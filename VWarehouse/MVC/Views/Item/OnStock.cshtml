@@ -6,9 +6,10 @@
 
 <h2>Index</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+<a href="@Url.Action("Create")"
+   class="btn btn-success">
+    <span class="glyphicon glyphicon-plus"></span> New Item
+</a>
 <table class="table">
     <tr>
         <th>
@@ -16,9 +17,6 @@
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.SerialNumber)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.EmployeeID)
@@ -36,15 +34,12 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SerialNumber)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.EmployeeID)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                @Html.ActionLink("Edit", "Edit", new { id = item.ID }, new { @class = "btn btn-success" })
+                @Html.ActionLink("Details", "Details", new { id = item.ID }, new { @class = "btn btn-primary" })
+                @Html.ActionLink("Delete", "Delete", new { id = item.ID }, new { @class = "btn btn-danger" })
             </td>
         </tr>
     }

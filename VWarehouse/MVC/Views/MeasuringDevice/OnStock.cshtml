@@ -1,14 +1,15 @@
 ﻿@model IEnumerable<Model.Common.Inventory.IMeasuringDevice>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "OnStock";
 }
 
 <h2>Index</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+<a href="@Url.Action("Create")"
+   class="btn btn-success">
+    <span class="glyphicon glyphicon-plus"></span> New Measuring Device
+</a>
 <table class="table">
     <tr>
         <th>
@@ -23,25 +24,25 @@
         <th></th>
     </tr>
 
-    @foreach (var item in Model)
+    @foreach (var MD in Model)
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                @Html.DisplayFor(model => MD.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SerialNumber)
+                @Html.DisplayFor(model => MD.SerialNumber)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CalibrationExpirationDate)
+                @Html.DisplayFor(model => MD.CalibrationExpirationDate.Day)<p style="display:inline">.</p>
+                @Html.DisplayFor(model => MD.CalibrationExpirationDate.Month)<p style="display:inline">.</p>
+                @Html.DisplayFor(model => MD.CalibrationExpirationDate.Year)<p style="display:inline">.</p>
             </td>
-
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                @Html.ActionLink("Edit", "Edit", new { id = MD.ID }, new { @class = "btn btn-success" })
+                @Html.ActionLink("Details", "Details", new { id = MD.ID }, new { @class = "btn btn-primary" })
+                @Html.ActionLink("Delete", "Delete", new { id = MD.ID }, new { @class = "btn btn-danger" })
             </td>
         </tr>
     }
-
 </table>

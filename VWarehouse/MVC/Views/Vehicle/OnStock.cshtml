@@ -1,14 +1,15 @@
 ﻿@model IEnumerable<Model.Common.Inventory.IVehicle>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "OnStock";
 }
 
-<h2>Index</h2>
+<h2>On Stock</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+<a href="@Url.Action("Create")"
+   class="btn btn-success">
+    <span class="glyphicon glyphicon-plus"></span> New Vehicle
+</a>
 <table class="table">
     <tr>
         <th>
@@ -32,34 +33,34 @@
         <th></th>
     </tr>
 
-    @foreach (var item in Model)
+    @foreach (var vehicle in Model)
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                @Html.DisplayFor(model => vehicle.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Type)
+                @Html.DisplayFor(model => vehicle.Type)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.LicensePlate)
+                @Html.DisplayFor(model => vehicle.LicensePlate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.LicenseExpirationDate.Day)<p style="display:inline">.</p>
-                @Html.DisplayFor(modelItem => item.LicenseExpirationDate.Month)<p style="display:inline">.</p>
-                @Html.DisplayFor(modelItem => item.LicenseExpirationDate.Year)<p style="display:inline">.</p>
+                @Html.DisplayFor(model => vehicle.LicenseExpirationDate.Day)<p style="display:inline">.</p>
+                @Html.DisplayFor(model => vehicle.LicenseExpirationDate.Month)<p style="display:inline">.</p>
+                @Html.DisplayFor(model => vehicle.LicenseExpirationDate.Year)<p style="display:inline">.</p>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Mileage)
+                @Html.DisplayFor(model => vehicle.Mileage)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.NextService)
+                @Html.DisplayFor(model => vehicle.NextService)
             </td>
 
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                @Html.ActionLink("Edit", "Edit", new { id = vehicle.ID }, new { @class = "btn btn-success" })
+                @Html.ActionLink("Details", "Details", new { id = vehicle.ID }, new { @class = "btn btn-primary" })
+                @Html.ActionLink("Delete", "Delete", new { id = vehicle.ID }, new { @class = "btn btn-danger" })
             </td>
         </tr>
     }

@@ -25,10 +25,14 @@
         <dd>
             @Html.DisplayFor(model => model.PhoneNumber)
         </dd>
-
     </dl>
+    <a href="@Url.Action("Edit", new { id = Model.ID })"
+       class="btn btn-success">
+        <span class="glyphicon glyphicon-pencil"></span> Edit
+    </a>
+    <a href="@Url.Action("Index")"
+       class="btn btn-default">
+        <span class="glyphicon glyphicon-list-alt"></span> Back to List
+    </a>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+
