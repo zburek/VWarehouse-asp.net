@@ -13,5 +13,7 @@ namespace Model.Common.Inventory
         string SerialNumber { get; set; }
         DateTime CalibrationExpirationDate { get; set; }
         int? EmployeeID { get; set; }
+        IEmployee Employee { get; set; }
+
     }
 }

@@ -46,6 +46,24 @@ namespace MVC.Controllers
             }
             return View(employee);
         }
+
+        [HttpGet]
+
+        public async Task<ActionResult> Inventory(int? ID)
+        {
+            if (ID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Expression<Func<EmployeeEntity, bool>> filter = e => e.ID == ID;
+            string includeProperties = "Items, MeasuringDevices, Vehicles";
+            IEmployee employee = await service.GetOneAsync(filter, includeProperties);
+            if (employee == null)
+            {
+                return HttpNotFound();
+            }
+            return View(employee);
+        }
         
         [HttpGet]
         public ActionResult Create()

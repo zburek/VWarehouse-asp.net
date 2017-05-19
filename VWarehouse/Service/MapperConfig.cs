@@ -20,14 +20,17 @@ namespace Service
                     cfg.CreateMap<EmployeeEntity, IEmployee>().ReverseMap();
 
                     cfg.CreateMap<ItemEntity, Item>().ReverseMap();
+                    cfg.CreateMap<ItemEntity, IBaseInfo>().ReverseMap();
                     cfg.CreateMap<Item, IItem>().ReverseMap();
                     cfg.CreateMap<ItemEntity, IItem>().ReverseMap();
 
                     cfg.CreateMap<MeasuringDeviceEntity, MeasuringDevice>().ReverseMap();
+                    cfg.CreateMap<MeasuringDeviceEntity, IBaseInfo>().ReverseMap();
                     cfg.CreateMap<MeasuringDevice, IMeasuringDevice>().ReverseMap();
                     cfg.CreateMap<MeasuringDeviceEntity, IMeasuringDevice>().ReverseMap();
 
                     cfg.CreateMap<VehicleEntity, Vehicle>().ReverseMap();
+                    cfg.CreateMap<VehicleEntity, IBaseInfo>().ReverseMap();
                     cfg.CreateMap<Vehicle, IVehicle>().ReverseMap();
                     cfg.CreateMap<VehicleEntity, IVehicle>().ReverseMap();
                 });

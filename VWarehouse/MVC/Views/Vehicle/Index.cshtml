@@ -30,6 +30,9 @@
         <th>
             @Html.DisplayNameFor(model => model.NextService)
         </th>
+        <th>
+            <b>Employee</b>
+        </th>
         <th></th>
     </tr>
 
@@ -55,6 +58,9 @@
             </td>
             <td>
                 @Html.DisplayFor(model => vehicle.NextService)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => vehicle.Employee.Name)
             </td>
 
             <td>

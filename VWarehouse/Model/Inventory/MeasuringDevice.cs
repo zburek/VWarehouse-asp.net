@@ -1,4 +1,5 @@
 ﻿
+using Model.Common;
 using Model.Common.Inventory;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -15,6 +16,6 @@ namespace Model.Inventory
         public string SerialNumber { get; set; }
         public DateTime CalibrationExpirationDate { get; set; }
         public int? EmployeeID { get; set; }
-        public virtual Employee Employee { get; set; }
+        public virtual IEmployee Employee { get; set; }
     }
 }

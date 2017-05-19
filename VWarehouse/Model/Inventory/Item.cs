@@ -1,4 +1,5 @@
-﻿using Model.Common.Inventory;
+﻿using Model.Common;
+using Model.Common.Inventory;
 using System.ComponentModel.DataAnnotations;
 
 namespace Model.Inventory
@@ -14,6 +15,6 @@ namespace Model.Inventory
         public string Description { get; set; }
         public string SerialNumber { get; set; }
         public int? EmployeeID { get; set; }
-        public virtual Employee Employee { get; set; }
+        public virtual IEmployee Employee { get; set; }
     }
 }

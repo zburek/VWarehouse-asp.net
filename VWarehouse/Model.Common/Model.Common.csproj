@@ -45,6 +45,7 @@
     <Compile Include="DbEntities\Inventory\IItemEntity.cs" />
     <Compile Include="DbEntities\Inventory\IMeasuringDeviceEntity.cs" />
     <Compile Include="DbEntities\Inventory\IVehicleEntity.cs" />
+    <Compile Include="IBaseInfo.cs" />
     <Compile Include="IEmployee.cs" />
     <Compile Include="Inventory\IItem.cs" />
     <Compile Include="Inventory\IMeasuringDevice.cs" />

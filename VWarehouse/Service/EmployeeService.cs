@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Model;
 using Model.Common;
 using Model.DbEntities;
 using Model.DbEntities.Inventory;
@@ -20,7 +21,8 @@ namespace Service
         {
             this.unitOfWork = unitOfWork;
         }
-        
+
+        #region Get
         public async Task<List<IEmployee>> GetAllAsync(
             Expression<Func<EmployeeEntity, bool>> filter = null, 
             Func <IQueryable<EmployeeEntity>, IOrderedQueryable<EmployeeEntity>> orderBy = null, 
@@ -37,7 +39,17 @@ namespace Service
                 (await unitOfWork.Employees.GetByIdAsync(ID));
             return employee;
         }
-        
+        public async Task<IEmployee> GetOneAsync(
+            Expression<Func<EmployeeEntity, bool>> filter = null,
+            string includeProperties = null)
+        {
+            var employee = Mapper.Map<IEmployee>
+                (await unitOfWork.Employees.GetOneAsync(filter, includeProperties));
+            return employee;
+        }
+        #endregion
+
+        #region CRUD
         public async Task CreateAsync(IEmployee employee)
         {
             EmployeeEntity employeeEntity = Mapper.Map<EmployeeEntity>(employee);
@@ -68,5 +80,6 @@ namespace Service
             await unitOfWork.Employees.DeleteAsync(employeeEnity);
             await unitOfWork.SaveAsync();
         }
+        #endregion
     }
 }

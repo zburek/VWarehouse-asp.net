@@ -1,10 +1,3 @@
-C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Model\bin\Debug\Model.dll
-C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Model\bin\Debug\Model.pdb
-C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Model\bin\Debug\Model.Common.dll
-C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Model\bin\Debug\Model.Common.pdb
-C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Model\obj\Debug\Model.csprojResolveAssemblyReference.cache
-C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Model\obj\Debug\Model.dll
-C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Model\obj\Debug\Model.pdb
 C:\Users\zvone\Desktop\staro - novo\VWarehouse\Model\bin\Debug\Model.dll
 C:\Users\zvone\Desktop\staro - novo\VWarehouse\Model\bin\Debug\Model.pdb
 C:\Users\zvone\Desktop\staro - novo\VWarehouse\Model\bin\Debug\Model.Common.dll
@@ -12,5 +5,12 @@ C:\Users\zvone\Desktop\staro - novo\VWarehouse\Model\bin\Debug\Model.Common.pdb
 C:\Users\zvone\Desktop\staro - novo\VWarehouse\Model\obj\Debug\Model.csprojResolveAssemblyReference.cache
 C:\Users\zvone\Desktop\staro - novo\VWarehouse\Model\obj\Debug\Model.dll
 C:\Users\zvone\Desktop\staro - novo\VWarehouse\Model\obj\Debug\Model.pdb
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Model\bin\Debug\Model.dll
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Model\bin\Debug\Model.pdb
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Model\bin\Debug\Common.dll
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Model\bin\Debug\Model.Common.dll
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Model\bin\Debug\Common.pdb
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Model\bin\Debug\Model.Common.pdb
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Model\obj\Debug\Model.csprojResolveAssemblyReference.cache
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Model\obj\Debug\Model.dll
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Model\obj\Debug\Model.pdb

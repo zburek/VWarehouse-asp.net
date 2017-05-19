@@ -12,5 +12,7 @@ namespace Model.Common.Inventory
         int Mileage { get; set; }
         int NextService { get; set; }
         int? EmployeeID { get; set; }
+        IEmployee Employee { get; set; }
+
     }
 }

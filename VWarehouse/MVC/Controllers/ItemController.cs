@@ -26,7 +26,7 @@ namespace MVC.Controllers
             // Func<IQueryable<ItemEntity>, IOrderedQueryable<ItemEntity>> orderBy = source => source.OrderByDescending(e => e.Name);
             // Expression<Func<ItemEntity, bool>> filter = e => e.Name == "Mark";
 
-            List<IItem> item = await service.GetAllAsync(null, null, null);
+            List<IItem> item = await service.GetAllAsync(null, null, "Employee");
             return View(item);
         }
 

@@ -1,4 +1,5 @@
 ﻿using Model.Common.DbEntities;
+using Model.Common.DbEntities.Inventory;
 using Model.DbEntities.Inventory;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;

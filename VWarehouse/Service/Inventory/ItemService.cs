@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Model.Common.Inventory;
 using Model.DbEntities.Inventory;
+using Model.Inventory;
 using Repository;
 using Repository.Common;
 using Service.Common.Inventory;

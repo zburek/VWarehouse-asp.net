@@ -11,8 +11,8 @@ namespace Model.DbEntities.Inventory
         [MaxLength(60)]
         public string Description { get; set; }
         public string SerialNumber { get; set; }
-        [ForeignKey("EmployeeEntity")]
+        [ForeignKey("Employee")]
         public int? EmployeeID { get; set; }
-        public virtual EmployeeEntity EmployeeEntity { get; set; }
+        public virtual EmployeeEntity Employee { get; set; }
     }
 }

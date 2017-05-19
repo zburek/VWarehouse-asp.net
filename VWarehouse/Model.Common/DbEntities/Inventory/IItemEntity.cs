@@ -6,5 +6,6 @@ namespace Model.Common.DbEntities.Inventory
         string Description { get; set; }
         string SerialNumber { get; set; }
         int? EmployeeID { get; set; }
+
     }
 }

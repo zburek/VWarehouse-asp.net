@@ -45,10 +45,14 @@ namespace Repository
 
             return query;
         }
+
+        #region Get
         public virtual async Task<TEntity> GetByIdAsync(int? ID)
         {
             return await context.Set<TEntity>().FindAsync(ID);
         }
+
+        
         public virtual async Task<IEnumerable<TEntity>> GetAllAsync(
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, 
@@ -61,8 +65,11 @@ namespace Repository
             Expression<Func<TEntity, bool>> filter = null,
             string includeProperties = null)
         {
-            return await GetQueryable(filter, null).SingleOrDefaultAsync();
+            return await GetQueryable(filter, null, includeProperties).SingleOrDefaultAsync();
         }
+        #endregion
+
+        #region CRUD
         public virtual async Task AddAsync(TEntity entity)
         {
             try
@@ -156,5 +163,6 @@ namespace Repository
                 throw fail;
             }
         }
+        #endregion
     }
 }
