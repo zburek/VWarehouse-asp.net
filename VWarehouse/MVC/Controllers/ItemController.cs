@@ -9,6 +9,8 @@ using Service.Common.Inventory;
 using System.Linq.Expressions;
 using Model.Common.Inventory;
 using Model.Inventory;
+using Model.Common.ViewModels;
+using Model.ViewModels;
 
 namespace MVC.Controllers
 {
@@ -26,7 +28,7 @@ namespace MVC.Controllers
             // Func<IQueryable<ItemEntity>, IOrderedQueryable<ItemEntity>> orderBy = source => source.OrderByDescending(e => e.Name);
             // Expression<Func<ItemEntity, bool>> filter = e => e.Name == "Mark";
 
-            List<IItem> item = await service.GetAllAsync(null, null, "Employee");
+            List<IItem> item = await service.GetAllAsync(null, null, null);
             return View(item);
         }
 
@@ -52,6 +54,47 @@ namespace MVC.Controllers
                 return HttpNotFound();
             }
             return View(item);
+        }
+
+
+        [HttpGet]
+        public async Task<ActionResult> Assign(int? ID)
+        {
+            if (ID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            // Other option without using viewmodel is by using ViewBag to store EmployeeList for DropDownList
+            IAssignViewModel item = await service.CreateAssignViewModelAsync(ID);
+            if (item == null)
+            {
+                return HttpNotFound();
+            }
+            return View(item);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Assign([Bind(Include = "ID,Name,EmployeeID")] AssignViewModel assignedItem)
+        {
+            try
+            {
+                if (assignedItem.EmployeeID == null)
+                {
+                    return RedirectToAction("Assign", new { ID = assignedItem.ID });
+                }
+                if (ModelState.IsValid)
+                {
+                    IAssignViewModel item = assignedItem; // Not sure this is allowed, use automapper for new?
+                    await service.AssignItemAsync(item);
+                    return RedirectToAction("OnStock");
+                }
+            }
+            catch (DataException)
+            {
+                ModelState.AddModelError("", "Unable to save changes. Try again and if the problem persists see your system administrator.");
+            }
+            return RedirectToAction("Assign", new { ID = assignedItem.ID });
         }
         public ActionResult Create()
         {

@@ -19,7 +19,7 @@
             @Html.DisplayNameFor(model => model.Description)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.EmployeeID)
+            @Html.DisplayNameFor(model => model.SerialNumber)
         </th>
         <th></th>
     </tr>
@@ -34,10 +34,11 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.EmployeeID)
+                @Html.DisplayFor(modelItem => item.SerialNumber)
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.ID }, new { @class = "btn btn-success" })
+                @Html.ActionLink("Assign", "Assign", new { id = item.ID }, new { @class = "btn btn-success" })
                 @Html.ActionLink("Details", "Details", new { id = item.ID }, new { @class = "btn btn-primary" })
                 @Html.ActionLink("Delete", "Delete", new { id = item.ID }, new { @class = "btn btn-danger" })
             </td>

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using Model;
@@ -10,23 +9,30 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Model.Common;
 using Service.Common;
+using Service.Common.Inventory;
 
 namespace MVC.Controllers
 {
     public class EmployeeController : Controller
     {
         protected IEmployeeService service;
-        public EmployeeController(IEmployeeService service)
+        protected IItemService itemService;
+        protected IMeasuringDeviceService measuringDeviceService;
+        protected IVehicleService vehicleService;
+        public EmployeeController(IEmployeeService service, IItemService itemService, IMeasuringDeviceService measuringDeviceService, IVehicleService vehicleService)
         { 
             this.service = service;
+            this.itemService = itemService;
+            this.measuringDeviceService = measuringDeviceService;
+            this.vehicleService = vehicleService;
         }
         
 
         [HttpGet]
         public async Task<ActionResult> Index()
         {
-            Func<IQueryable<EmployeeEntity>, IOrderedQueryable<EmployeeEntity>> orderBy = source => source.OrderByDescending(e => e.Name);
-            Expression<Func<EmployeeEntity, bool>> filter = e => e.Name == "Mark";
+            //Func<IQueryable<EmployeeEntity>, IOrderedQueryable<EmployeeEntity>> orderBy = source => source.OrderByDescending(e => e.Name);
+           // Expression<Func<EmployeeEntity, bool>> filter = e => e.Name == "Mark";
 
             List<IEmployee> employee = await service.GetAllAsync(null, null, null);
             return View(employee);
@@ -64,7 +70,37 @@ namespace MVC.Controllers
             }
             return View(employee);
         }
-        
+
+        public async Task<ActionResult> ReturnOneItem(int? itemID, int? empID)
+        {
+            if (itemID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            await itemService.ReturnOneItemAsync(itemID);
+            return RedirectToAction("Inventory", new { ID = empID });
+        }
+
+        public async Task<ActionResult> ReturnOneMeasuringDevice(int? MDeviceID, int? empID)
+        {
+            if (MDeviceID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            await measuringDeviceService.ReturnOneMeasuringDeviceAsync(MDeviceID);
+            return RedirectToAction("Inventory", new { ID = empID });
+        }
+
+        public async Task<ActionResult> ReturnOneVehicle(int? vhID, int? empID)
+        {
+            if (vhID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            await vehicleService.ReturnOneVehicleAsync(vhID);
+            return RedirectToAction("Inventory", new { ID = empID });
+        }
+
         [HttpGet]
         public ActionResult Create()
         {

@@ -6,7 +6,6 @@ namespace Model.Common
     {
         int ID { get; set; }
         string Name { get; set; }
-
     }
 
     // Created for displaying Employee Name in Inventory tables

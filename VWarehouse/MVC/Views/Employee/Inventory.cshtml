@@ -6,7 +6,6 @@
 
 <h2>Employee Inventory</h2>
 
-
 <div>
     <dl class="dl-horizontal">
         <dt>
@@ -44,6 +43,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
+            <td>
+                @Html.ActionLink("Return Item", "ReturnOneItem", new { itemID = item.ID, empID = Model.ID }, new { @class = "btn btn-primary" })
+            </td>
         </tr>
     }
 </table>
@@ -59,11 +61,14 @@
         <th></th>
     </tr>
 
-    @foreach (var item in Model.MeasuringDevices)
+    @foreach (var MD in Model.MeasuringDevices)
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                @Html.DisplayFor(modelItem => MD.Name)
+            </td>
+            <td>
+                @Html.ActionLink("Return Measuring Device", "ReturnOneMeasuringDevice", new { MDeviceID = MD.ID, empID = Model.ID }, new { @class = "btn btn-primary" })
             </td>
         </tr>
     }
@@ -80,12 +85,20 @@
         <th></th>
     </tr>
 
-    @foreach (var item in Model.Vehicles)
+    @foreach (var vehicle in Model.Vehicles)
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                @Html.DisplayFor(modelItem => vehicle.Name)
+            </td>
+            <td>
+                @Html.ActionLink("Return Vehicle", "ReturnOneVehicle", new { vhID = vehicle.ID, empID = Model.ID }, new { @class = "btn btn-primary" })
             </td>
         </tr>
     }
 </table>
+
+<a href="@Url.Action("Index")"
+   class="btn btn-default">
+    <span class="glyphicon glyphicon-list-alt"></span> Back to List
+</a>

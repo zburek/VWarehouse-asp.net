@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Model.Common;
 using Model.Common.Inventory;
+using Model.Common.ViewModels;
 using Model.DbEntities.Inventory;
 using Repository;
 using Repository.Common;
@@ -39,31 +41,45 @@ namespace Service.Inventory
 
         public async Task CreateAsync(IVehicle vehicle)
         {
-            VehicleEntity vehicleEntity = Mapper.Map<VehicleEntity>(vehicle);
+            var vehicleEntity = Mapper.Map<VehicleEntity>(vehicle);
             await unitOfWork.Vehicles.AddAsync(vehicleEntity);
             await unitOfWork.SaveAsync();
         }
 
         public async Task UpdateAsync(IVehicle vehicle)
         {
-            VehicleEntity vehicleEntity = Mapper.Map<VehicleEntity>(vehicle);
+            var vehicleEntity = Mapper.Map<VehicleEntity>(vehicle);
             await unitOfWork.Vehicles.UpdateAsync(vehicleEntity);
             await unitOfWork.SaveAsync();
         }
 
         public async Task DeleteAsync(int ID)
         {
-            VehicleEntity vehicleEntity = Mapper.Map<VehicleEntity>(await unitOfWork.Vehicles.GetByIdAsync(ID));
+            var vehicleEntity = Mapper.Map<VehicleEntity>(await unitOfWork.Vehicles.GetByIdAsync(ID));
             await unitOfWork.Vehicles.DeleteAsync(vehicleEntity);
             await unitOfWork.SaveAsync();
         }
 
-        public async Task ReturnItemAsync(int ID)
+        public async Task<IAssignViewModel> CreateAssignViewModelAsync(int? ID)
         {
-            VehicleEntity vehicleEntity = Mapper.Map<VehicleEntity>(await unitOfWork.Vehicles.GetByIdAsync(ID));
-            vehicleEntity.EmployeeID = null;
-            await unitOfWork.Vehicles.UpdateAsync(vehicleEntity);
+            var vehicle = Mapper.Map<IAssignViewModel>(await unitOfWork.Vehicles.GetByIdAsync(ID));
+            vehicle.EmployeeList = Mapper.Map<List<IEmployee>>(await unitOfWork.Employees.GetAllAsync(null, null, null));
+            return vehicle;
         }
 
+        public async Task AssignVehicleAsync(IAssignViewModel vehicle)
+        {
+            var vehicleEntity = await unitOfWork.Vehicles.GetByIdAsync(vehicle.ID);
+            vehicleEntity.EmployeeID = vehicle.EmployeeID;
+            await unitOfWork.Vehicles.UpdateAsync(vehicleEntity);
+            await unitOfWork.SaveAsync();
+        }
+        public async Task ReturnOneVehicleAsync(int? ID)
+        {
+            var vehicleEntity = Mapper.Map<VehicleEntity>(await unitOfWork.Vehicles.GetByIdAsync(ID));
+            vehicleEntity.EmployeeID = null;
+            await unitOfWork.Vehicles.UpdateAsync(vehicleEntity);
+            await unitOfWork.SaveAsync();
+        }
     }
 }

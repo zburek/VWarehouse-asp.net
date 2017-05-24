@@ -60,7 +60,7 @@
                 @Html.DisplayFor(model => vehicle.NextService)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => vehicle.Employee.Name)
+                <a href="@Url.Action("Inventory", "Employee", new { ID=vehicle.EmployeeID})">@Html.DisplayFor(modelItem => vehicle.Employee.Name)</a>
             </td>
 
             <td>

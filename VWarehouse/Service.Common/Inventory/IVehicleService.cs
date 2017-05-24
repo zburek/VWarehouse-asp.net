@@ -1,4 +1,5 @@
 ﻿using Model.Common.Inventory;
+using Model.Common.ViewModels;
 using Model.DbEntities.Inventory;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,8 @@ namespace Service.Common.Inventory
         Task CreateAsync(IVehicle item);
         Task UpdateAsync(IVehicle item);
         Task DeleteAsync(int ID);
-        Task ReturnItemAsync(int ID);
+        Task<IAssignViewModel> CreateAssignViewModelAsync(int? ID);
+        Task AssignVehicleAsync(IAssignViewModel measuringDevice);
+        Task ReturnOneVehicleAsync(int? ID);
     }
 }

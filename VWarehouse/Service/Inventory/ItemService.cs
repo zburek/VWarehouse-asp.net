@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
+using Model.Common;
 using Model.Common.Inventory;
+using Model.Common.ViewModels;
 using Model.DbEntities.Inventory;
-using Model.Inventory;
 using Repository;
 using Repository.Common;
 using Service.Common.Inventory;
@@ -33,38 +34,51 @@ namespace Service.Inventory
 
         public async Task<IItem> GetByIdAsync(int? ID)
         {
-            var item = Mapper.Map<IItem>
-                (await unitOfWork.Items.GetByIdAsync(ID));
+            var item = Mapper.Map<IItem>(await unitOfWork.Items.GetByIdAsync(ID));
             return item;
         }
 
         public async Task CreateAsync(IItem item)
         {
-            ItemEntity itemEntity = Mapper.Map<ItemEntity>(item);
+            var itemEntity = Mapper.Map<ItemEntity>(item);
             await unitOfWork.Items.AddAsync(itemEntity);
             await unitOfWork.SaveAsync();
         }
 
         public async Task UpdateAsync(IItem item)
         {
-            ItemEntity itemEntity = Mapper.Map<ItemEntity>(item);
+            var itemEntity = Mapper.Map<ItemEntity>(item);
             await unitOfWork.Items.UpdateAsync(itemEntity);
             await unitOfWork.SaveAsync();
         }
 
         public async Task DeleteAsync(int ID)
         {
-            ItemEntity itemEntity = Mapper.Map<ItemEntity>(await unitOfWork.Items.GetByIdAsync(ID));
+            var itemEntity = Mapper.Map<ItemEntity>(await unitOfWork.Items.GetByIdAsync(ID));
             await unitOfWork.Items.DeleteAsync(itemEntity);
             await unitOfWork.SaveAsync();
         }
 
-        public async Task ReturnItemAsync(int ID)
+        public async Task<IAssignViewModel> CreateAssignViewModelAsync(int? ID)
         {
-            ItemEntity itemEntity = Mapper.Map<ItemEntity>(await unitOfWork.Items.GetByIdAsync(ID));
-            itemEntity.EmployeeID = null;
-            await unitOfWork.Items.UpdateAsync(itemEntity);
+            var item = Mapper.Map<IAssignViewModel>(await unitOfWork.Items.GetByIdAsync(ID));
+            item.EmployeeList = Mapper.Map<List<IEmployee>>(await unitOfWork.Employees.GetAllAsync(null, null, null));
+            return item;
         }
 
+        public async Task AssignItemAsync(IAssignViewModel item)
+        {
+            var itemEntity = await unitOfWork.Items.GetByIdAsync(item.ID);
+            itemEntity.EmployeeID = item.EmployeeID;
+            await unitOfWork.Items.UpdateAsync(itemEntity);
+            await unitOfWork.SaveAsync();
+        }
+        public async Task ReturnOneItemAsync(int? ID)
+        {
+            var itemEntity = Mapper.Map<ItemEntity>(await unitOfWork.Items.GetByIdAsync(ID));
+            itemEntity.EmployeeID = null;
+            await unitOfWork.Items.UpdateAsync(itemEntity);
+            await unitOfWork.SaveAsync();
+        }
     }
 }

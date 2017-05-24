@@ -245,10 +245,12 @@
     <Content Include="Views\Vehicle\Index.cshtml" />
     <Content Include="Views\Vehicle\OnStock.cshtml" />
     <Content Include="Views\Employee\Inventory.cshtml" />
+    <Content Include="Views\Item\Assign.cshtml" />
+    <Content Include="Views\MeasuringDevice\Assign.cshtml" />
+    <Content Include="Views\Vehicle\Assign.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

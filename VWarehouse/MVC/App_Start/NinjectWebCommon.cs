@@ -18,6 +18,8 @@ namespace MVC.App_Start
     using Model.Common.Inventory;
     using Service.Common.Inventory;
     using Service.Inventory;
+    using Model.Common.ViewModels;
+    using Model.ViewModels;
 
     public static class NinjectWebCommon 
     {
@@ -83,6 +85,7 @@ namespace MVC.App_Start
 
             kernel.Bind<IVehicleService>().To<VehicleService>().InRequestScope();
             kernel.Bind<IVehicle>().ToSelf().InRequestScope();
+
         }        
     }
 }

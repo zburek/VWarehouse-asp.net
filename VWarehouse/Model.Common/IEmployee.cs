@@ -1,5 +1,4 @@
 ﻿
-using Model.Common.Inventory;
 using System.Collections.Generic;
 
 namespace Model.Common

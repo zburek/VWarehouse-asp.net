@@ -8,7 +8,7 @@ namespace Model.Inventory
     {
         [Required]
         public int ID { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Name is required")]
         [MaxLength(40)]
         public string Name { get; set; }
         [MaxLength(60)]

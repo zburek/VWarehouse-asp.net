@@ -9,6 +9,8 @@ using Service.Common.Inventory;
 using System.Linq.Expressions;
 using Model.Common.Inventory;
 using Model.Inventory;
+using Model.Common.ViewModels;
+using Model.ViewModels;
 
 namespace MVC.Controllers
 {
@@ -50,6 +52,41 @@ namespace MVC.Controllers
                 return HttpNotFound();
             }
             return View(measuringDevice);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Assign(int? ID)
+        {
+            if (ID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            IAssignViewModel measuringDevice = await service.CreateAssignViewModelAsync(ID);
+            if (measuringDevice == null)
+            {
+                return HttpNotFound();
+            }
+            return View(measuringDevice);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Assign([Bind(Include = "ID,Name,EmployeeID")] AssignViewModel assignedMeasuringDevice)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    IAssignViewModel measuringDevice = assignedMeasuringDevice; // Not sure this is allowed, use automapper for new?
+                    await service.AssignMeasuringDeviceAsync(measuringDevice);
+                    return RedirectToAction("OnStock");
+                }
+            }
+            catch (DataException)
+            {
+                ModelState.AddModelError("", "Unable to save changes. Try again and if the problem persists see your system administrator.");
+            }
+            return View(assignedMeasuringDevice);
         }
         public ActionResult Create()
         {

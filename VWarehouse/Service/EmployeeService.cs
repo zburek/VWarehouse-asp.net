@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Model;
 using Model.Common;
 using Model.DbEntities;
 using Model.DbEntities.Inventory;
@@ -52,14 +51,14 @@ namespace Service
         #region CRUD
         public async Task CreateAsync(IEmployee employee)
         {
-            EmployeeEntity employeeEntity = Mapper.Map<EmployeeEntity>(employee);
+            var employeeEntity = Mapper.Map<EmployeeEntity>(employee);
             await unitOfWork.Employees.AddAsync(employeeEntity);
             await unitOfWork.SaveAsync();
         }
 
         public async Task UpdateAsync(IEmployee employee)
         {
-            EmployeeEntity employeeEntity = Mapper.Map<EmployeeEntity>(employee);
+            var employeeEntity = Mapper.Map<EmployeeEntity>(employee);
             await unitOfWork.Employees.UpdateAsync(employeeEntity);
             await unitOfWork.SaveAsync();
         }
@@ -76,7 +75,7 @@ namespace Service
                 await unitOfWork.Items.DeleteAsync(item);
             }
 
-            EmployeeEntity employeeEnity = Mapper.Map<EmployeeEntity>(await unitOfWork.Employees.GetByIdAsync(ID));
+            var employeeEnity = Mapper.Map<EmployeeEntity>(await unitOfWork.Employees.GetByIdAsync(ID));
             await unitOfWork.Employees.DeleteAsync(employeeEnity);
             await unitOfWork.SaveAsync();
         }

@@ -42,7 +42,7 @@
                 @Html.DisplayFor(model => MD.CalibrationExpirationDate.Year)<p style="display:inline">.</p>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => MD.Employee.Name)
+                <a href="@Url.Action("Inventory", "Employee", new { ID=MD.EmployeeID})">@Html.DisplayFor(modelItem => MD.Employee.Name)</a>
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = MD.ID }, new { @class = "btn btn-success" })
