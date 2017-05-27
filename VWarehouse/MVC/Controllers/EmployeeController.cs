@@ -26,14 +26,11 @@ namespace MVC.Controllers
             this.measuringDeviceService = measuringDeviceService;
             this.vehicleService = vehicleService;
         }
-        
 
+        #region Get
         [HttpGet]
         public async Task<ActionResult> Index()
         {
-            //Func<IQueryable<EmployeeEntity>, IOrderedQueryable<EmployeeEntity>> orderBy = source => source.OrderByDescending(e => e.Name);
-           // Expression<Func<EmployeeEntity, bool>> filter = e => e.Name == "Mark";
-
             List<IEmployee> employee = await service.GetAllAsync(null, null, null);
             return View(employee);
         }
@@ -54,7 +51,6 @@ namespace MVC.Controllers
         }
 
         [HttpGet]
-
         public async Task<ActionResult> Inventory(int? ID)
         {
             if (ID == null)
@@ -70,10 +66,13 @@ namespace MVC.Controllers
             }
             return View(employee);
         }
+        #endregion
 
+        #region Inventory return
+        [HttpGet]
         public async Task<ActionResult> ReturnOneItem(int? itemID, int? empID)
         {
-            if (itemID == null)
+            if (itemID == null || empID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
@@ -81,9 +80,21 @@ namespace MVC.Controllers
             return RedirectToAction("Inventory", new { ID = empID });
         }
 
+        [HttpGet]
+        public async Task<ActionResult> ReturnAllItems(int? empID)
+        {
+            if (empID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            await itemService.ReturnAllItemsAsync(empID);
+            return RedirectToAction("Inventory", new { ID = empID });
+        }
+
+        [HttpGet]
         public async Task<ActionResult> ReturnOneMeasuringDevice(int? MDeviceID, int? empID)
         {
-            if (MDeviceID == null)
+            if (MDeviceID == null || empID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
@@ -91,15 +102,54 @@ namespace MVC.Controllers
             return RedirectToAction("Inventory", new { ID = empID });
         }
 
+        [HttpGet]
+        public async Task<ActionResult> ReturnAllMeasuringDevices(int? empID)
+        {
+            if (empID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            await measuringDeviceService.ReturnAllMeasuringDevicesAsync(empID);
+            return RedirectToAction("Inventory", new { ID = empID });
+        }
+
+        [HttpGet]
         public async Task<ActionResult> ReturnOneVehicle(int? vhID, int? empID)
         {
-            if (vhID == null)
+            if (vhID == null || empID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             await vehicleService.ReturnOneVehicleAsync(vhID);
             return RedirectToAction("Inventory", new { ID = empID });
         }
+
+        [HttpGet]
+        public async Task<ActionResult> ReturnAllVehicles(int? empID)
+        {
+            if (empID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            await vehicleService.ReturnAllVehiclesAsync(empID);
+            return RedirectToAction("Inventory", new { ID = empID });
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> ReturnAllInventory(int? empID)
+        {
+            if (empID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            await itemService.ReturnAllItemsAsync(empID);
+            await measuringDeviceService.ReturnAllMeasuringDevicesAsync(empID);
+            await vehicleService.ReturnAllVehiclesAsync(empID);
+            return RedirectToAction("Inventory", new { ID = empID });
+        }
+        #endregion
+
+        #region CRUD
 
         [HttpGet]
         public ActionResult Create()
@@ -126,7 +176,6 @@ namespace MVC.Controllers
             }
             return View(createdEmployee);
         }
-        
         
         [HttpGet]
         public async Task<ActionResult> Edit(int? ID)
@@ -188,7 +237,15 @@ namespace MVC.Controllers
         {
             try
             {
+                await itemService.ReturnAllItemsAsync(ID);
+                await measuringDeviceService.ReturnAllMeasuringDevicesAsync(ID);
+                await vehicleService.ReturnAllVehiclesAsync(ID);
                 await service.DeleteAsync(ID);
+                // Not using unit of work properly? this will make 4 different chunks of changes in DataBase. (not using all succeede or all fail)
+                // Save will be used 4 times
+                // To change Returning should be made from EmployeeService for all Inventory, so that one unit of work is used
+                // But then when adding new tables into Inventory code should be added also to the EmployeeService, instead of only adding newTableService
+                // All of this aplies to the ReturnAllInventory method also
             }
             catch (DataException)
             {
@@ -196,6 +253,6 @@ namespace MVC.Controllers
             }
             return RedirectToAction("Index");
         }
-        
+        #endregion
     }
 }

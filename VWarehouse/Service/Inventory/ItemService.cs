@@ -22,6 +22,7 @@ namespace Service.Inventory
             this.unitOfWork = unitOfWork;
         }
 
+        #region Get
         public async Task<List<IItem>> GetAllAsync(
             Expression<Func<ItemEntity, bool>> filter = null,
             Func<IQueryable<ItemEntity>, IOrderedQueryable<ItemEntity>> orderBy = null,
@@ -37,7 +38,16 @@ namespace Service.Inventory
             var item = Mapper.Map<IItem>(await unitOfWork.Items.GetByIdAsync(ID));
             return item;
         }
+        public async Task<IAssignViewModel> CreateAssignViewModelAsync(int? ID)
+        {
+            var item = Mapper.Map<IAssignViewModel>(await unitOfWork.Items.GetByIdAsync(ID));
+            item.EmployeeList = Mapper.Map<List<IEmployee>>(await unitOfWork.Employees.GetAllAsync(null, null, null));
+            return item;
+        }
 
+        #endregion
+
+        #region Basic CRUD
         public async Task CreateAsync(IItem item)
         {
             var itemEntity = Mapper.Map<ItemEntity>(item);
@@ -58,14 +68,9 @@ namespace Service.Inventory
             await unitOfWork.Items.DeleteAsync(itemEntity);
             await unitOfWork.SaveAsync();
         }
+        #endregion
 
-        public async Task<IAssignViewModel> CreateAssignViewModelAsync(int? ID)
-        {
-            var item = Mapper.Map<IAssignViewModel>(await unitOfWork.Items.GetByIdAsync(ID));
-            item.EmployeeList = Mapper.Map<List<IEmployee>>(await unitOfWork.Employees.GetAllAsync(null, null, null));
-            return item;
-        }
-
+        #region Assign and Return
         public async Task AssignItemAsync(IAssignViewModel item)
         {
             var itemEntity = await unitOfWork.Items.GetByIdAsync(item.ID);
@@ -80,5 +85,18 @@ namespace Service.Inventory
             await unitOfWork.Items.UpdateAsync(itemEntity);
             await unitOfWork.SaveAsync();
         }
+        public async Task ReturnAllItemsAsync(int? ID)
+        {
+            Expression<Func<ItemEntity, bool>> filter = i => i.EmployeeID == ID;
+            IEnumerable<ItemEntity> itemList = await unitOfWork.Items.GetAllAsync(filter, null, null);
+            foreach(var itemEntity in itemList)
+            {
+                itemEntity.EmployeeID = null;
+                await unitOfWork.Items.UpdateAsync(itemEntity);
+            }
+            await unitOfWork.SaveAsync();
+        }
+        #endregion
+
     }
 }

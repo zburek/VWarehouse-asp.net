@@ -22,5 +22,7 @@ namespace Service.Common.Inventory
         Task<IAssignViewModel> CreateAssignViewModelAsync(int? ID);
         Task AssignItemAsync(IAssignViewModel item);
         Task ReturnOneItemAsync(int? ID);
+        Task ReturnAllItemsAsync(int? ID);
+
     }
 }

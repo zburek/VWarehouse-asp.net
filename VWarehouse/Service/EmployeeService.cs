@@ -21,7 +21,7 @@ namespace Service
             this.unitOfWork = unitOfWork;
         }
 
-        #region Get
+        #region Basic Get
         public async Task<List<IEmployee>> GetAllAsync(
             Expression<Func<EmployeeEntity, bool>> filter = null, 
             Func <IQueryable<EmployeeEntity>, IOrderedQueryable<EmployeeEntity>> orderBy = null, 
@@ -48,7 +48,7 @@ namespace Service
         }
         #endregion
 
-        #region CRUD
+        #region Basic CRUD
         public async Task CreateAsync(IEmployee employee)
         {
             var employeeEntity = Mapper.Map<EmployeeEntity>(employee);
@@ -79,6 +79,10 @@ namespace Service
             await unitOfWork.Employees.DeleteAsync(employeeEnity);
             await unitOfWork.SaveAsync();
         }
+        #endregion
+
+        #region Inventory actions
+
         #endregion
     }
 }

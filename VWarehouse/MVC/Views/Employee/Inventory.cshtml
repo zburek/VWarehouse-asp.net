@@ -40,7 +40,7 @@
     @foreach (var item in Model.Items)
     {
         <tr>
-            <td>
+            <td width="300">
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
@@ -49,6 +49,17 @@
         </tr>
     }
 </table>
+<table class="table">
+    <tr>
+        <td width="300"></td>
+        <td>
+            @Html.ActionLink("Return All Items", "ReturnAllItems", new { empID = Model.ID }, new { @class = "btn btn-primary" })
+        </td>
+    </tr>
+</table
+<p>&nbsp;</p>
+<p></p>
+
 
 <h4>Employee Measuring Devices</h4>
 
@@ -64,7 +75,7 @@
     @foreach (var MD in Model.MeasuringDevices)
     {
         <tr>
-            <td>
+            <td width="300">
                 @Html.DisplayFor(modelItem => MD.Name)
             </td>
             <td>
@@ -73,6 +84,18 @@
         </tr>
     }
 </table>
+
+<table class="table">
+    <tr>
+        <td width="300"></td>
+        <td>
+            @Html.ActionLink("Return All Measuring Devices", "ReturnAllMeasuringDevices", new { empID = Model.ID }, new { @class = "btn btn-primary" })
+        </td>
+    </tr>
+</table>
+<p>&nbsp;</p>
+<p></p>
+
 
 <h4>Employee Vehicles</h4>
 
@@ -88,7 +111,7 @@
     @foreach (var vehicle in Model.Vehicles)
     {
         <tr>
-            <td>
+            <td width="300">
                 @Html.DisplayFor(modelItem => vehicle.Name)
             </td>
             <td>
@@ -98,7 +121,27 @@
     }
 </table>
 
-<a href="@Url.Action("Index")"
-   class="btn btn-default">
-    <span class="glyphicon glyphicon-list-alt"></span> Back to List
-</a>
+<table class="table">
+        <tr>
+            <td width="300"></td>
+            <td>
+                @Html.ActionLink("Return All Vehicles", "ReturnAllVehicles", new { empID = Model.ID }, new { @class = "btn btn-primary" })
+            </td>
+        </tr>
+</table>
+
+<p>&nbsp;</p>
+<p></p>
+
+<div class="row">
+    <div class="col-md-2">
+        <a href="@Url.Action("Index")"
+           class="btn btn-default">
+            <span class="glyphicon glyphicon-list-alt"></span> Back to List
+        </a>
+    </div>
+    <div class="col-md-1"></div>
+    <div class="col-md-2">
+        @Html.ActionLink("Return All", "ReturnAllInventory", new { empID = Model.ID }, new { @class = "btn btn-danger" })
+    </div>
+</div>

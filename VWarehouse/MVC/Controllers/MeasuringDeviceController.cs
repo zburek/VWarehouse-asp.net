@@ -22,6 +22,8 @@ namespace MVC.Controllers
             this.service = service;
         }
 
+        #region Get
+
         [HttpGet]
         public async Task<ActionResult> Index()
         {
@@ -53,6 +55,9 @@ namespace MVC.Controllers
             }
             return View(measuringDevice);
         }
+        #endregion
+
+        #region Assign
 
         [HttpGet]
         public async Task<ActionResult> Assign(int? ID)
@@ -88,6 +93,10 @@ namespace MVC.Controllers
             }
             return View(assignedMeasuringDevice);
         }
+        #endregion
+
+        #region CRUD
+        [HttpGet]
         public ActionResult Create()
         {
             return View();
@@ -180,5 +189,6 @@ namespace MVC.Controllers
             }
             return RedirectToAction("Index");
         }
+        #endregion
     }
 }

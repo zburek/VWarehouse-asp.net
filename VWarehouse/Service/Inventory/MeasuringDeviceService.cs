@@ -22,6 +22,7 @@ namespace Service.Inventory
             this.unitOfWork = unitOfWork;
         }
 
+        #region Get
         public async Task<List<IMeasuringDevice>> GetAllAsync(
             Expression<Func<MeasuringDeviceEntity, bool>> filter = null,
             Func<IQueryable<MeasuringDeviceEntity>, IOrderedQueryable<MeasuringDeviceEntity>> orderBy = null,
@@ -39,6 +40,16 @@ namespace Service.Inventory
             return measuringDevice;
         }
 
+        public async Task<IAssignViewModel> CreateAssignViewModelAsync(int? ID)
+        {
+            var measuringDevice = Mapper.Map<IAssignViewModel>(await unitOfWork.MeasuringDevices.GetByIdAsync(ID));
+            measuringDevice.EmployeeList = Mapper.Map<List<IEmployee>>(await unitOfWork.Employees.GetAllAsync(null, null, null));
+            return measuringDevice;
+        }
+
+        #endregion
+
+        #region CRUD
         public async Task CreateAsync(IMeasuringDevice measuringDevice)
         {
             var measuringDeviceEntity = Mapper.Map<MeasuringDeviceEntity>(measuringDevice);
@@ -60,13 +71,9 @@ namespace Service.Inventory
             await unitOfWork.SaveAsync();
         }
 
-        public async Task<IAssignViewModel> CreateAssignViewModelAsync(int? ID)
-        {
-            var measuringDevice = Mapper.Map<IAssignViewModel>(await unitOfWork.MeasuringDevices.GetByIdAsync(ID));
-            measuringDevice.EmployeeList = Mapper.Map<List<IEmployee>>(await unitOfWork.Employees.GetAllAsync(null, null, null));
-            return measuringDevice;
-        }
+        #endregion
 
+        #region Assign and Return
         public async Task AssignMeasuringDeviceAsync(IAssignViewModel measuringDevice)
         {
             var measuringDeviceEntity = await unitOfWork.MeasuringDevices.GetByIdAsync(measuringDevice.ID);
@@ -82,5 +89,18 @@ namespace Service.Inventory
             await unitOfWork.MeasuringDevices.UpdateAsync(measuringDeviceEntity);
             await unitOfWork.SaveAsync();
         }
+
+        public async Task ReturnAllMeasuringDevicesAsync(int? ID)
+        {
+            Expression<Func<MeasuringDeviceEntity, bool>> filter = i => i.EmployeeID == ID;
+            IEnumerable<MeasuringDeviceEntity> measuringDeviceList = await unitOfWork.MeasuringDevices.GetAllAsync(filter, null, null);
+            foreach (var measuringDeviceEntity in measuringDeviceList)
+            {
+                measuringDeviceEntity.EmployeeID = null;
+                await unitOfWork.MeasuringDevices.UpdateAsync(measuringDeviceEntity);
+            }
+            await unitOfWork.SaveAsync();
+        }
+        #endregion
     }
 }

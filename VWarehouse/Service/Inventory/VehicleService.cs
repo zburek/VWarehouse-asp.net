@@ -22,6 +22,7 @@ namespace Service.Inventory
             this.unitOfWork = unitOfWork;
         }
 
+        #region Get
         public async Task<List<IVehicle>> GetAllAsync(
             Expression<Func<VehicleEntity, bool>> filter = null,
             Func<IQueryable<VehicleEntity>, IOrderedQueryable<VehicleEntity>> orderBy = null,
@@ -38,7 +39,16 @@ namespace Service.Inventory
                 (await unitOfWork.Vehicles.GetByIdAsync(ID));
             return vehicle;
         }
+        public async Task<IAssignViewModel> CreateAssignViewModelAsync(int? ID)
+        {
+            var vehicle = Mapper.Map<IAssignViewModel>(await unitOfWork.Vehicles.GetByIdAsync(ID));
+            vehicle.EmployeeList = Mapper.Map<List<IEmployee>>(await unitOfWork.Employees.GetAllAsync(null, null, null));
+            return vehicle;
+        }
 
+        #endregion
+
+        #region CRUD
         public async Task CreateAsync(IVehicle vehicle)
         {
             var vehicleEntity = Mapper.Map<VehicleEntity>(vehicle);
@@ -60,13 +70,9 @@ namespace Service.Inventory
             await unitOfWork.SaveAsync();
         }
 
-        public async Task<IAssignViewModel> CreateAssignViewModelAsync(int? ID)
-        {
-            var vehicle = Mapper.Map<IAssignViewModel>(await unitOfWork.Vehicles.GetByIdAsync(ID));
-            vehicle.EmployeeList = Mapper.Map<List<IEmployee>>(await unitOfWork.Employees.GetAllAsync(null, null, null));
-            return vehicle;
-        }
+        #endregion
 
+        #region Assign and Return
         public async Task AssignVehicleAsync(IAssignViewModel vehicle)
         {
             var vehicleEntity = await unitOfWork.Vehicles.GetByIdAsync(vehicle.ID);
@@ -81,5 +87,19 @@ namespace Service.Inventory
             await unitOfWork.Vehicles.UpdateAsync(vehicleEntity);
             await unitOfWork.SaveAsync();
         }
+
+        public async Task ReturnAllVehiclesAsync(int? ID)
+        {
+            Expression<Func<VehicleEntity, bool>> filter = i => i.EmployeeID == ID;
+            IEnumerable<VehicleEntity> vehicleList = await unitOfWork.Vehicles.GetAllAsync(filter, null, null);
+            foreach (var vehicleEntity in vehicleList)
+            {
+                vehicleEntity.EmployeeID = null;
+                await unitOfWork.Vehicles.UpdateAsync(vehicleEntity);
+            }
+            await unitOfWork.SaveAsync();
+        }
+
+        #endregion
     }
 }

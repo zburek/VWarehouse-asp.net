@@ -22,5 +22,6 @@ namespace Service.Common.Inventory
         Task<IAssignViewModel> CreateAssignViewModelAsync(int? ID);
         Task AssignMeasuringDeviceAsync(IAssignViewModel measuringDevice);
         Task ReturnOneMeasuringDeviceAsync(int? ID);
+        Task ReturnAllMeasuringDevicesAsync(int? ID);
     }
 }

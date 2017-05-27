@@ -51,8 +51,6 @@ namespace Repository
         {
             return await context.Set<TEntity>().FindAsync(ID);
         }
-
-        
         public virtual async Task<IEnumerable<TEntity>> GetAllAsync(
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, 
@@ -107,7 +105,6 @@ namespace Repository
                     throw new ArgumentNullException("entity");
                 }
                 await Task.Run(() => context.Set<TEntity>().Attach(entity));
-
                 await Task.Run(() => context.Entry(entity).State = EntityState.Modified);
             }
             catch (DbEntityValidationException dbEx)
