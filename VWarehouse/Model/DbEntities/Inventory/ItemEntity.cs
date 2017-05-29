@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Model.DbEntities.Inventory
 {
     [Table("Item")]
-    public class ItemEntity : BaseEntity, IItemEntity, IBaseEntity
+    public class ItemEntity : BaseEntity, IItemEntity
     {
         [MaxLength(60)]
         public string Description { get; set; }

@@ -241,11 +241,6 @@ namespace MVC.Controllers
                 await measuringDeviceService.ReturnAllMeasuringDevicesAsync(ID);
                 await vehicleService.ReturnAllVehiclesAsync(ID);
                 await service.DeleteAsync(ID);
-                // Not using unit of work properly? this will make 4 different chunks of changes in DataBase. (not using all succeede or all fail)
-                // Save will be used 4 times
-                // To change Returning should be made from EmployeeService for all Inventory, so that one unit of work is used
-                // But then when adding new tables into Inventory code should be added also to the EmployeeService, instead of only adding newTableService
-                // All of this aplies to the ReturnAllInventory method also
             }
             catch (DataException)
             {

@@ -1,5 +1,4 @@
 ﻿using Model.Common.DbEntities;
-using Model.Common.DbEntities.Inventory;
 using Model.DbEntities.Inventory;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -7,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Model.DbEntities
 {
     [Table("Employee")]
-    public class EmployeeEntity : BaseEntity, IEmployeeEntity, IBaseEntity
+    public class EmployeeEntity : BaseEntity, IEmployeeEntity
     {
         public string PhoneNumber { get; set; }
         /// Add code for additional tables in VWarehouse
@@ -16,13 +15,4 @@ namespace Model.DbEntities
         public ICollection<VehicleEntity> Vehicles { get; set; }
     }
 }
-/*
- Try implement Generic class for adding additional tables into VWarehouse
 
-public class MyClass<T> where T : BaseEntity, IBaseEntity
-    {
-        public List<T> NewList { get; set; }
-
-    }
-
-*/

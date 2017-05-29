@@ -37,9 +37,7 @@
                 @Html.DisplayFor(model => MD.SerialNumber)
             </td>
             <td>
-                @Html.DisplayFor(model => MD.CalibrationExpirationDate.Day)<p style="display:inline">.</p>
-                @Html.DisplayFor(model => MD.CalibrationExpirationDate.Month)<p style="display:inline">.</p>
-                @Html.DisplayFor(model => MD.CalibrationExpirationDate.Year)<p style="display:inline">.</p>
+                @Html.DisplayFor(model => MD.CalibrationExpirationDate)
             </td>
             <td>
                 <a href="@Url.Action("Inventory", "Employee", new { ID=MD.EmployeeID})">@Html.DisplayFor(modelItem => MD.Employee.Name)</a>

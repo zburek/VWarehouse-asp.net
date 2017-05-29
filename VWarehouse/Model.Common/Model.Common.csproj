@@ -53,6 +53,7 @@
     <Compile Include="Inventory\IVehicle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\IAssignViewModel.cs" />
+    <Compile Include="ViewModels\IWarningViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">

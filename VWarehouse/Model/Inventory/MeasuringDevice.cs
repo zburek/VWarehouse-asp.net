@@ -14,6 +14,8 @@ namespace Model.Inventory
         [MaxLength(40)]
         public string Name { get; set; }
         public string SerialNumber { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
         public DateTime CalibrationExpirationDate { get; set; }
         public int? EmployeeID { get; set; }
         public virtual IEmployee Employee { get; set; }

@@ -86,6 +86,8 @@ namespace MVC.App_Start
             kernel.Bind<IVehicleService>().To<VehicleService>().InRequestScope();
             kernel.Bind<IVehicle>().ToSelf().InRequestScope();
 
+            kernel.Bind<WarningService>().ToSelf().InRequestScope();
+            kernel.Bind<IWarningService>().To<WarningService>().InRequestScope();
         }        
     }
 }

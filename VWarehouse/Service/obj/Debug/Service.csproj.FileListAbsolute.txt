@@ -38,3 +38,6 @@ C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service\bin\Debu
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service\obj\Debug\Service.csprojResolveAssemblyReference.cache
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service\obj\Debug\Service.dll
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service\obj\Debug\Service.pdb
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service\bin\Debug\Service.dll.config
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service\bin\Debug\EntityFramework.SqlServer.xml

@@ -39,6 +39,10 @@ namespace Service
                     cfg.CreateMap<IAssignViewModel, ItemEntity>().ReverseMap();
                     cfg.CreateMap<IAssignViewModel, MeasuringDeviceEntity>().ReverseMap();
                     cfg.CreateMap<IAssignViewModel, VehicleEntity>().ReverseMap();
+
+                    cfg.CreateMap<WarningViewModel, IWarningViewModel>().ReverseMap();
+                    cfg.CreateMap<IWarningViewModel, IMeasuringDevice>().ReverseMap();
+                    cfg.CreateMap<IWarningViewModel, IVehicle>().ReverseMap();
                 });
         }
 

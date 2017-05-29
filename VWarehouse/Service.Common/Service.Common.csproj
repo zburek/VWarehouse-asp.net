@@ -44,6 +44,7 @@
     <Compile Include="Inventory\IItemService.cs" />
     <Compile Include="Inventory\IMeasuringDeviceService.cs" />
     <Compile Include="Inventory\IVehicleService.cs" />
+    <Compile Include="IWarningService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

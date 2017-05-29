@@ -14,6 +14,8 @@ namespace Model.Inventory
         [MaxLength(40)]
         public string Name { get; set; }
         public string LicensePlate { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
         public DateTime LicenseExpirationDate { get; set; }
         public int Mileage { get; set; }
         public int NextService { get; set; }

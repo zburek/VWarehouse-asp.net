@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Model.DbEntities.Inventory
 {
     [Table("Vehicle")]
-    public class VehicleEntity : BaseEntity, IVehicleEntity, IBaseEntity
+    public class VehicleEntity : BaseEntity, IVehicleEntity
     {
         public string Type { get; set; }
         public string LicensePlate { get; set; }

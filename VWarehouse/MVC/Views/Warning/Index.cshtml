@@ -1,0 +1,138 @@
+﻿@model Model.Common.ViewModels.IWarningViewModel
+
+@{
+    ViewBag.Title = "Warnings";
+}
+
+<h2>Warnings</h2>
+<p>&nbsp;</p>
+<p></p>
+
+<!--#region Measuring Device Warnings  -->
+<h4>Measuring Device Warnings</h4>
+
+<table class="table">
+    <tr>
+        <th width="200">
+            <b>Name</b>
+        </th>
+        <th width="200">
+            <b>Calibration Expiration Date</b>
+        </th>
+        <th width="200">
+            <b>Employee</b>
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.MeasuringDeviceList)
+    {
+        <tr>
+            <td width="200">
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td width="200">
+                @Html.DisplayFor(modelItem => item.CalibrationExpirationDate)
+            </td>
+            <td width="200">
+                <a href="@Url.Action("Inventory", "Employee", new { ID=item.EmployeeID})">@Html.DisplayFor(modelItem => item.Employee.Name)</a>
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", "MeasuringDevice", new { ID = item.ID }, new { @class = "btn btn-primary" })
+            </td>
+        </tr>
+    }
+</table>
+<p>&nbsp;</p>
+<p></p>
+
+<!--#endregion -->
+
+<!--#region Vehicle License Plate Warnings  -->
+<h4>Vehicle License Plate Warnings</h4>
+
+<table class="table">
+    <tr>
+        <th width="200">
+            <b>Name</b>
+        </th>
+        <th width="200">
+            <b>License Plate Expiration Date</b>
+        </th>
+        <th width="200">
+            <b>Employee</b>
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.VehicleLicensePlateList)
+    {
+        <tr>
+            <td width="300">
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td width="300">
+                @Html.DisplayFor(modelItem => item.LicenseExpirationDate)
+            </td>
+            <td width="300">
+                <a href="@Url.Action("Inventory", "Employee", new { ID=item.EmployeeID})">@Html.DisplayFor(modelItem => item.Employee.Name)</a>
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", "Vehicle", new { ID = item.ID }, new { @class = "btn btn-primary" })
+            </td>
+        </tr>
+    }
+</table>
+<p>&nbsp;</p>
+<p></p>
+
+<!--#endregion -->
+
+<!--#region Vehicle Mileage Warnings  -->
+<h4>Vehicle License Mileage Warnings</h4>
+
+<table class="table">
+    <tr>
+        <th width="200">
+            <b>Name</b>
+        </th>
+        <th width="200">
+            <b>Current Mileage</b>
+        </th>
+        <th width="200">
+            <b>Next Service</b>
+        </th>
+        <th width="200">
+            <b>Employee</b>
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.VehicleMileageList)
+    {
+        <tr>
+            <td width="200">
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td width="200">
+                @Html.DisplayFor(modelItem => item.Mileage)
+            </td>
+            <td width="200">
+                @Html.DisplayFor(modelItem => item.NextService)
+            </td>
+            <td width="200">
+                <a href="@Url.Action("Inventory", "Employee", new { ID=item.EmployeeID})">@Html.DisplayFor(modelItem => item.Employee.Name)</a>
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", "Vehicle", new { ID = item.ID }, new { @class = "btn btn-primary" })
+            </td>
+        </tr>
+    }
+</table>
+<p>&nbsp;</p>
+<p></p>
+
+<!--#endregion -->

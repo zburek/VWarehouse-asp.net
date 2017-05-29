@@ -180,6 +180,7 @@
     <Compile Include="Controllers\ItemController.cs" />
     <Compile Include="Controllers\MeasuringDeviceController.cs" />
     <Compile Include="Controllers\VehicleController.cs" />
+    <Compile Include="Controllers\WarningController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -248,6 +249,7 @@
     <Content Include="Views\Item\Assign.cshtml" />
     <Content Include="Views\MeasuringDevice\Assign.cshtml" />
     <Content Include="Views\Vehicle\Assign.cshtml" />
+    <Content Include="Views\Warning\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

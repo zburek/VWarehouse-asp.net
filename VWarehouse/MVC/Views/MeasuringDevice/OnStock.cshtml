@@ -34,9 +34,7 @@
                 @Html.DisplayFor(model => MD.SerialNumber)
             </td>
             <td>
-                @Html.DisplayFor(model => MD.CalibrationExpirationDate.Day)<p style="display:inline">.</p>
-                @Html.DisplayFor(model => MD.CalibrationExpirationDate.Month)<p style="display:inline">.</p>
-                @Html.DisplayFor(model => MD.CalibrationExpirationDate.Year)<p style="display:inline">.</p>
+                @Html.DisplayFor(model => MD.CalibrationExpirationDate)
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = MD.ID }, new { @class = "btn btn-success" })
