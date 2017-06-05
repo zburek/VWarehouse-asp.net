@@ -163,3 +163,7 @@ C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\MVC\bin\AutoMapp
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\MVC\obj\Debug\MVC.csprojResolveAssemblyReference.cache
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\MVC\obj\Debug\MVC.dll
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\MVC\obj\Debug\MVC.pdb
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\MVC\bin\PagedList.dll
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\MVC\bin\PagedList.Mvc.dll
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\MVC\bin\PagedList.xml
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\MVC\bin\PagedList.Mvc.xml

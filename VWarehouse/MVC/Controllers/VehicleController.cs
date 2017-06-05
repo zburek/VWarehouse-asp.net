@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using System.Net;
@@ -24,20 +23,56 @@ namespace MVC.Controllers
 
         #region Get
         [HttpGet]
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(string currentFilter, int? page, string searchString = null, string sortOrder = null)
         {
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.NameSortParm = sortOrder == "Name" ? "name_desc" : "Name";
+            ViewBag.TypeSortParm = sortOrder == "Type" ? "type_desc" : "Type";
+            ViewBag.LicenseExpirationDateSortParm = sortOrder == "LicenseExpirationDate" ? "licenseExpirationDate_desc" : "LicenseExpirationDate";
+            ViewBag.MileageSortParm = sortOrder == "Mileage" ? "mileage_desc" : "Mileage";
+            ViewBag.NextServiceSortParm = sortOrder == "NextService" ? "nextService_desc" : "NextService";
+            ViewBag.EmployeeSortParm = sortOrder == "Employee" ? "employee_desc" : "Employee";
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewBag.CurrentFilter = searchString;
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
 
-            List<IVehicle> vehicle = await service.GetAllAsync(null, null, null);
-            return View(vehicle);
+            var vehiclePagedList = await service.GetAllPagedListAsync(searchString, sortOrder, pageNumber, pageSize, null);
+            return View(vehiclePagedList);
         }
 
         [HttpGet]
-        public async Task<ActionResult> OnStock()
+        public async Task<ActionResult> OnStock(string currentFilter, int? page, string searchString = null, string sortOrder = null)
         {
-            Expression<Func<VehicleEntity, bool>> filter = e => e.EmployeeID == null;
+            Expression<Func<VehicleEntity, bool>> filter = v => v.EmployeeID == null;
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.NameSortParm = sortOrder == "Name" ? "name_desc" : "Name";
+            ViewBag.TypeSortParm = sortOrder == "Type" ? "type_desc" : "Type";
+            ViewBag.LicenseExpirationDateSortParm = sortOrder == "LicenseExpirationDate" ? "licenseExpirationDate_desc" : "LicenseExpirationDate";
+            ViewBag.MileageSortParm = sortOrder == "Mileage" ? "mileage_desc" : "Mileage";
+            ViewBag.NextServiceSortParm = sortOrder == "NextService" ? "nextService_desc" : "NextService";
+            ViewBag.EmployeeSortParm = sortOrder == "Employee" ? "employee_desc" : "Employee";
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewBag.CurrentFilter = searchString;
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
 
-            List<IVehicle> vehicle = await service.GetAllAsync(filter, null, null);
-            return View(vehicle);
+            var vehiclePagedList = await service.GetAllPagedListAsync(searchString, sortOrder, pageNumber, pageSize, filter);
+            return View(vehiclePagedList);
         }
 
         [HttpGet]

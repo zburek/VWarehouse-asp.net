@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Net;
 using System.Web.Mvc;
@@ -29,10 +28,24 @@ namespace MVC.Controllers
 
         #region Get
         [HttpGet]
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(string currentFilter, int? page, string searchString = null, string sortOrder = null)
         {
-            List<IEmployee> employee = await service.GetAllAsync(null, null, null);
-            return View(employee);
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.NameSortParm = sortOrder == "Name" ? "name_desc" : "Name";
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewBag.CurrentFilter = searchString;
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
+
+            var employeePagedList = await service.GetAllPagedListAsync(searchString, sortOrder, pageNumber, pageSize); 
+            return View(employeePagedList);
         }
         
         [HttpGet]

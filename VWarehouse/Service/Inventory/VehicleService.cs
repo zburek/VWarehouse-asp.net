@@ -3,6 +3,7 @@ using Model.Common;
 using Model.Common.Inventory;
 using Model.Common.ViewModels;
 using Model.DbEntities.Inventory;
+using PagedList;
 using Repository;
 using Repository.Common;
 using Service.Common.Inventory;
@@ -33,6 +34,76 @@ namespace Service.Inventory
                 (await unitOfWork.Vehicles.GetAllAsync(filter, orderBy, includeProperties)));
         }
 
+        public async Task<StaticPagedList<IVehicle>> GetAllPagedListAsync(
+            string searchString, string sortOrder, int pageNumber, int pageSize,
+            Expression<Func<VehicleEntity, bool>> filter = null)
+        {
+            Func<IQueryable<VehicleEntity>, IOrderedQueryable<VehicleEntity>> orderBy = null;
+            if (!String.IsNullOrEmpty(searchString) && filter == null)
+            {
+                filter = v => v.Name.Contains(searchString);
+            }
+            else if (!String.IsNullOrEmpty(searchString) && filter != null)
+            {
+                filter = v => v.Name.Contains(searchString) && v.EmployeeID == null;
+            }
+            else if (filter != null)
+            {
+                filter = v => v.EmployeeID == null;
+            }
+            #region This is ridiculous, need another way
+            switch (sortOrder)
+            {
+                case "Name":
+                    orderBy = source => source.OrderBy(v => v.Name);
+                    break;
+                case "name_desc":
+                    orderBy = source => source.OrderByDescending(v => v.Name);
+                    break;
+                case "Type":
+                    orderBy = source => source.OrderBy(v => v.Type);
+                    break;
+                case "type_desc":
+                    orderBy = source => source.OrderByDescending(v => v.Type);
+                    break;
+                case "LicenseExpirationDate":
+                    orderBy = source => source.OrderBy(v => v.LicenseExpirationDate);
+                    break;
+                case "licenseExpirationDate_desc":
+                    orderBy = source => source.OrderByDescending(v => v.LicenseExpirationDate);
+                    break;
+                case "Mileage":
+                    orderBy = source => source.OrderBy(v => v.Mileage);
+                    break;
+                case "mileage_desc":
+                    orderBy = source => source.OrderByDescending(v => v.Mileage);
+                    break;
+                case "NextService":
+                    orderBy = source => source.OrderBy(v => v.NextService);
+                    break;
+                case "nextService_desc":
+                    orderBy = source => source.OrderByDescending(v => v.NextService);
+                    break;
+                case "Employee":
+                    orderBy = source => source.OrderBy(v => v.Employee.Name);
+                    break;
+                case "employee_desc":
+                    orderBy = source => source.OrderByDescending(v => v.Employee.Name);
+                    break;
+                default:
+                    orderBy = source => source.OrderBy(v => v.ID);
+                    break;
+            }
+            #endregion
+            var skip = (pageNumber - 1) * pageSize;
+            var take = pageSize;
+
+            var count = await unitOfWork.Vehicles.GetCountAsync(filter);
+            var vehicleList = (Mapper.Map<List<IVehicle>>(await unitOfWork.Vehicles.GetAllPagedListAsync(filter, orderBy, null, skip, take)));
+            var vehiclePagedList = new StaticPagedList<IVehicle>(vehicleList, pageNumber, pageSize, count);
+
+            return vehiclePagedList;
+        }
         public async Task<IVehicle> GetByIdAsync(int? ID)
         {
             var vehicle = Mapper.Map<IVehicle>
@@ -52,21 +123,21 @@ namespace Service.Inventory
         public async Task CreateAsync(IVehicle vehicle)
         {
             var vehicleEntity = Mapper.Map<VehicleEntity>(vehicle);
-            await unitOfWork.Vehicles.AddAsync(vehicleEntity);
+            int test = await unitOfWork.Vehicles.AddAsync(vehicleEntity);
             await unitOfWork.SaveAsync();
         }
 
         public async Task UpdateAsync(IVehicle vehicle)
         {
             var vehicleEntity = Mapper.Map<VehicleEntity>(vehicle);
-            await unitOfWork.Vehicles.UpdateAsync(vehicleEntity);
+            int test = await unitOfWork.Vehicles.UpdateAsync(vehicleEntity);
             await unitOfWork.SaveAsync();
         }
 
         public async Task DeleteAsync(int ID)
         {
             var vehicleEntity = Mapper.Map<VehicleEntity>(await unitOfWork.Vehicles.GetByIdAsync(ID));
-            await unitOfWork.Vehicles.DeleteAsync(vehicleEntity);
+            int test = await unitOfWork.Vehicles.DeleteAsync(vehicleEntity);
             await unitOfWork.SaveAsync();
         }
 
@@ -77,14 +148,14 @@ namespace Service.Inventory
         {
             var vehicleEntity = await unitOfWork.Vehicles.GetByIdAsync(vehicle.ID);
             vehicleEntity.EmployeeID = vehicle.EmployeeID;
-            await unitOfWork.Vehicles.UpdateAsync(vehicleEntity);
+            int test = await unitOfWork.Vehicles.UpdateAsync(vehicleEntity);
             await unitOfWork.SaveAsync();
         }
         public async Task ReturnOneVehicleAsync(int? ID)
         {
             var vehicleEntity = Mapper.Map<VehicleEntity>(await unitOfWork.Vehicles.GetByIdAsync(ID));
             vehicleEntity.EmployeeID = null;
-            await unitOfWork.Vehicles.UpdateAsync(vehicleEntity);
+            int test = await unitOfWork.Vehicles.UpdateAsync(vehicleEntity);
             await unitOfWork.SaveAsync();
         }
 
@@ -95,11 +166,10 @@ namespace Service.Inventory
             foreach (var vehicleEntity in vehicleList)
             {
                 vehicleEntity.EmployeeID = null;
-                await unitOfWork.Vehicles.UpdateAsync(vehicleEntity);
+                int test = await unitOfWork.Vehicles.UpdateAsync(vehicleEntity);
             }
             await unitOfWork.SaveAsync();
         }
-
         #endregion
     }
 }

@@ -3,6 +3,7 @@ using Model.Common;
 using Model.Common.Inventory;
 using Model.Common.ViewModels;
 using Model.DbEntities.Inventory;
+using PagedList;
 using Repository;
 using Repository.Common;
 using Service.Common.Inventory;
@@ -33,6 +34,56 @@ namespace Service.Inventory
                 (await unitOfWork.MeasuringDevices.GetAllAsync(filter, orderBy, includeProperties)));
         }
 
+        public async Task<StaticPagedList<IMeasuringDevice>> GetAllPagedListAsync(
+            string searchString, string sortOrder, int pageNumber, int pageSize,
+            Expression<Func<MeasuringDeviceEntity, bool>> filter = null)
+        {
+            Func<IQueryable<MeasuringDeviceEntity>, IOrderedQueryable<MeasuringDeviceEntity>> orderBy = null;
+            if (!String.IsNullOrEmpty(searchString) && filter == null)
+            {
+                filter = MD => MD.Name.Contains(searchString);
+            }
+            else if (!String.IsNullOrEmpty(searchString) && filter != null)
+            {
+                filter = MD => MD.Name.Contains(searchString) && MD.EmployeeID == null;
+            }
+            else if (filter != null)
+            {
+                filter = MD => MD.EmployeeID == null;
+            }
+            switch (sortOrder)
+            {
+                case "Name":
+                    orderBy = source => source.OrderBy(MD => MD.Name);
+                    break;
+                case "name_desc":
+                    orderBy = source => source.OrderByDescending(MD => MD.Name);
+                    break;
+                case "CalibrationExpirationDate":
+                    orderBy = source => source.OrderBy(MD => MD.CalibrationExpirationDate);
+                    break;
+                case "calibrationExpirationDate_desc":
+                    orderBy = source => source.OrderByDescending(MD => MD.CalibrationExpirationDate);
+                    break;
+                case "Employee":
+                    orderBy = source => source.OrderBy(MD => MD.Employee.Name);
+                    break;
+                case "employee_desc":
+                    orderBy = source => source.OrderByDescending(MD => MD.Employee.Name);
+                    break;
+                default:
+                    orderBy = source => source.OrderBy(MD => MD.ID);
+                    break;
+            }
+            var skip = (pageNumber - 1) * pageSize;
+            var take = pageSize;
+
+            var count = await unitOfWork.MeasuringDevices.GetCountAsync(filter);
+            var measuringDeviceList = (Mapper.Map<List<IMeasuringDevice>>(await unitOfWork.MeasuringDevices.GetAllPagedListAsync(filter, orderBy, null, skip, take)));
+            var measuringDevicePagedList = new StaticPagedList<IMeasuringDevice>(measuringDeviceList, pageNumber, pageSize, count);
+
+            return measuringDevicePagedList;
+        }
         public async Task<IMeasuringDevice> GetByIdAsync(int? ID)
         {
             var measuringDevice = Mapper.Map<IMeasuringDevice>
@@ -53,21 +104,21 @@ namespace Service.Inventory
         public async Task CreateAsync(IMeasuringDevice measuringDevice)
         {
             var measuringDeviceEntity = Mapper.Map<MeasuringDeviceEntity>(measuringDevice);
-            await unitOfWork.MeasuringDevices.AddAsync(measuringDeviceEntity);
+            int test = await unitOfWork.MeasuringDevices.AddAsync(measuringDeviceEntity);
             await unitOfWork.SaveAsync();
         }
 
         public async Task UpdateAsync(IMeasuringDevice measuringDevice)
         {
             var measuringDeviceEntity = Mapper.Map<MeasuringDeviceEntity>(measuringDevice);
-            await unitOfWork.MeasuringDevices.UpdateAsync(measuringDeviceEntity);
+            int test = await unitOfWork.MeasuringDevices.UpdateAsync(measuringDeviceEntity);
             await unitOfWork.SaveAsync();
         }
         
         public async Task DeleteAsync(int ID)
         {
             var measuringDeviceEntity = Mapper.Map<MeasuringDeviceEntity>(await unitOfWork.MeasuringDevices.GetByIdAsync(ID));
-            await unitOfWork.MeasuringDevices.DeleteAsync(measuringDeviceEntity);
+            int test = await unitOfWork.MeasuringDevices.DeleteAsync(measuringDeviceEntity);
             await unitOfWork.SaveAsync();
         }
 
@@ -78,7 +129,7 @@ namespace Service.Inventory
         {
             var measuringDeviceEntity = await unitOfWork.MeasuringDevices.GetByIdAsync(measuringDevice.ID);
             measuringDeviceEntity.EmployeeID = measuringDevice.EmployeeID;
-            await unitOfWork.MeasuringDevices.UpdateAsync(measuringDeviceEntity);
+            int test = await unitOfWork.MeasuringDevices.UpdateAsync(measuringDeviceEntity);
             await unitOfWork.SaveAsync();
         }
 
@@ -86,7 +137,7 @@ namespace Service.Inventory
         {
             var measuringDeviceEntity = Mapper.Map<MeasuringDeviceEntity>(await unitOfWork.MeasuringDevices.GetByIdAsync(ID));
             measuringDeviceEntity.EmployeeID = null;
-            await unitOfWork.MeasuringDevices.UpdateAsync(measuringDeviceEntity);
+            int test = await unitOfWork.MeasuringDevices.UpdateAsync(measuringDeviceEntity);
             await unitOfWork.SaveAsync();
         }
 
@@ -97,7 +148,7 @@ namespace Service.Inventory
             foreach (var measuringDeviceEntity in measuringDeviceList)
             {
                 measuringDeviceEntity.EmployeeID = null;
-                await unitOfWork.MeasuringDevices.UpdateAsync(measuringDeviceEntity);
+                int test = await unitOfWork.MeasuringDevices.UpdateAsync(measuringDeviceEntity);
             }
             await unitOfWork.SaveAsync();
         }

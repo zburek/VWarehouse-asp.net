@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using System.Net;
@@ -25,22 +24,49 @@ namespace MVC.Controllers
         #region Get
 
         [HttpGet]
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(string currentFilter, int? page, string searchString = null, string sortOrder = null)
         {
-            // Func<IQueryable<ItemEntity>, IOrderedQueryable<ItemEntity>> orderBy = source => source.OrderByDescending(e => e.Name);
-            // Expression<Func<ItemEntity, bool>> filter = e => e.Name == "Mark";
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.NameSortParm = sortOrder == "Name" ? "name_desc" : "Name";
+            ViewBag.DescriptionSortParm = sortOrder == "Description" ? "description_desc" : "Description";
+            ViewBag.EmployeeSortParm = sortOrder == "Employee" ? "employee_desc" : "Employee";
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewBag.CurrentFilter = searchString;
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
 
-            List<IItem> item = await service.GetAllAsync(null, null, null);
-            return View(item);
+            var itemPagedList = await service.GetAllPagedListAsync(searchString, sortOrder, pageNumber, pageSize, null);
+            return View(itemPagedList);
         }
 
         [HttpGet]
-        public async Task<ActionResult> OnStock()
+        public async Task<ActionResult> OnStock(string currentFilter, int? page, string searchString = null, string sortOrder = null)
         {
-            Expression<Func<ItemEntity, bool>> filter = e => e.EmployeeID == null;
+            Expression<Func<ItemEntity, bool>> filter = i => i.EmployeeID == null;
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.NameSortParm = sortOrder == "Name" ? "name_desc" : "Name";
+            ViewBag.DescriptionSortParm = sortOrder == "Description" ? "description_desc" : "Description";
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewBag.CurrentFilter = searchString;
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
 
-            List<IItem> item = await service.GetAllAsync(filter, null, null);
-            return View(item);
+            var itemPagedList = await service.GetAllPagedListAsync(searchString, sortOrder, pageNumber, pageSize, filter);
+            return View(itemPagedList);
         }
 
         [HttpGet]

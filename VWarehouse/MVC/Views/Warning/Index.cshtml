@@ -70,13 +70,13 @@
     @foreach (var item in Model.VehicleLicensePlateList)
     {
         <tr>
-            <td width="300">
+            <td width="200">
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
-            <td width="300">
+            <td width="200">
                 @Html.DisplayFor(modelItem => item.LicenseExpirationDate)
             </td>
-            <td width="300">
+            <td width="200">
                 <a href="@Url.Action("Inventory", "Employee", new { ID=item.EmployeeID})">@Html.DisplayFor(modelItem => item.Employee.Name)</a>
             </td>
             <td>

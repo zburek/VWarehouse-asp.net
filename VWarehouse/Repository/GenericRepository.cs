@@ -3,7 +3,6 @@ using Repository.Common;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Validation;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -18,9 +17,11 @@ namespace Repository
             this.context = context;
         }
         protected virtual IQueryable<TEntity> GetQueryable
-            (Expression<Func<TEntity, bool>> filter = null, 
-            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, 
-            string includeProperties = null)
+            (Expression<Func<TEntity, bool>> filter = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            string includeProperties = null,
+            int? skip = null,
+            int? take = null)
         {
 
             includeProperties = includeProperties ?? string.Empty;
@@ -37,12 +38,18 @@ namespace Repository
             {
                 query = query.Include(includeProperty);
             }
-            
             if (orderBy != null)
             {
                 query = orderBy(query);
             }
-
+            if (skip.HasValue)
+            {
+                query = query.Skip(skip.Value);
+            }
+            if (take.HasValue)
+            {
+                query = query.Take(take.Value);
+            }
             return query;
         }
 
@@ -53,10 +60,10 @@ namespace Repository
         }
         public virtual async Task<IEnumerable<TEntity>> GetAllAsync(
             Expression<Func<TEntity, bool>> filter = null,
-            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, 
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             string includeProperties = null)
         {
-            return await GetQueryable(filter, orderBy, includeProperties).ToListAsync();
+            return await GetQueryable(filter, null, includeProperties).ToListAsync();
         }
 
         public virtual async Task<TEntity> GetOneAsync(
@@ -65,99 +72,82 @@ namespace Repository
         {
             return await GetQueryable(filter, null, includeProperties).SingleOrDefaultAsync();
         }
+
+        public virtual Task<int> GetCountAsync(Expression<Func<TEntity, bool>> filter = null)
+        {
+            return GetQueryable(filter).CountAsync();
+        }
+
         #endregion
 
         #region CRUD
-        public virtual async Task AddAsync(TEntity entity)
+        public virtual Task<int> AddAsync(TEntity entity)
         {
             try
             {
-                if (entity == null)
+                var dbEntityEntry = context.Entry(entity);
+                if (dbEntityEntry.State != EntityState.Detached)
                 {
-                    throw new ArgumentNullException("entity");
+                    dbEntityEntry.State = EntityState.Added;
                 }
-                await Task.Run(() => context.Set<TEntity>().Add(entity));
+                else
+                {
+                    context.Set<TEntity>().Add(entity);
+                }
+                return Task.FromResult(1);
             }
-            catch (DbEntityValidationException dbEx)
+            catch (Exception e)
             {
-                var msg = string.Empty;
-
-                foreach (var validationErrors in dbEx.EntityValidationErrors)
-                {
-                    foreach (var validationError in validationErrors.ValidationErrors)
-                    {
-                        msg += string.Format("Property: {0} Error: {1}",
-                        validationError.PropertyName, validationError.ErrorMessage) + Environment.NewLine;
-                    }
-                }
-
-                var fail = new Exception(msg, dbEx);
-                throw fail;
+                throw e;
             }
-
         }
-        public virtual async Task UpdateAsync(TEntity entity)
+        public virtual Task<int> UpdateAsync(TEntity entity)
         {
             try
             {
-                if (entity == null)
+                var dbEntityEntry = context.Entry(entity);
+                if (dbEntityEntry.State == EntityState.Detached)
                 {
-                    throw new ArgumentNullException("entity");
+                    context.Set<TEntity>().Attach(entity);
                 }
-                await Task.Run(() => context.Set<TEntity>().Attach(entity));
-                await Task.Run(() => context.Entry(entity).State = EntityState.Modified);
+                dbEntityEntry.State = EntityState.Modified;
+                return Task.FromResult(1);
             }
-            catch (DbEntityValidationException dbEx)
+            catch (Exception e)
             {
-                var msg = string.Empty;
-                foreach (var validationErrors in dbEx.EntityValidationErrors)
-                {
-                    foreach (var validationError in validationErrors.ValidationErrors)
-                    {
-                        msg += Environment.NewLine + string.Format("Property: {0} Error: {1}",
-                        validationError.PropertyName, validationError.ErrorMessage);
-                    }
-                }
-                var fail = new Exception(msg, dbEx);
-                throw fail;
+                throw e;
             }
         }
-        
-        public virtual async Task DeleteAsync(object ID)
+
+        public virtual Task<int> DeleteAsync(object ID)
         {
-            TEntity entity = context.Set<TEntity>().Find(ID);
-            await DeleteAsync(entity);
+            var entity = context.Set<TEntity>().Find(ID);
+            if (entity == null)
+            {
+                return Task.FromResult(0);
+            }
+            return DeleteAsync(entity);
         }
-        
-        public virtual async Task DeleteAsync(TEntity entity)
+
+        public virtual Task<int> DeleteAsync(TEntity entity)
         {
             try
             {
-                if (entity == null)
+                var dbEntityEntry = context.Entry(entity);
+                if (dbEntityEntry.State != EntityState.Deleted)
                 {
-                    throw new ArgumentNullException("entity");
+                    dbEntityEntry.State = EntityState.Deleted;
                 }
-                var dbSet = context.Set<TEntity>();
-                if (context.Entry(entity).State == EntityState.Detached)
+                else
                 {
-                    await Task.Run(() => dbSet.Attach(entity));
+                    context.Set<TEntity>().Attach(entity);
+                    context.Set<TEntity>().Remove(entity);
                 }
-                await Task.Run(() => dbSet.Remove(entity));
+                return Task.FromResult(1);
             }
-            catch (DbEntityValidationException dbEx)
+            catch (Exception e)
             {
-                var msg = string.Empty;
-
-                foreach (var validationErrors in dbEx.EntityValidationErrors)
-                {
-                    foreach (var validationError in validationErrors.ValidationErrors)
-                    {
-                        msg += Environment.NewLine + string.Format("Property: {0} Error: {1}",
-                        validationError.PropertyName, validationError.ErrorMessage);
-                    }
-                }
-                var fail = new Exception(msg, dbEx);
-                throw fail;
+                throw e;
             }
         }
         #endregion

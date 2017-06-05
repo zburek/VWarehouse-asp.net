@@ -1,5 +1,6 @@
-﻿@model IEnumerable<Model.Common.Inventory.IItem>
-
+﻿@model PagedList.IPagedList<Model.Common.Inventory.IItem>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 @{
     ViewBag.Title = "Index";
 }
@@ -10,42 +11,58 @@
    class="btn btn-success">
     <span class="glyphicon glyphicon-plus"></span> New Item
 </a>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.SerialNumber)
-        </th>
-        <th>
-            <b>Employee</b>
-        </th>
-        <th></th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.SerialNumber)
-        </td>
-        <td>
-            <a href="@Url.Action("Inventory", "Employee", new { ID=item.EmployeeID})">@Html.DisplayFor(modelItem => item.Employee.Name)</a>
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id = item.ID }, new { @class = "btn btn-success" })
-            @Html.ActionLink("Details", "Details", new { id = item.ID }, new { @class = "btn btn-primary" })
-            @Html.ActionLink("Delete", "Delete", new { id = item.ID }, new { @class = "btn btn-danger" })
-        </td>
-    </tr>
+@using (Html.BeginForm("Index", "Item", FormMethod.Get))
+{
+    <p>
+        Search by Item Name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+        <input type="submit" value="Search" />
+    </p>
 }
-</table>
+<div style="height: 350px">
+    <table class="table">
+        <tr>
+            <th>
+                @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink("Description", "Index", new { sortOrder = ViewBag.DescriptionSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                Serial Number
+            </th>
+            <th>
+                @Html.ActionLink("Employee", "Index", new { sortOrder = ViewBag.EmployeeSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td width="150">
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td width="150">
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td width="150">
+                    @Html.DisplayFor(modelItem => item.SerialNumber)
+                </td>
+                <td width="150">
+                    <a href="@Url.Action("Inventory", "Employee", new { ID=item.EmployeeID})">@Html.DisplayFor(modelItem => item.Employee.Name)</a>
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ID }, new { @class = "btn btn-success" })
+                    @Html.ActionLink("Details", "Details", new { id = item.ID }, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ID }, new { @class = "btn btn-danger" })
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

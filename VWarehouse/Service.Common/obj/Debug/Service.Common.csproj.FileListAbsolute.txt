@@ -32,3 +32,7 @@ C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service.Common\b
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service.Common\obj\Debug\Service.Common.csprojResolveAssemblyReference.cache
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service.Common\obj\Debug\Service.Common.dll
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service.Common\obj\Debug\Service.Common.pdb
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service.Common\bin\Debug\PagedList.dll
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service.Common\bin\Debug\PagedList.Mvc.dll
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service.Common\bin\Debug\PagedList.xml
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service.Common\bin\Debug\PagedList.Mvc.xml

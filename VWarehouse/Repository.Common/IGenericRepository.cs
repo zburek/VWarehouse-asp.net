@@ -12,14 +12,15 @@ namespace Repository.Common
     {
         Task<IEnumerable<TEntity>> GetAllAsync(
             Expression<Func<TEntity, bool>> filter = null,
-            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, 
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             string includeProperties = null);
         Task<TEntity> GetByIdAsync(int? ID);
         Task<TEntity> GetOneAsync(
             Expression<Func<TEntity, bool>> filter = null,
             string includeProperties = null);
-        Task AddAsync(TEntity entity);
-        Task UpdateAsync(TEntity entity);
-        Task DeleteAsync(TEntity entity);
+        Task<int> GetCountAsync(Expression<Func<TEntity, bool>> filter = null);
+        Task<int> AddAsync(TEntity entity);
+        Task<int> UpdateAsync(TEntity entity);
+        Task<int> DeleteAsync(TEntity entity);
     }
 }

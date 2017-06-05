@@ -13,13 +13,9 @@ namespace MVC.App_Start
     using DAL;
     using Repository;
     using Service.Common;
-    using Service;
-    using Model.Common;
-    using Model.Common.Inventory;
+    using Service; 
     using Service.Common.Inventory;
     using Service.Inventory;
-    using Model.Common.ViewModels;
-    using Model.ViewModels;
 
     public static class NinjectWebCommon 
     {
@@ -75,18 +71,11 @@ namespace MVC.App_Start
             kernel.Bind<UnitOfWork>().ToSelf().InRequestScope();
 
             kernel.Bind<IEmployeeService>().To<EmployeeService>().InRequestScope();
-            kernel.Bind<IEmployee>().ToSelf().InRequestScope();
 
             kernel.Bind<IItemService>().To<ItemService>().InRequestScope();
-            kernel.Bind<IItem>().ToSelf().InRequestScope();
-
             kernel.Bind<IMeasuringDeviceService>().To<MeasuringDeviceService>().InRequestScope();
-            kernel.Bind<IMeasuringDevice>().ToSelf().InRequestScope();
-
             kernel.Bind<IVehicleService>().To<VehicleService>().InRequestScope();
-            kernel.Bind<IVehicle>().ToSelf().InRequestScope();
 
-            kernel.Bind<WarningService>().ToSelf().InRequestScope();
             kernel.Bind<IWarningService>().To<WarningService>().InRequestScope();
         }        
     }

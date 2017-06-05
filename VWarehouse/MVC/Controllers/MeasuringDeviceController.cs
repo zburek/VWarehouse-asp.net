@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using System.Net;
@@ -25,20 +24,49 @@ namespace MVC.Controllers
         #region Get
 
         [HttpGet]
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(string currentFilter, int? page, string searchString = null, string sortOrder = null)
         {
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.NameSortParm = sortOrder == "Name" ? "name_desc" : "Name";
+            ViewBag.CalibrationExpirationDateSortParm = sortOrder == "CalibrationExpirationDate" ? "calibrationExpirationDate_desc" : "CalibrationExpirationDate";
+            ViewBag.EmployeeSortParm = sortOrder == "Employee" ? "employee_desc" : "Employee";
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewBag.CurrentFilter = searchString;
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
 
-            List<IMeasuringDevice> measuringDevice = await service.GetAllAsync(null, null, null);
-            return View(measuringDevice);
+            var measuringDevicePagedList = await service.GetAllPagedListAsync(searchString, sortOrder, pageNumber, pageSize, null);
+            return View(measuringDevicePagedList);
         }
 
         [HttpGet]
-        public async Task<ActionResult> OnStock()
+        public async Task<ActionResult> OnStock(string currentFilter, int? page, string searchString = null, string sortOrder = null)
         {
-            Expression<Func<MeasuringDeviceEntity, bool>> filter = e => e.EmployeeID == null;
+            Expression<Func<MeasuringDeviceEntity, bool>> filter = MD => MD.EmployeeID == null;
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.NameSortParm = sortOrder == "Name" ? "name_desc" : "Name";
+            ViewBag.CalibrationExpirationDateSortParm = sortOrder == "CalibrationExpirationDate" ? "calibrationExpirationDate_desc" : "CalibrationExpirationDate";
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewBag.CurrentFilter = searchString;
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
 
-            List<IMeasuringDevice> measuringDevice = await service.GetAllAsync(filter, null, null);
-            return View(measuringDevice);
+            var measuringDevicePagedList = await service.GetAllPagedListAsync(searchString, sortOrder, pageNumber, pageSize, filter);
+            return View(measuringDevicePagedList);
         }
 
         [HttpGet]

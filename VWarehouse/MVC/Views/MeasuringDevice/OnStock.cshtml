@@ -1,47 +1,65 @@
-﻿@model IEnumerable<Model.Common.Inventory.IMeasuringDevice>
+﻿@model PagedList.IPagedList<Model.Common.Inventory.IMeasuringDevice>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
     ViewBag.Title = "OnStock";
 }
 
-<h2>Index</h2>
+<h2>On Stock</h2>
 
 <a href="@Url.Action("Create")"
    class="btn btn-success">
     <span class="glyphicon glyphicon-plus"></span> New Measuring Device
 </a>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.SerialNumber)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CalibrationExpirationDate)
-        </th>
-        <th></th>
-    </tr>
 
-    @foreach (var MD in Model)
-    {
+@using (Html.BeginForm("Index", "MeasuringDevice", FormMethod.Get))
+{
+    <p>
+        Search by Measuring Device Name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+        <input type="submit" value="Search" />
+    </p>
+}
+
+<div style="height: 350px">
+    <table class="table">
         <tr>
-            <td>
-                @Html.DisplayFor(model => MD.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(model => MD.SerialNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(model => MD.CalibrationExpirationDate)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = MD.ID }, new { @class = "btn btn-success" })
-                @Html.ActionLink("Assign", "Assign", new { id = MD.ID }, new { @class = "btn btn-success" })
-                @Html.ActionLink("Details", "Details", new { id = MD.ID }, new { @class = "btn btn-primary" })
-                @Html.ActionLink("Delete", "Delete", new { id = MD.ID }, new { @class = "btn btn-danger" })
-            </td>
+            <th>
+                @Html.ActionLink("Name", "OnStock", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                Serial Number
+            </th>
+            <th>
+                @Html.ActionLink("CalibrationExpirationDate", "OnStock", new { sortOrder = ViewBag.CalibrationExpirationDateSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th></th>
         </tr>
-    }
-</table>
+
+        @foreach (var MD in Model)
+        {
+            <tr>
+                <td width="150">
+                    @Html.DisplayFor(modelItem => MD.Name)
+                </td>
+                <td width="150">
+                    @Html.DisplayFor(model => MD.SerialNumber)
+                </td>
+                <td width="150">
+                    @Html.DisplayFor(model => MD.CalibrationExpirationDate)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = MD.ID }, new { @class = "btn btn-success" })
+                    @Html.ActionLink("Assign", "Assign", new { id = MD.ID }, new { @class = "btn btn-success" })
+                    @Html.ActionLink("Details", "Details", new { id = MD.ID }, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Delete", "Delete", new { id = MD.ID }, new { @class = "btn btn-danger" })
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("OnStock",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

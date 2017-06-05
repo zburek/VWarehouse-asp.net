@@ -1,6 +1,7 @@
 ﻿using Model.Common.Inventory;
 using Model.Common.ViewModels;
 using Model.DbEntities.Inventory;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,9 @@ namespace Service.Common.Inventory
             Func<IQueryable<ItemEntity>, IOrderedQueryable<ItemEntity>> orderBy = null,
             string includeProperties = null);
         Task<IItem> GetByIdAsync(int? ID);
+        Task<StaticPagedList<IItem>> GetAllPagedListAsync(
+            string searchString, string sortOrder, int pageNumber, int pageSize,
+            Expression<Func<ItemEntity, bool>> filter = null);
         Task CreateAsync(IItem item);
         Task UpdateAsync(IItem item);
         Task DeleteAsync(int ID);

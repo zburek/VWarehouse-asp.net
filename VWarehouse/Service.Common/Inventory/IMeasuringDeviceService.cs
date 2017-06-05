@@ -1,6 +1,7 @@
 ﻿using Model.Common.Inventory;
 using Model.Common.ViewModels;
 using Model.DbEntities.Inventory;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,9 @@ namespace Service.Common.Inventory
             Func<IQueryable<MeasuringDeviceEntity>, IOrderedQueryable<MeasuringDeviceEntity>> orderBy = null,
             string includeProperties = null);
         Task<IMeasuringDevice> GetByIdAsync(int? ID);
+        Task<StaticPagedList<IMeasuringDevice>> GetAllPagedListAsync(
+            string searchString, string sortOrder, int pageNumber, int pageSize,
+            Expression<Func<MeasuringDeviceEntity, bool>> filter = null);
         Task CreateAsync(IMeasuringDevice measuringDevice);
         Task UpdateAsync(IMeasuringDevice measuringDevice);
         Task DeleteAsync(int ID);

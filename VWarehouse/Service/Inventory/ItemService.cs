@@ -3,6 +3,7 @@ using Model.Common;
 using Model.Common.Inventory;
 using Model.Common.ViewModels;
 using Model.DbEntities.Inventory;
+using PagedList;
 using Repository;
 using Repository.Common;
 using Service.Common.Inventory;
@@ -33,6 +34,56 @@ namespace Service.Inventory
                 (await unitOfWork.Items.GetAllAsync(filter, orderBy, includeProperties)));
         }
 
+        public async Task<StaticPagedList<IItem>> GetAllPagedListAsync(
+            string searchString, string sortOrder, int pageNumber, int pageSize,
+            Expression<Func<ItemEntity, bool>> filter = null)
+        {
+            Func<IQueryable<ItemEntity>, IOrderedQueryable<ItemEntity>> orderBy = null;
+            if (!String.IsNullOrEmpty(searchString) && filter == null)
+            {
+                filter = i => i.Name.Contains(searchString);
+            }
+            else if(!String.IsNullOrEmpty(searchString) && filter != null)
+            {
+                filter = i => i.Name.Contains(searchString) && i.EmployeeID == null;
+            }
+            else if (filter != null)
+            {
+                filter = i => i.EmployeeID == null;
+            }
+            switch (sortOrder)
+            {
+                case "Name":
+                    orderBy = source => source.OrderBy(i => i.Name);
+                    break;
+                case "name_desc":
+                    orderBy = source => source.OrderByDescending(i => i.Name);
+                    break;
+                case "Description":
+                    orderBy = source => source.OrderBy(i => i.Description);
+                    break;
+                case "description_desc":
+                    orderBy = source => source.OrderByDescending(i => i.Name);
+                    break;
+                case "Employee":
+                    orderBy = source => source.OrderBy(i => i.Employee.Name);
+                    break;
+                case "employee_desc":
+                    orderBy = source => source.OrderByDescending(i => i.Employee.Name);
+                    break;
+                default:
+                    orderBy = source => source.OrderBy(i => i.ID);
+                    break;
+            }
+            var skip = (pageNumber - 1) * pageSize;
+            var take = pageSize;
+
+            var count = await unitOfWork.Items.GetCountAsync(filter);
+            var itemList = (Mapper.Map<List<IItem>>(await unitOfWork.Items.GetAllPagedListAsync(filter, orderBy, null, skip, take)));
+            var itemPagedList = new StaticPagedList<IItem>(itemList, pageNumber, pageSize, count);
+
+            return itemPagedList;
+        }
         public async Task<IItem> GetByIdAsync(int? ID)
         {
             var item = Mapper.Map<IItem>(await unitOfWork.Items.GetByIdAsync(ID));
@@ -51,21 +102,21 @@ namespace Service.Inventory
         public async Task CreateAsync(IItem item)
         {
             var itemEntity = Mapper.Map<ItemEntity>(item);
-            await unitOfWork.Items.AddAsync(itemEntity);
+            int test = await unitOfWork.Items.AddAsync(itemEntity);
             await unitOfWork.SaveAsync();
         }
 
         public async Task UpdateAsync(IItem item)
         {
             var itemEntity = Mapper.Map<ItemEntity>(item);
-            await unitOfWork.Items.UpdateAsync(itemEntity);
+            int test = await unitOfWork.Items.UpdateAsync(itemEntity);
             await unitOfWork.SaveAsync();
         }
 
         public async Task DeleteAsync(int ID)
         {
             var itemEntity = Mapper.Map<ItemEntity>(await unitOfWork.Items.GetByIdAsync(ID));
-            await unitOfWork.Items.DeleteAsync(itemEntity);
+            int test = await unitOfWork.Items.DeleteAsync(itemEntity);
             await unitOfWork.SaveAsync();
         }
         #endregion
@@ -75,14 +126,14 @@ namespace Service.Inventory
         {
             var itemEntity = await unitOfWork.Items.GetByIdAsync(item.ID);
             itemEntity.EmployeeID = item.EmployeeID;
-            await unitOfWork.Items.UpdateAsync(itemEntity);
+            int test = await unitOfWork.Items.UpdateAsync(itemEntity);
             await unitOfWork.SaveAsync();
         }
         public async Task ReturnOneItemAsync(int? ID)
         {
             var itemEntity = Mapper.Map<ItemEntity>(await unitOfWork.Items.GetByIdAsync(ID));
             itemEntity.EmployeeID = null;
-            await unitOfWork.Items.UpdateAsync(itemEntity);
+            int test = await unitOfWork.Items.UpdateAsync(itemEntity);
             await unitOfWork.SaveAsync();
         }
         public async Task ReturnAllItemsAsync(int? ID)
@@ -92,7 +143,7 @@ namespace Service.Inventory
             foreach(var itemEntity in itemList)
             {
                 itemEntity.EmployeeID = null;
-                await unitOfWork.Items.UpdateAsync(itemEntity);
+                int test = await unitOfWork.Items.UpdateAsync(itemEntity);
             }
             await unitOfWork.SaveAsync();
         }
