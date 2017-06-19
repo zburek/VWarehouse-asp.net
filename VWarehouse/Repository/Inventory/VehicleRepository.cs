@@ -11,9 +11,9 @@ namespace Repository.Inventory
     public class VehicleRepository : IVehicleRepository
     {
         protected IGenericRepository<VehicleEntity> Repository { get; private set; }
-        public VehicleRepository(VWarehouseContext context)
+        public VehicleRepository(IGenericRepository<VehicleEntity> repository)
         {
-            this.Repository = new GenericRepository<VehicleEntity>(context);
+            this.Repository = repository;
         }
 
         #region Get
@@ -33,19 +33,22 @@ namespace Repository.Inventory
         #endregion
 
         #region Basic CRUD
-        public async Task<int> CreateAsync(VehicleEntity itemEntity)
+        public async Task CreateAsync(VehicleEntity vehicleEntity)
         {
-            return await Repository.AddAsync(itemEntity);
+            int addTest = await Repository.AddAsync(vehicleEntity);
+            int saveTest = await Repository.SaveAsync();
         }
 
-        public async Task<int> UpdateAsync(VehicleEntity itemEntity)
+        public async Task UpdateAsync(VehicleEntity vehicleEntity)
         {
-            return await Repository.UpdateAsync(itemEntity);
+            int updateTest = await Repository.UpdateAsync(vehicleEntity);
+            int saveTest = await Repository.SaveAsync(); 
         }
 
-        public async Task<int> DeleteAsync(Guid ID)
+        public async Task DeleteAsync(Guid ID)
         {
-            return await Repository.DeleteAsync(ID);
+            int updateTest = await Repository.DeleteAsync(ID);
+            int saveTest = await Repository.SaveAsync();
         }
         #endregion
     }

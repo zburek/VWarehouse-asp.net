@@ -109,22 +109,19 @@ namespace Service.Inventory
         public async Task CreateAsync(IVehicle vehicle)
         {
             var vehicleEntity = Mapper.Map<VehicleEntity>(vehicle);
-            int test = await unitOfWork.Vehicles.CreateAsync(vehicleEntity);
-            await unitOfWork.SaveAsync();
+            await unitOfWork.Vehicles.CreateAsync(vehicleEntity);
         }
 
         public async Task UpdateAsync(IVehicle vehicle)
         {
             var vehicleEntity = Mapper.Map<VehicleEntity>(vehicle);
-            int test = await unitOfWork.Vehicles.UpdateAsync(vehicleEntity);
-            await unitOfWork.SaveAsync();
+            await unitOfWork.Vehicles.UpdateAsync(vehicleEntity);
         }
 
         public async Task DeleteAsync(Guid ID)
         {
             var vehicleEntity = Mapper.Map<VehicleEntity>(await unitOfWork.Vehicles.GetByIdAsync(ID));
-            int test = await unitOfWork.Vehicles.DeleteAsync(vehicleEntity.ID);
-            await unitOfWork.SaveAsync();
+            await unitOfWork.Vehicles.DeleteAsync(vehicleEntity.ID);
         }
 
         #endregion
@@ -134,15 +131,13 @@ namespace Service.Inventory
         {
             var vehicleEntity = await unitOfWork.Vehicles.GetByIdAsync(itemID);
             vehicleEntity.EmployeeID = employeeID;
-            int test = await unitOfWork.Vehicles.UpdateAsync(vehicleEntity);
-            await unitOfWork.SaveAsync();
+            await unitOfWork.Vehicles.UpdateAsync(vehicleEntity);
         }
         public async Task ReturnOneVehicleAsync(Guid? ID)
         {
             var vehicleEntity = Mapper.Map<VehicleEntity>(await unitOfWork.Vehicles.GetByIdAsync(ID));
             vehicleEntity.EmployeeID = null;
-            int test = await unitOfWork.Vehicles.UpdateAsync(vehicleEntity);
-            await unitOfWork.SaveAsync();
+            await unitOfWork.Vehicles.UpdateAsync(vehicleEntity);
         }
 
         public async Task ReturnAllVehiclesAsync(Guid? ID)
@@ -153,9 +148,8 @@ namespace Service.Inventory
             foreach (var vehicleEntity in vehicleList)
             {
                 vehicleEntity.EmployeeID = null;
-                int test = await unitOfWork.Vehicles.UpdateAsync(vehicleEntity);
+                await unitOfWork.Vehicles.UpdateAsync(vehicleEntity);
             }
-            await unitOfWork.SaveAsync();
         }
         #endregion
     }

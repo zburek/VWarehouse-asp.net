@@ -10,9 +10,9 @@ namespace Repository
     public class EmployeeRepository : IEmployeeRepository
     {
         protected IGenericRepository<EmployeeEntity> Repository { get; private set; }
-        public EmployeeRepository(VWarehouseContext context)
+        public EmployeeRepository(IGenericRepository<EmployeeEntity> repository)
         {
-            this.Repository = new GenericRepository<EmployeeEntity>(context);
+            this.Repository = repository;
         }
 
         #region Get
@@ -38,21 +38,23 @@ namespace Repository
         #endregion
 
         #region CRUD
-        public async Task<int> AddAsync(EmployeeEntity entity)
+        public async Task AddAsync(EmployeeEntity entity)
         {
-            return await Repository.AddAsync(entity);
+            int addTest = await Repository.AddAsync(entity);
+            int saveTest = await Repository.SaveAsync();
         }
 
-        public async Task<int> UpdateAsync(EmployeeEntity entity)
+        public async Task UpdateAsync(EmployeeEntity entity)
         {
-            return await Repository.UpdateAsync(entity);
+            int updateTest = await Repository.UpdateAsync(entity);
+            int saveTest = await Repository.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid ID)
+        public async Task DeleteAsync(Guid ID)
         {
-            return await Repository.DeleteAsync(ID);
+            int updateTest = await Repository.DeleteAsync(ID);
+            int saveTest = await Repository.SaveAsync();
         }
         #endregion
-
     }
 }

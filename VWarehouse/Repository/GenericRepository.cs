@@ -12,7 +12,7 @@ namespace Repository
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class, IBaseEntity
     {
         protected readonly DbContext context;
-        public GenericRepository(DbContext context)
+        public GenericRepository(VWarehouseContext context)
         {
             this.context = context;
         }
@@ -20,7 +20,7 @@ namespace Repository
         {
 
             parameters.IncludeProperties = parameters.IncludeProperties ?? string.Empty;
-            
+
             IQueryable<TEntity> query = context.Set<TEntity>();
 
             if (parameters.Filter != null)
@@ -141,6 +141,27 @@ namespace Repository
             {
                 throw e;
             }
+        }
+        #endregion
+
+        #region Save/Dispose
+
+        public virtual async Task<int> SaveAsync()
+        {
+            int result = 0;
+            try
+            {
+                result = await context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            return result;
+        }
+        public void Dispose()
+        {
+            context.Dispose();
         }
         #endregion
     }

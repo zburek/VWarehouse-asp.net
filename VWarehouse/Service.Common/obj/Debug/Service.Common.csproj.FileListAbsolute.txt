@@ -36,3 +36,26 @@ C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service.Common\b
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service.Common\bin\Debug\PagedList.Mvc.dll
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service.Common\bin\Debug\PagedList.xml
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service.Common\bin\Debug\PagedList.Mvc.xml
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service.Common\bin\Debug\Service.Common.dll
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service.Common\bin\Debug\Service.Common.pdb
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service.Common\bin\Debug\Common.dll
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service.Common\bin\Debug\DAL.dll
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service.Common\bin\Debug\Model.Common.dll
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service.Common\bin\Debug\Model.dll
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service.Common\bin\Debug\PagedList.dll
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service.Common\bin\Debug\PagedList.Mvc.dll
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service.Common\bin\Debug\Repository.Common.dll
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service.Common\bin\Debug\Repository.dll
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service.Common\bin\Debug\EntityFramework.dll
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service.Common\bin\Debug\Common.pdb
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service.Common\bin\Debug\DAL.pdb
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service.Common\bin\Debug\Model.Common.pdb
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service.Common\bin\Debug\Model.pdb
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service.Common\bin\Debug\Repository.Common.pdb
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service.Common\bin\Debug\Repository.pdb
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service.Common\bin\Debug\PagedList.xml
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service.Common\bin\Debug\PagedList.Mvc.xml
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service.Common\bin\Debug\EntityFramework.xml
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service.Common\obj\Debug\Service.Common.csprojResolveAssemblyReference.cache
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service.Common\obj\Debug\Service.Common.dll
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service.Common\obj\Debug\Service.Common.pdb

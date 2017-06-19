@@ -45,3 +45,31 @@ C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service\bin\Debu
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service\bin\Debug\PagedList.Mvc.dll
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service\bin\Debug\PagedList.xml
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service\bin\Debug\PagedList.Mvc.xml
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service\bin\Debug\Service.dll.config
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service\bin\Debug\Service.dll
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service\bin\Debug\Service.pdb
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service\bin\Debug\AutoMapper.dll
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service\bin\Debug\DAL.dll
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service\bin\Debug\EntityFramework.dll
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service\bin\Debug\EntityFramework.SqlServer.dll
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service\bin\Debug\Model.Common.dll
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service\bin\Debug\Model.dll
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service\bin\Debug\PagedList.dll
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service\bin\Debug\PagedList.Mvc.dll
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service\bin\Debug\Repository.Common.dll
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service\bin\Debug\Repository.dll
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service\bin\Debug\Service.Common.dll
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service\bin\Debug\DAL.pdb
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service\bin\Debug\Model.Common.pdb
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service\bin\Debug\Model.pdb
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service\bin\Debug\Repository.Common.pdb
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service\bin\Debug\Repository.pdb
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service\bin\Debug\Service.Common.pdb
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service\bin\Debug\AutoMapper.xml
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service\bin\Debug\EntityFramework.xml
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service\bin\Debug\EntityFramework.SqlServer.xml
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service\bin\Debug\PagedList.xml
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service\bin\Debug\PagedList.Mvc.xml
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service\obj\Debug\Service.csprojResolveAssemblyReference.cache
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service\obj\Debug\Service.dll
+D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service\obj\Debug\Service.pdb

@@ -11,8 +11,8 @@ namespace Repository.Common.Inventory
         Task<IEnumerable<MeasuringDeviceEntity>> GetAllAsync(IParameters<MeasuringDeviceEntity> parameters);
         Task<MeasuringDeviceEntity> GetByIdAsync(Guid? ID);
         Task<int> GetCountAsync(IParameters<MeasuringDeviceEntity> parameters);
-        Task<int> CreateAsync(MeasuringDeviceEntity itemEntity);
-        Task<int> UpdateAsync(MeasuringDeviceEntity itemEntity);
-        Task<int> DeleteAsync(Guid ID);
+        Task CreateAsync(MeasuringDeviceEntity measuringDeviceEntity);
+        Task UpdateAsync(MeasuringDeviceEntity measuringDeviceEntity);
+        Task DeleteAsync(Guid ID);
     }
 }

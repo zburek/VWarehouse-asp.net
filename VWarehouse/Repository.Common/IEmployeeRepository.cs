@@ -15,8 +15,8 @@ namespace Repository.Common
         Task<IEnumerable<EmployeeEntity>> GetAllAsync(IParameters<EmployeeEntity> parameters);
         Task<EmployeeEntity> GetOneAsync(IParameters<EmployeeEntity> parameters);
         Task<int> GetCountAsync(IParameters<EmployeeEntity> parameters);
-        Task<int> AddAsync(EmployeeEntity entity);
-        Task<int> UpdateAsync(EmployeeEntity entity);
-        Task<int> DeleteAsync(Guid ID);
+        Task AddAsync(EmployeeEntity entity);
+        Task UpdateAsync(EmployeeEntity entity);
+        Task DeleteAsync(Guid ID);
     }
 }

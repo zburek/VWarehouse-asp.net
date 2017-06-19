@@ -77,15 +77,13 @@ namespace Service
         public async Task CreateAsync(IEmployee employee)
         {
             var employeeEntity = Mapper.Map<EmployeeEntity>(employee);
-            int test = await unitOfWork.Employees.AddAsync(employeeEntity);
-            await unitOfWork.SaveAsync();
+            await unitOfWork.Employees.AddAsync(employeeEntity);
         }
 
         public async Task UpdateAsync(IEmployee employee)
         {
             var employeeEntity = Mapper.Map<EmployeeEntity>(employee);
-            int test = await unitOfWork.Employees.UpdateAsync(employeeEntity);
-            await unitOfWork.SaveAsync();
+            await unitOfWork.Employees.UpdateAsync(employeeEntity);
         }
         
         public async Task DeleteAsync(Guid ID)
@@ -101,26 +99,25 @@ namespace Service
                 (await unitOfWork.Items.GetAllAsync(itemParameters)));
             foreach(ItemEntity item in employeeItems)
             {
-                int testItem = await unitOfWork.Items.DeleteAsync(item.ID);
+                await unitOfWork.Items.DeleteAsync(item.ID);
             }
 
             List<MeasuringDeviceEntity> employeeMeasuringDevices = (Mapper.Map<List<MeasuringDeviceEntity>>
                 (await unitOfWork.MeasuringDevices.GetAllAsync(measuringDeviceParameters)));
             foreach (MeasuringDeviceEntity measuringDevice in employeeMeasuringDevices)
             {
-                int testMeasuringDevice = await unitOfWork.MeasuringDevices.DeleteAsync(measuringDevice.ID);
+                await unitOfWork.MeasuringDevices.DeleteAsync(measuringDevice.ID);
             }
 
             List<VehicleEntity> employeeVehicles = (Mapper.Map<List<VehicleEntity>>
                 (await unitOfWork.Vehicles.GetAllAsync(vehicleParameters)));
             foreach (VehicleEntity vehicle in employeeVehicles)
             {
-                int testVehicle = await unitOfWork.Vehicles.DeleteAsync(vehicle.ID);
+                await unitOfWork.Vehicles.DeleteAsync(vehicle.ID);
             }
 
             var employeeEnity = Mapper.Map<EmployeeEntity>(await unitOfWork.Employees.GetByIdAsync(ID));
-            int test = await unitOfWork.Employees.DeleteAsync(employeeEnity.ID);
-            await unitOfWork.SaveAsync();
+            await unitOfWork.Employees.DeleteAsync(employeeEnity.ID);
         }
         #endregion
     }

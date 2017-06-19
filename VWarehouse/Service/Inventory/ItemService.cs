@@ -88,22 +88,19 @@ namespace Service.Inventory
         public async Task CreateAsync(IItem item)
         {
             var itemEntity = Mapper.Map<ItemEntity>(item);
-            int test = await unitOfWork.Items.CreateAsync(itemEntity);
-            await unitOfWork.SaveAsync();
+            await unitOfWork.Items.CreateAsync(itemEntity);
         }
 
         public async Task UpdateAsync(IItem item)
         {
             var itemEntity = Mapper.Map<ItemEntity>(item);
-            int test = await unitOfWork.Items.UpdateAsync(itemEntity);
-            await unitOfWork.SaveAsync();
+            await unitOfWork.Items.UpdateAsync(itemEntity);
         }
 
         public async Task DeleteAsync(Guid ID)
         {
             var itemEntity = Mapper.Map<ItemEntity>(await unitOfWork.Items.GetByIdAsync(ID));
-            int test = await unitOfWork.Items.DeleteAsync(itemEntity.ID);
-            await unitOfWork.SaveAsync();
+            await unitOfWork.Items.DeleteAsync(itemEntity.ID);
         }
         #endregion
 
@@ -112,15 +109,13 @@ namespace Service.Inventory
         {
             var itemEntity = await unitOfWork.Items.GetByIdAsync(itemID);
             itemEntity.EmployeeID = employeeID;
-            int test = await unitOfWork.Items.UpdateAsync(itemEntity);
-            await unitOfWork.SaveAsync();
+            await unitOfWork.Items.UpdateAsync(itemEntity);
         }
         public async Task ReturnOneItemAsync(Guid? ID)
         {
             var itemEntity = Mapper.Map<ItemEntity>(await unitOfWork.Items.GetByIdAsync(ID));
             itemEntity.EmployeeID = null;
-            int test = await unitOfWork.Items.UpdateAsync(itemEntity);
-            await unitOfWork.SaveAsync();
+            await unitOfWork.Items.UpdateAsync(itemEntity);
         }
         public async Task ReturnAllItemsAsync(Guid? ID)
         {
@@ -130,9 +125,8 @@ namespace Service.Inventory
             foreach(var itemEntity in itemList)
             {
                 itemEntity.EmployeeID = null;
-                int test = await unitOfWork.Items.UpdateAsync(itemEntity);
+                await unitOfWork.Items.UpdateAsync(itemEntity);
             }
-            await unitOfWork.SaveAsync();
         }
         #endregion
 

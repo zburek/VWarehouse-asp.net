@@ -11,8 +11,8 @@ namespace Repository.Common.Inventory
         Task<IEnumerable<VehicleEntity>> GetAllAsync(IParameters<VehicleEntity> parameters);
         Task<VehicleEntity> GetByIdAsync(Guid? ID);
         Task<int> GetCountAsync(IParameters<VehicleEntity> parameters);
-        Task<int> CreateAsync(VehicleEntity itemEntity);
-        Task<int> UpdateAsync(VehicleEntity itemEntity);
-        Task<int> DeleteAsync(Guid ID);
+        Task CreateAsync(VehicleEntity vehicleEntity);
+        Task UpdateAsync(VehicleEntity vehicleEntity);
+        Task DeleteAsync(Guid ID);
     }
 }

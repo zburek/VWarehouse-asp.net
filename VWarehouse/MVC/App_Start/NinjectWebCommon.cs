@@ -19,8 +19,8 @@ namespace MVC.App_Start
     using DAL.DbEntities;
     using DAL.DbEntities.Inventory;
     using Repository.Common;
-    using Model.Common;
-    using Model;
+    using Repository.Common.Inventory;
+    using Repository.Inventory;
 
     public static class NinjectWebCommon 
     {
@@ -85,6 +85,16 @@ namespace MVC.App_Start
             kernel.Bind<IParameters<ItemEntity>>().To<Parameters<ItemEntity>>().InRequestScope();
             kernel.Bind<IParameters<MeasuringDeviceEntity>>().To<Parameters<MeasuringDeviceEntity>>().InRequestScope();
             kernel.Bind<IParameters<VehicleEntity>>().To<Parameters<VehicleEntity>>().InRequestScope();
+
+            kernel.Bind<IEmployeeRepository>().To<EmployeeRepository>().InRequestScope();
+            kernel.Bind<IItemRepository>().To<ItemRepository>().InRequestScope();
+            kernel.Bind<IMeasuringDeviceRepository>().To<MeasuringDeviceRepository>().InRequestScope();
+            kernel.Bind<IVehicleRepository>().To<VehicleRepository>().InRequestScope();
+
+            kernel.Bind<IGenericRepository<EmployeeEntity>>().To<GenericRepository<EmployeeEntity>>().InRequestScope();
+            kernel.Bind<IGenericRepository<ItemEntity>>().To<GenericRepository<ItemEntity>>().InRequestScope();
+            kernel.Bind<IGenericRepository<MeasuringDeviceEntity>>().To<GenericRepository<MeasuringDeviceEntity>>().InRequestScope();
+            kernel.Bind<IGenericRepository<VehicleEntity>>().To<GenericRepository<VehicleEntity>>().InRequestScope();
         }        
     }
 }

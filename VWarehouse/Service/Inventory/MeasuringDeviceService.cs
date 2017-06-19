@@ -88,22 +88,19 @@ namespace Service.Inventory
         public async Task CreateAsync(IMeasuringDevice measuringDevice)
         {
             var measuringDeviceEntity = Mapper.Map<MeasuringDeviceEntity>(measuringDevice);
-            int test = await unitOfWork.MeasuringDevices.CreateAsync(measuringDeviceEntity);
-            await unitOfWork.SaveAsync();
+            await unitOfWork.MeasuringDevices.CreateAsync(measuringDeviceEntity);
         }
 
         public async Task UpdateAsync(IMeasuringDevice measuringDevice)
         {
             var measuringDeviceEntity = Mapper.Map<MeasuringDeviceEntity>(measuringDevice);
-            int test = await unitOfWork.MeasuringDevices.UpdateAsync(measuringDeviceEntity);
-            await unitOfWork.SaveAsync();
+            await unitOfWork.MeasuringDevices.UpdateAsync(measuringDeviceEntity);
         }
         
         public async Task DeleteAsync(Guid ID)
         {
             var measuringDeviceEntity = Mapper.Map<MeasuringDeviceEntity>(await unitOfWork.MeasuringDevices.GetByIdAsync(ID));
-            int test = await unitOfWork.MeasuringDevices.DeleteAsync(measuringDeviceEntity.ID);
-            await unitOfWork.SaveAsync();
+            await unitOfWork.MeasuringDevices.DeleteAsync(measuringDeviceEntity.ID);
         }
 
         #endregion
@@ -113,16 +110,14 @@ namespace Service.Inventory
         {
             var measuringDeviceEntity = await unitOfWork.MeasuringDevices.GetByIdAsync(itemID);
             measuringDeviceEntity.EmployeeID = employeeID;
-            int test = await unitOfWork.MeasuringDevices.UpdateAsync(measuringDeviceEntity);
-            await unitOfWork.SaveAsync();
+            await unitOfWork.MeasuringDevices.UpdateAsync(measuringDeviceEntity);
         }
 
         public async Task ReturnOneMeasuringDeviceAsync(Guid? ID)
         {
             var measuringDeviceEntity = Mapper.Map<MeasuringDeviceEntity>(await unitOfWork.MeasuringDevices.GetByIdAsync(ID));
             measuringDeviceEntity.EmployeeID = null;
-            int test = await unitOfWork.MeasuringDevices.UpdateAsync(measuringDeviceEntity);
-            await unitOfWork.SaveAsync();
+            await unitOfWork.MeasuringDevices.UpdateAsync(measuringDeviceEntity);
         }
 
         public async Task ReturnAllMeasuringDevicesAsync(Guid? ID)
@@ -133,9 +128,8 @@ namespace Service.Inventory
             foreach (var measuringDeviceEntity in measuringDeviceList)
             {
                 measuringDeviceEntity.EmployeeID = null;
-                int test = await unitOfWork.MeasuringDevices.UpdateAsync(measuringDeviceEntity);
+                await unitOfWork.MeasuringDevices.UpdateAsync(measuringDeviceEntity);
             }
-            await unitOfWork.SaveAsync();
         }
         #endregion
     }

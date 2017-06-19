@@ -11,9 +11,9 @@ namespace Repository.Inventory
     public class MeasuringDeviceRepository : IMeasuringDeviceRepository
     {
         protected IGenericRepository<MeasuringDeviceEntity> Repository { get; private set; }
-        public MeasuringDeviceRepository(VWarehouseContext context)
+        public MeasuringDeviceRepository(IGenericRepository<MeasuringDeviceEntity> repository)
         {
-            this.Repository = new GenericRepository<MeasuringDeviceEntity>(context);
+            this.Repository = repository;
         }
 
         #region Get
@@ -33,19 +33,22 @@ namespace Repository.Inventory
         #endregion
 
         #region Basic CRUD
-        public async Task<int> CreateAsync(MeasuringDeviceEntity measuringDeviceEntity)
+        public async Task CreateAsync(MeasuringDeviceEntity measuringDeviceEntity)
         {
-            return await Repository.AddAsync(measuringDeviceEntity);
+            int addTest = await Repository.AddAsync(measuringDeviceEntity);
+            int saveTest = await Repository.SaveAsync();
         }
 
-        public async Task<int> UpdateAsync(MeasuringDeviceEntity measuringDeviceEntity)
+        public async Task UpdateAsync(MeasuringDeviceEntity measuringDeviceEntity)
         {
-            return await Repository.UpdateAsync(measuringDeviceEntity);
+            int updateTest = await Repository.UpdateAsync(measuringDeviceEntity);
+            int saveTest = await Repository.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync(Guid ID)
+        public async Task DeleteAsync(Guid ID)
         {
-            return await Repository.DeleteAsync(ID);
+            int updateTest = await Repository.DeleteAsync(ID);
+            int saveTest = await Repository.SaveAsync();
         }
         #endregion
     }
