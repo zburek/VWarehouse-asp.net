@@ -18,11 +18,7 @@ C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\DAL\bin\Debug\DA
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\DAL\bin\Debug\Common.dll
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\DAL\bin\Debug\EntityFramework.dll
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\DAL\bin\Debug\EntityFramework.SqlServer.dll
-C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\DAL\bin\Debug\Model.Common.dll
-C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\DAL\bin\Debug\Model.dll
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\DAL\bin\Debug\Common.pdb
-C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\DAL\bin\Debug\Model.Common.pdb
-C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\DAL\bin\Debug\Model.pdb
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\DAL\bin\Debug\EntityFramework.xml
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\DAL\bin\Debug\EntityFramework.SqlServer.xml
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\DAL\obj\Debug\DAL.csprojResolveAssemblyReference.cache

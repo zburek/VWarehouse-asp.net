@@ -1,5 +1,5 @@
-﻿using Model.DbEntities;
-using Model.DbEntities.Inventory;
+﻿using DAL.DbEntities;
+using DAL.DbEntities.Inventory;
 using System.Data.Entity;
 
 namespace DAL

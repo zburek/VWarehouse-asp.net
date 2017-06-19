@@ -3,27 +3,29 @@ using System.Data;
 using System.Net;
 using System.Web.Mvc;
 using Model;
-using Model.DbEntities;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Model.Common;
 using Service.Common;
 using Service.Common.Inventory;
+using DAL;
+using DAL.DbEntities;
 
 namespace MVC.Controllers
 {
     public class EmployeeController : Controller
     {
-        protected IEmployeeService service;
-        protected IItemService itemService;
-        protected IMeasuringDeviceService measuringDeviceService;
-        protected IVehicleService vehicleService;
-        public EmployeeController(IEmployeeService service, IItemService itemService, IMeasuringDeviceService measuringDeviceService, IVehicleService vehicleService)
+        protected IEmployeeService Service;
+        protected IItemService ItemService;
+        protected IMeasuringDeviceService MeasuringDeviceService;
+        protected IVehicleService VehicleService;
+        protected IParameters<EmployeeEntity> parameters;
+        public EmployeeController(IEmployeeService service, IItemService itemService, IMeasuringDeviceService measuringDeviceService, IVehicleService vehicleService, IParameters<EmployeeEntity> parameters)
         { 
-            this.service = service;
-            this.itemService = itemService;
-            this.measuringDeviceService = measuringDeviceService;
-            this.vehicleService = vehicleService;
+            this.Service = service;
+            this.ItemService = itemService;
+            this.MeasuringDeviceService = measuringDeviceService;
+            this.VehicleService = vehicleService;
+            this.parameters = parameters;
         }
 
         #region Get
@@ -41,21 +43,23 @@ namespace MVC.Controllers
                 searchString = currentFilter;
             }
             ViewBag.CurrentFilter = searchString;
-            int pageSize = 5;
-            int pageNumber = (page ?? 1);
+            parameters.PageSize = 5;
+            parameters.PageNumber = (page ?? 1);
+            parameters.SearchString = searchString;
+            parameters.SortOrder = sortOrder;
 
-            var employeePagedList = await service.GetAllPagedListAsync(searchString, sortOrder, pageNumber, pageSize); 
+            var employeePagedList = await Service.GetAllPagedListAsync(parameters); 
             return View(employeePagedList);
         }
         
         [HttpGet]
-        public async Task<ActionResult> Details(int? ID)
+        public async Task<ActionResult> Details(Guid? ID)
         {
             if (ID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            IEmployee employee = await service.GetByIdAsync(ID);
+            IEmployee employee = await Service.GetByIdAsync(ID);
             if (employee == null)
             {
                 return HttpNotFound();
@@ -64,15 +68,15 @@ namespace MVC.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Inventory(int? ID)
+        public async Task<ActionResult> Inventory(Guid? ID)
         {
             if (ID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Expression<Func<EmployeeEntity, bool>> filter = e => e.ID == ID;
-            string includeProperties = "Items, MeasuringDevices, Vehicles";
-            IEmployee employee = await service.GetOneAsync(filter, includeProperties);
+            parameters.Filter = e => e.ID == ID;
+            parameters.IncludeProperties = "Items, MeasuringDevices, Vehicles";
+            IEmployee employee = await Service.GetOneAsync(parameters);
             if (employee == null)
             {
                 return HttpNotFound();
@@ -83,81 +87,81 @@ namespace MVC.Controllers
 
         #region Inventory return
         [HttpGet]
-        public async Task<ActionResult> ReturnOneItem(int? itemID, int? empID)
+        public async Task<ActionResult> ReturnOneItem(Guid? itemID, Guid? empID)
         {
             if (itemID == null || empID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            await itemService.ReturnOneItemAsync(itemID);
+            await ItemService.ReturnOneItemAsync(itemID);
             return RedirectToAction("Inventory", new { ID = empID });
         }
 
         [HttpGet]
-        public async Task<ActionResult> ReturnAllItems(int? empID)
+        public async Task<ActionResult> ReturnAllItems(Guid? empID)
         {
             if (empID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            await itemService.ReturnAllItemsAsync(empID);
+            await ItemService.ReturnAllItemsAsync(empID);
             return RedirectToAction("Inventory", new { ID = empID });
         }
 
         [HttpGet]
-        public async Task<ActionResult> ReturnOneMeasuringDevice(int? MDeviceID, int? empID)
+        public async Task<ActionResult> ReturnOneMeasuringDevice(Guid? MDeviceID, Guid? empID)
         {
             if (MDeviceID == null || empID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            await measuringDeviceService.ReturnOneMeasuringDeviceAsync(MDeviceID);
+            await MeasuringDeviceService.ReturnOneMeasuringDeviceAsync(MDeviceID);
             return RedirectToAction("Inventory", new { ID = empID });
         }
 
         [HttpGet]
-        public async Task<ActionResult> ReturnAllMeasuringDevices(int? empID)
+        public async Task<ActionResult> ReturnAllMeasuringDevices(Guid? empID)
         {
             if (empID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            await measuringDeviceService.ReturnAllMeasuringDevicesAsync(empID);
+            await MeasuringDeviceService.ReturnAllMeasuringDevicesAsync(empID);
             return RedirectToAction("Inventory", new { ID = empID });
         }
 
         [HttpGet]
-        public async Task<ActionResult> ReturnOneVehicle(int? vhID, int? empID)
+        public async Task<ActionResult> ReturnOneVehicle(Guid? vhID, Guid? empID)
         {
             if (vhID == null || empID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            await vehicleService.ReturnOneVehicleAsync(vhID);
+            await VehicleService.ReturnOneVehicleAsync(vhID);
             return RedirectToAction("Inventory", new { ID = empID });
         }
 
         [HttpGet]
-        public async Task<ActionResult> ReturnAllVehicles(int? empID)
+        public async Task<ActionResult> ReturnAllVehicles(Guid? empID)
         {
             if (empID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            await vehicleService.ReturnAllVehiclesAsync(empID);
+            await VehicleService.ReturnAllVehiclesAsync(empID);
             return RedirectToAction("Inventory", new { ID = empID });
         }
 
         [HttpGet]
-        public async Task<ActionResult> ReturnAllInventory(int? empID)
+        public async Task<ActionResult> ReturnAllInventory(Guid? empID)
         {
             if (empID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            await itemService.ReturnAllItemsAsync(empID);
-            await measuringDeviceService.ReturnAllMeasuringDevicesAsync(empID);
-            await vehicleService.ReturnAllVehiclesAsync(empID);
+            await ItemService.ReturnAllItemsAsync(empID);
+            await MeasuringDeviceService.ReturnAllMeasuringDevicesAsync(empID);
+            await VehicleService.ReturnAllVehiclesAsync(empID);
             return RedirectToAction("Inventory", new { ID = empID });
         }
         #endregion
@@ -179,7 +183,7 @@ namespace MVC.Controllers
                 if (ModelState.IsValid)
                 {
                     IEmployee employee = createdEmployee; // Not sure this is allowed, use automapper for new employee?
-                    await service.CreateAsync(employee);
+                    await Service.CreateAsync(employee);
                     return RedirectToAction("Index");
                 }
             }
@@ -191,13 +195,13 @@ namespace MVC.Controllers
         }
         
         [HttpGet]
-        public async Task<ActionResult> Edit(int? ID)
+        public async Task<ActionResult> Edit(Guid? ID)
         {
             if (ID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            IEmployee employee = await service.GetByIdAsync(ID);
+            IEmployee employee = await Service.GetByIdAsync(ID);
             if (employee == null)
             {
                 return HttpNotFound();
@@ -214,7 +218,7 @@ namespace MVC.Controllers
                 if (ModelState.IsValid)
                 {
                     IEmployee employee = editedEmployee; // Not sure this is allowed, use automapper for new employee?
-                    await service.UpdateAsync(employee);
+                    await Service.UpdateAsync(employee);
                     return RedirectToAction("Index");
                 }
             }
@@ -226,7 +230,7 @@ namespace MVC.Controllers
         }
         
         [HttpGet]
-        public async Task<ActionResult> Delete(int? ID, bool? saveChangesError = false)
+        public async Task<ActionResult> Delete(Guid? ID, bool? saveChangesError = false)
         {
             if (ID == null)
             {
@@ -236,7 +240,7 @@ namespace MVC.Controllers
             {
                 ViewBag.ErrorMessage = "Delete faild. Try again and if the problem persists see your system administrator.";
             }
-            IEmployee employee = await service.GetByIdAsync(ID);
+            IEmployee employee = await Service.GetByIdAsync(ID);
             if (employee == null)
             {
                 return HttpNotFound();
@@ -246,14 +250,14 @@ namespace MVC.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int ID)
+        public async Task<ActionResult> DeleteConfirmed(Guid ID)
         {
             try
             {
-                await itemService.ReturnAllItemsAsync(ID);
-                await measuringDeviceService.ReturnAllMeasuringDevicesAsync(ID);
-                await vehicleService.ReturnAllVehiclesAsync(ID);
-                await service.DeleteAsync(ID);
+                await ItemService.ReturnAllItemsAsync(ID);
+                await MeasuringDeviceService.ReturnAllMeasuringDevicesAsync(ID);
+                await VehicleService.ReturnAllVehiclesAsync(ID);
+                await Service.DeleteAsync(ID);
             }
             catch (DataException)
             {

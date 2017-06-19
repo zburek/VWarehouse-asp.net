@@ -1,29 +1,52 @@
 ﻿using DAL;
-using Model.DbEntities.Inventory;
+using DAL.DbEntities.Inventory;
+using Repository.Common;
 using Repository.Common.Inventory;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Repository.Inventory
 {
-    public class ItemRepository : GenericRepository<ItemEntity>, IItemRepository
+    public class ItemRepository : IItemRepository
     {
+        protected IGenericRepository<ItemEntity> Repository { get; private set; }
         public ItemRepository(VWarehouseContext context)
-            : base(context)
         {
+            this.Repository = new GenericRepository<ItemEntity>(context);
         }
-        public async Task<IEnumerable<ItemEntity>> GetAllPagedListAsync(
-            Expression<Func<ItemEntity, bool>> filter = null,
-            Func<IQueryable<ItemEntity>, IOrderedQueryable<ItemEntity>> orderBy = null,
-            string includeProperties = null,
-            int? skip = null,
-            int? take = null)
+
+        #region Get
+        public async Task<IEnumerable<ItemEntity>> GetAllAsync(IParameters<ItemEntity> parameters)
         {
-            return await GetQueryable(filter, orderBy, includeProperties, skip, take).ToListAsync();
+            return await Repository.GetAllAsync(parameters);
         }
+        public async Task<ItemEntity> GetByIdAsync(Guid? ID)
+        {
+            return await Repository.GetByIdAsync(ID);
+        }
+
+        public Task<int> GetCountAsync(IParameters<ItemEntity> parameters)
+        {
+            return Repository.GetCountAsync(parameters);
+        }
+        #endregion
+
+        #region Basic CRUD
+        public async Task<int> CreateAsync(ItemEntity itemEntity)
+        {
+            return await Repository.AddAsync(itemEntity);
+        }
+
+        public async Task<int> UpdateAsync(ItemEntity itemEntity)
+        {
+            return await Repository.UpdateAsync(itemEntity);
+        }
+
+        public async Task<int> DeleteAsync(Guid ID)
+        {
+            return await Repository.DeleteAsync(ID);
+        }
+        #endregion
     }
 }

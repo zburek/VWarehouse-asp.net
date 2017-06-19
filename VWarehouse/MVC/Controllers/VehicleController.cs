@@ -3,22 +3,32 @@ using System.Data;
 using System.Threading.Tasks;
 using System.Net;
 using System.Web.Mvc;
-using Model.DbEntities.Inventory;
 using Service.Common.Inventory;
-using System.Linq.Expressions;
 using Model.Common.Inventory;
 using Model.Inventory;
-using Model.Common.ViewModels;
-using Model.ViewModels;
+using MVC.Models.ViewModels;
+using Service.Common;
+using AutoMapper;
+using Model.Common;
+using System.Collections.Generic;
+using DAL;
+using DAL.DbEntities;
+using DAL.DbEntities.Inventory;
 
 namespace MVC.Controllers
 {
     public class VehicleController : Controller
     {
-        protected IVehicleService service;
-        public VehicleController(IVehicleService service)
+        protected IVehicleService Service;
+        protected IEmployeeService EmployeeService;
+        protected IParameters<VehicleEntity> parameters;
+        protected IParameters<EmployeeEntity> employeeParameters;
+        public VehicleController(IVehicleService service, IEmployeeService employeeService, IParameters<VehicleEntity> parameters, IParameters<EmployeeEntity> employeeParameters)
         {
-            this.service = service;
+            this.Service = service;
+            this.EmployeeService = employeeService;
+            this.parameters = parameters;
+            this.employeeParameters = employeeParameters;
         }
 
         #region Get
@@ -41,17 +51,19 @@ namespace MVC.Controllers
                 searchString = currentFilter;
             }
             ViewBag.CurrentFilter = searchString;
-            int pageSize = 5;
-            int pageNumber = (page ?? 1);
+            parameters.PageSize = 5;
+            parameters.PageNumber = (page ?? 1);
+            parameters.SearchString = searchString;
+            parameters.SortOrder = sortOrder;
 
-            var vehiclePagedList = await service.GetAllPagedListAsync(searchString, sortOrder, pageNumber, pageSize, null);
+            var vehiclePagedList = await Service.GetAllPagedListAsync(parameters);
             return View(vehiclePagedList);
         }
 
         [HttpGet]
         public async Task<ActionResult> OnStock(string currentFilter, int? page, string searchString = null, string sortOrder = null)
         {
-            Expression<Func<VehicleEntity, bool>> filter = v => v.EmployeeID == null;
+            parameters.Filter = v => v.EmployeeID == null;
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NameSortParm = sortOrder == "Name" ? "name_desc" : "Name";
             ViewBag.TypeSortParm = sortOrder == "Type" ? "type_desc" : "Type";
@@ -68,21 +80,23 @@ namespace MVC.Controllers
                 searchString = currentFilter;
             }
             ViewBag.CurrentFilter = searchString;
-            int pageSize = 5;
-            int pageNumber = (page ?? 1);
+            parameters.PageSize = 5;
+            parameters.PageNumber = (page ?? 1);
+            parameters.SearchString = searchString;
+            parameters.SortOrder = sortOrder;
 
-            var vehiclePagedList = await service.GetAllPagedListAsync(searchString, sortOrder, pageNumber, pageSize, filter);
+            var vehiclePagedList = await Service.GetAllPagedListAsync(parameters);
             return View(vehiclePagedList);
         }
 
         [HttpGet]
-        public async Task<ActionResult> Details(int? ID)
+        public async Task<ActionResult> Details(Guid? ID)
         {
             if (ID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            IVehicle vehicle = await service.GetByIdAsync(ID);
+            IVehicle vehicle = await Service.GetByIdAsync(ID);
             if (vehicle == null)
             {
                 return HttpNotFound();
@@ -93,13 +107,14 @@ namespace MVC.Controllers
 
         #region Assign
         [HttpGet]
-        public async Task<ActionResult> Assign(int? ID)
+        public async Task<ActionResult> Assign(Guid? ID)
         {
             if (ID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            IAssignViewModel vehicle = await service.CreateAssignViewModelAsync(ID);
+            IAssignViewModel vehicle = Mapper.Map<IAssignViewModel>(await Service.GetByIdAsync(ID));
+            vehicle.EmployeeList = Mapper.Map<List<IEmployee>>(await EmployeeService.GetAllAsync(employeeParameters));
             if (vehicle == null)
             {
                 return HttpNotFound();
@@ -115,8 +130,9 @@ namespace MVC.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    IAssignViewModel measuringDevice = assignedVehicle; // Not sure this is allowed, use automapper for new?
-                    await service.AssignVehicleAsync(measuringDevice);
+                    Guid itemID = assignedVehicle.ID;
+                    Guid? employeeID = assignedVehicle.EmployeeID;
+                    await Service.AssignVehicleAsync(itemID, employeeID);
                     return RedirectToAction("OnStock");
                 }
             }
@@ -144,7 +160,7 @@ namespace MVC.Controllers
                 if (ModelState.IsValid)
                 {
                     IVehicle vehicle = createdVehicle; // Not sure this is allowed, use automapper for new?
-                    await service.CreateAsync(vehicle);
+                    await Service.CreateAsync(vehicle);
                     return RedirectToAction("Index");
                 }
             }
@@ -156,13 +172,13 @@ namespace MVC.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Edit(int? ID)
+        public async Task<ActionResult> Edit(Guid? ID)
         {
             if (ID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            IVehicle vehicle = await service.GetByIdAsync(ID);
+            IVehicle vehicle = await Service.GetByIdAsync(ID);
             if (vehicle == null)
             {
                 return HttpNotFound();
@@ -179,7 +195,7 @@ namespace MVC.Controllers
                 if (ModelState.IsValid)
                 {
                     IVehicle vehicle = editedVehicle; // Not sure this is allowed, use automapper for new?
-                    await service.UpdateAsync(vehicle);
+                    await Service.UpdateAsync(vehicle);
                     return RedirectToAction("Index");
                 }
             }
@@ -191,7 +207,7 @@ namespace MVC.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Delete(int? ID, bool? saveChangesError = false)
+        public async Task<ActionResult> Delete(Guid? ID, bool? saveChangesError = false)
         {
             if (ID == null)
             {
@@ -201,7 +217,7 @@ namespace MVC.Controllers
             {
                 ViewBag.ErrorMessage = "Delete faild. Try again and if the problem persists see your system administrator.";
             }
-            IVehicle vehicle = await service.GetByIdAsync(ID);
+            IVehicle vehicle = await Service.GetByIdAsync(ID);
             if (vehicle == null)
             {
                 return HttpNotFound();
@@ -211,11 +227,11 @@ namespace MVC.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int ID)
+        public async Task<ActionResult> DeleteConfirmed(Guid ID)
         {
             try
             {
-                await service.DeleteAsync(ID);
+                await Service.DeleteAsync(ID);
             }
             catch (DataException)
             {

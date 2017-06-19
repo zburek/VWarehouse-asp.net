@@ -1,35 +1,58 @@
 ﻿using DAL;
-using Model.DbEntities;
+using DAL.DbEntities;
 using Repository.Common;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Repository
 {
-    public class EmployeeRepository : GenericRepository<EmployeeEntity>, IEmployeeRepository
+    public class EmployeeRepository : IEmployeeRepository
     {
+        protected IGenericRepository<EmployeeEntity> Repository { get; private set; }
         public EmployeeRepository(VWarehouseContext context)
-            : base(context)
         {
+            this.Repository = new GenericRepository<EmployeeEntity>(context);
         }
 
-        public async Task<IEnumerable<EmployeeEntity>> GetAllPagedListAsync(
-            Expression<Func<EmployeeEntity, bool>> filter = null,
-            Func<IQueryable<EmployeeEntity>, IOrderedQueryable<EmployeeEntity>> orderBy = null,
-            string includeProperties = null,
-            int? skip = null,
-            int? take = null)
+        #region Get
+        public async Task<EmployeeEntity> GetByIdAsync(Guid? ID)
         {
-            return await GetQueryable(filter, orderBy, includeProperties, skip, take).ToListAsync();
+            return await Repository.GetByIdAsync(ID);
         }
-        public Task<int> GetCountAsync(
-            Expression<Func<EmployeeEntity, bool>> filter = null)
+
+        public async Task<IEnumerable<EmployeeEntity>> GetAllAsync(IParameters<EmployeeEntity> parameters)
         {
-            return GetQueryable(filter).CountAsync();
+            return await Repository.GetAllAsync(parameters);
         }
+
+        public async Task<EmployeeEntity> GetOneAsync(IParameters<EmployeeEntity> parameters)
+        {
+            return await Repository.GetOneAsync(parameters);
+        }
+
+        public Task<int> GetCountAsync(IParameters<EmployeeEntity> parameters)
+        {
+            return Repository.GetCountAsync(parameters);
+        }
+        #endregion
+
+        #region CRUD
+        public async Task<int> AddAsync(EmployeeEntity entity)
+        {
+            return await Repository.AddAsync(entity);
+        }
+
+        public async Task<int> UpdateAsync(EmployeeEntity entity)
+        {
+            return await Repository.UpdateAsync(entity);
+        }
+
+        public async Task<int> DeleteAsync(Guid ID)
+        {
+            return await Repository.DeleteAsync(ID);
+        }
+        #endregion
+
     }
 }

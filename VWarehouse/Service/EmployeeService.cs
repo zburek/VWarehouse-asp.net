@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
+using DAL;
+using DAL.DbEntities;
+using DAL.DbEntities.Inventory;
 using Model.Common;
-using Model.DbEntities;
-using Model.DbEntities.Inventory;
 using PagedList;
 using Repository;
 using Repository.Common;
@@ -23,59 +24,51 @@ namespace Service
         }
 
         #region Get
-        public async Task<List<IEmployee>> GetAllAsync(
-            Expression<Func<EmployeeEntity, bool>> filter = null,
-            Func<IQueryable<EmployeeEntity>, IOrderedQueryable<EmployeeEntity>> orderBy = null,
-            string includeProperties = null)
+        public async Task<List<IEmployee>> GetAllAsync(IParameters<EmployeeEntity> parameters = null)
         {
             return new List<IEmployee>
                 (Mapper.Map<List<IEmployee>>
-                (await unitOfWork.Employees.GetAllAsync(filter, orderBy, includeProperties)));
+                (await unitOfWork.Employees.GetAllAsync(parameters)));
         }
 
-        public async Task<StaticPagedList<IEmployee>> GetAllPagedListAsync(
-            string searchString, string sortOrder, int pageNumber, int pageSize)
+        public async Task<StaticPagedList<IEmployee>> GetAllPagedListAsync(IParameters<EmployeeEntity> parameters)
         {
-            Expression<Func<EmployeeEntity, bool>> filter = null;
-            Func<IQueryable<EmployeeEntity>, IOrderedQueryable<EmployeeEntity>> orderBy = null;
-            if (!String.IsNullOrEmpty(searchString))
+            if (!String.IsNullOrEmpty(parameters.SearchString))
             {
-                filter = e => e.Name.Contains(searchString);
+                parameters.Filter = e => e.Name.Contains(parameters.SearchString);
             }
-            switch (sortOrder)
+            switch (parameters.SortOrder)
             {
                 case "Name":
-                    orderBy = source => source.OrderBy(e => e.Name);
+                    parameters.OrderBy = source => source.OrderBy(e => e.Name);
                     break;
                 case "name_desc":
-                    orderBy = source => source.OrderByDescending(e => e.Name);
+                    parameters.OrderBy = source => source.OrderByDescending(e => e.Name);
                     break;
                 default:
-                    orderBy = source => source.OrderBy(e => e.ID);
+                    parameters.OrderBy = source => source.OrderBy(e => e.ID);
                     break;
             }
-            var skip = (pageNumber - 1) * pageSize;
-            var take = pageSize;
+            parameters.Skip = (parameters.PageNumber - 1) * parameters.PageSize;
+            parameters.Take = parameters.PageSize;
 
-            var count = await unitOfWork.Employees.GetCountAsync(filter);
-            var employeeList = (Mapper.Map<List<IEmployee>>(await unitOfWork.Employees.GetAllPagedListAsync(filter, orderBy, null, skip, take)));
-            var employeePagedList = new StaticPagedList<IEmployee>(employeeList, pageNumber, pageSize, count);
+            var count = await unitOfWork.Employees.GetCountAsync(parameters);
+            var employeeList = (Mapper.Map<List<IEmployee>>(await unitOfWork.Employees.GetAllAsync(parameters)));
+            var employeePagedList = new StaticPagedList<IEmployee>(employeeList, parameters.PageNumber.Value, parameters.PageSize.Value, count);
 
             return employeePagedList;
         }
 
-        public async Task<IEmployee> GetByIdAsync(int? ID)
+        public async Task<IEmployee> GetByIdAsync(Guid? ID)
         {
             var employee = Mapper.Map<IEmployee>
                 (await unitOfWork.Employees.GetByIdAsync(ID));
             return employee;
         }
-        public async Task<IEmployee> GetOneAsync(
-            Expression<Func<EmployeeEntity, bool>> filter = null,
-            string includeProperties = null)
+        public async Task<IEmployee> GetOneAsync(IParameters<EmployeeEntity> parameters)
         {
             var employee = Mapper.Map<IEmployee>
-                (await unitOfWork.Employees.GetOneAsync(filter, includeProperties));
+                (await unitOfWork.Employees.GetOneAsync(parameters));
             return employee;
         }
         #endregion
@@ -95,35 +88,38 @@ namespace Service
             await unitOfWork.SaveAsync();
         }
         
-        public async Task DeleteAsync(int ID)
+        public async Task DeleteAsync(Guid ID)
         {
-            Expression<Func<ItemEntity, bool>> filterItem = i => i.EmployeeID == ID;
-            Expression<Func<MeasuringDeviceEntity, bool>> filterMeasuringDevice = MD => MD.EmployeeID == ID;
-            Expression<Func<VehicleEntity, bool>> filterVehicle = v => v.EmployeeID == ID;
+            IParameters<ItemEntity> itemParameters = new Parameters<ItemEntity>();
+            itemParameters.Filter = i => i.EmployeeID == ID;
+            IParameters<MeasuringDeviceEntity> measuringDeviceParameters = new Parameters<MeasuringDeviceEntity>();
+            measuringDeviceParameters.Filter = i => i.EmployeeID == ID;
+            IParameters<VehicleEntity> vehicleParameters = new Parameters<VehicleEntity>();
+            vehicleParameters.Filter = i => i.EmployeeID == ID;
 
             List<ItemEntity> employeeItems = (Mapper.Map<List<ItemEntity>>
-                (await unitOfWork.Items.GetAllAsync(filterItem, null, null)));
+                (await unitOfWork.Items.GetAllAsync(itemParameters)));
             foreach(ItemEntity item in employeeItems)
             {
-                int testItem = await unitOfWork.Items.DeleteAsync(item);
+                int testItem = await unitOfWork.Items.DeleteAsync(item.ID);
             }
 
             List<MeasuringDeviceEntity> employeeMeasuringDevices = (Mapper.Map<List<MeasuringDeviceEntity>>
-                (await unitOfWork.MeasuringDevices.GetAllAsync(filterMeasuringDevice, null, null)));
+                (await unitOfWork.MeasuringDevices.GetAllAsync(measuringDeviceParameters)));
             foreach (MeasuringDeviceEntity measuringDevice in employeeMeasuringDevices)
             {
-                int testMeasuringDevice = await unitOfWork.MeasuringDevices.DeleteAsync(measuringDevice);
+                int testMeasuringDevice = await unitOfWork.MeasuringDevices.DeleteAsync(measuringDevice.ID);
             }
 
             List<VehicleEntity> employeeVehicles = (Mapper.Map<List<VehicleEntity>>
-                (await unitOfWork.Vehicles.GetAllAsync(filterVehicle, null, null)));
+                (await unitOfWork.Vehicles.GetAllAsync(vehicleParameters)));
             foreach (VehicleEntity vehicle in employeeVehicles)
             {
-                int testVehicle = await unitOfWork.Vehicles.DeleteAsync(vehicle);
+                int testVehicle = await unitOfWork.Vehicles.DeleteAsync(vehicle.ID);
             }
 
             var employeeEnity = Mapper.Map<EmployeeEntity>(await unitOfWork.Employees.GetByIdAsync(ID));
-            int test = await unitOfWork.Employees.DeleteAsync(employeeEnity);
+            int test = await unitOfWork.Employees.DeleteAsync(employeeEnity.ID);
             await unitOfWork.SaveAsync();
         }
         #endregion

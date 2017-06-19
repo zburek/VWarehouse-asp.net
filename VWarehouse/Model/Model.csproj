@@ -41,18 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DbEntities\BaseEntity.cs" />
-    <Compile Include="DbEntities\EmployeeEntity.cs" />
-    <Compile Include="DbEntities\Inventory\ItemEntity.cs" />
-    <Compile Include="DbEntities\Inventory\MeasuringDeviceEntity.cs" />
-    <Compile Include="DbEntities\Inventory\VehicleEntity.cs" />
     <Compile Include="Employee.cs" />
     <Compile Include="Inventory\Item.cs" />
     <Compile Include="Inventory\MeasuringDevice.cs" />
     <Compile Include="Inventory\Vehicle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\AssignViewModel.cs" />
-    <Compile Include="ViewModels\WarningViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">

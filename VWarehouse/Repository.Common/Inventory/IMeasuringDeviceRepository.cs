@@ -1,20 +1,18 @@
-﻿
-using Model.DbEntities.Inventory;
+﻿using DAL;
+using DAL.DbEntities.Inventory;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Repository.Common.Inventory
 {
-    public interface IMeasuringDeviceRepository : IGenericRepository<MeasuringDeviceEntity>
+    public interface IMeasuringDeviceRepository
     {
-        Task<IEnumerable<MeasuringDeviceEntity>> GetAllPagedListAsync(
-            Expression<Func<MeasuringDeviceEntity, bool>> filter = null,
-            Func<IQueryable<MeasuringDeviceEntity>, IOrderedQueryable<MeasuringDeviceEntity>> orderBy = null,
-            string includeProperties = null,
-            int? skip = null,
-            int? take = null);
+        Task<IEnumerable<MeasuringDeviceEntity>> GetAllAsync(IParameters<MeasuringDeviceEntity> parameters);
+        Task<MeasuringDeviceEntity> GetByIdAsync(Guid? ID);
+        Task<int> GetCountAsync(IParameters<MeasuringDeviceEntity> parameters);
+        Task<int> CreateAsync(MeasuringDeviceEntity itemEntity);
+        Task<int> UpdateAsync(MeasuringDeviceEntity itemEntity);
+        Task<int> DeleteAsync(Guid ID);
     }
 }

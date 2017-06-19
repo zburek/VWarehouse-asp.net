@@ -1,32 +1,24 @@
-﻿using Model.Common.Inventory;
-using Model.Common.ViewModels;
-using Model.DbEntities.Inventory;
+﻿using DAL;
+using DAL.DbEntities.Inventory;
+using Model.Common.Inventory;
 using PagedList;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Service.Common.Inventory
 {
     public interface IItemService
     {
-        Task<List<IItem>> GetAllAsync(
-            Expression<Func<ItemEntity, bool>> filter = null,
-            Func<IQueryable<ItemEntity>, IOrderedQueryable<ItemEntity>> orderBy = null,
-            string includeProperties = null);
-        Task<IItem> GetByIdAsync(int? ID);
-        Task<StaticPagedList<IItem>> GetAllPagedListAsync(
-            string searchString, string sortOrder, int pageNumber, int pageSize,
-            Expression<Func<ItemEntity, bool>> filter = null);
+        Task<List<IItem>> GetAllAsync(IParameters<ItemEntity> parameters);
+        Task<IItem> GetByIdAsync(Guid? ID);
+        Task<StaticPagedList<IItem>> GetAllPagedListAsync(IParameters<ItemEntity> parameters);
         Task CreateAsync(IItem item);
         Task UpdateAsync(IItem item);
-        Task DeleteAsync(int ID);
-        Task<IAssignViewModel> CreateAssignViewModelAsync(int? ID);
-        Task AssignItemAsync(IAssignViewModel item);
-        Task ReturnOneItemAsync(int? ID);
-        Task ReturnAllItemsAsync(int? ID);
+        Task DeleteAsync(Guid ID);
+        Task AssignItemAsync(Guid itemID, Guid? employeeID);
+        Task ReturnOneItemAsync(Guid? ID);
+        Task ReturnAllItemsAsync(Guid? ID);
 
     }
 }

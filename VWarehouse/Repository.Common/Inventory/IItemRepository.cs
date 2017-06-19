@@ -1,20 +1,18 @@
-﻿
-using Model.DbEntities.Inventory;
+﻿using DAL;
+using DAL.DbEntities.Inventory;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Repository.Common.Inventory
 {
-    public interface IItemRepository : IGenericRepository<ItemEntity>
+    public interface IItemRepository
     {
-        Task<IEnumerable<ItemEntity>> GetAllPagedListAsync(
-            Expression<Func<ItemEntity, bool>> filter = null,
-            Func<IQueryable<ItemEntity>, IOrderedQueryable<ItemEntity>> orderBy = null,
-            string includeProperties = null,
-            int? skip = null,
-            int? take = null);
+        Task<IEnumerable<ItemEntity>> GetAllAsync(IParameters<ItemEntity> parameters);
+        Task<ItemEntity> GetByIdAsync(Guid? ID);
+        Task<int> GetCountAsync(IParameters<ItemEntity> parameters);
+        Task<int> CreateAsync(ItemEntity itemEntity);
+        Task<int> UpdateAsync(ItemEntity itemEntity);
+        Task<int> DeleteAsync(Guid ID);
     }
 }

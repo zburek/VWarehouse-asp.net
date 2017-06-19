@@ -1,5 +1,6 @@
 ﻿
-using Model.DbEntities;
+using DAL;
+using DAL.DbEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,13 +9,14 @@ using System.Threading.Tasks;
 
 namespace Repository.Common
 {
-    public interface IEmployeeRepository : IGenericRepository<EmployeeEntity>
+    public interface IEmployeeRepository
     {
-        Task<IEnumerable<EmployeeEntity>> GetAllPagedListAsync(
-            Expression<Func<EmployeeEntity, bool>> filter = null,
-            Func<IQueryable<EmployeeEntity>, IOrderedQueryable<EmployeeEntity>> orderBy = null,
-            string includeProperties = null,
-            int? skip = null,
-            int? take = null);
+        Task<EmployeeEntity> GetByIdAsync(Guid? ID);
+        Task<IEnumerable<EmployeeEntity>> GetAllAsync(IParameters<EmployeeEntity> parameters);
+        Task<EmployeeEntity> GetOneAsync(IParameters<EmployeeEntity> parameters);
+        Task<int> GetCountAsync(IParameters<EmployeeEntity> parameters);
+        Task<int> AddAsync(EmployeeEntity entity);
+        Task<int> UpdateAsync(EmployeeEntity entity);
+        Task<int> DeleteAsync(Guid ID);
     }
 }

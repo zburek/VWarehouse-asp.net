@@ -1,10 +1,14 @@
-﻿
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Model.Common
 {
     public interface IBaseInfo
     {
-        int ID { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Required]
+        Guid ID { get; set; }
         string Name { get; set; }
     }
 

@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
-using Model.Common;
+using DAL;
+using DAL.DbEntities.Inventory;
 using Model.Common.Inventory;
-using Model.Common.ViewModels;
-using Model.DbEntities.Inventory;
 using PagedList;
 using Repository;
 using Repository.Common;
@@ -10,7 +9,6 @@ using Service.Common.Inventory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Service.Inventory
@@ -24,85 +22,73 @@ namespace Service.Inventory
         }
 
         #region Get
-        public async Task<List<IItem>> GetAllAsync(
-            Expression<Func<ItemEntity, bool>> filter = null,
-            Func<IQueryable<ItemEntity>, IOrderedQueryable<ItemEntity>> orderBy = null,
-            string includeProperties = null)
+        public async Task<List<IItem>> GetAllAsync(IParameters<ItemEntity> parameters)
         {
             return new List<IItem>
                 (Mapper.Map<List<IItem>>
-                (await unitOfWork.Items.GetAllAsync(filter, orderBy, includeProperties)));
+                (await unitOfWork.Items.GetAllAsync(parameters)));
         }
 
-        public async Task<StaticPagedList<IItem>> GetAllPagedListAsync(
-            string searchString, string sortOrder, int pageNumber, int pageSize,
-            Expression<Func<ItemEntity, bool>> filter = null)
+        public async Task<StaticPagedList<IItem>> GetAllPagedListAsync(IParameters<ItemEntity> parameters)
         {
-            Func<IQueryable<ItemEntity>, IOrderedQueryable<ItemEntity>> orderBy = null;
-            if (!String.IsNullOrEmpty(searchString) && filter == null)
+            if (!String.IsNullOrEmpty(parameters.SearchString) && parameters.Filter == null)
             {
-                filter = i => i.Name.Contains(searchString);
+                parameters.Filter = i => i.Name.Contains(parameters.SearchString);
             }
-            else if(!String.IsNullOrEmpty(searchString) && filter != null)
+            else if(!String.IsNullOrEmpty(parameters.SearchString) && parameters.Filter != null)
             {
-                filter = i => i.Name.Contains(searchString) && i.EmployeeID == null;
+                parameters.Filter = i => i.Name.Contains(parameters.SearchString) && i.EmployeeID == null;
             }
-            else if (filter != null)
+            else if (parameters.Filter != null)
             {
-                filter = i => i.EmployeeID == null;
+                parameters.Filter = i => i.EmployeeID == null;
             }
-            switch (sortOrder)
+            switch (parameters.SortOrder)
             {
                 case "Name":
-                    orderBy = source => source.OrderBy(i => i.Name);
+                    parameters.OrderBy = source => source.OrderBy(i => i.Name);
                     break;
                 case "name_desc":
-                    orderBy = source => source.OrderByDescending(i => i.Name);
+                    parameters.OrderBy = source => source.OrderByDescending(i => i.Name);
                     break;
                 case "Description":
-                    orderBy = source => source.OrderBy(i => i.Description);
+                    parameters.OrderBy = source => source.OrderBy(i => i.Description);
                     break;
                 case "description_desc":
-                    orderBy = source => source.OrderByDescending(i => i.Name);
+                    parameters.OrderBy = source => source.OrderByDescending(i => i.Name);
                     break;
                 case "Employee":
-                    orderBy = source => source.OrderBy(i => i.Employee.Name);
+                    parameters.OrderBy = source => source.OrderBy(i => i.Employee.Name);
                     break;
                 case "employee_desc":
-                    orderBy = source => source.OrderByDescending(i => i.Employee.Name);
+                    parameters.OrderBy = source => source.OrderByDescending(i => i.Employee.Name);
                     break;
                 default:
-                    orderBy = source => source.OrderBy(i => i.ID);
+                    parameters.OrderBy = source => source.OrderBy(i => i.ID);
                     break;
             }
-            var skip = (pageNumber - 1) * pageSize;
-            var take = pageSize;
+            parameters.Skip = (parameters.PageNumber - 1) * parameters.PageSize;
+            parameters.Take = parameters.PageSize;
 
-            var count = await unitOfWork.Items.GetCountAsync(filter);
-            var itemList = (Mapper.Map<List<IItem>>(await unitOfWork.Items.GetAllPagedListAsync(filter, orderBy, null, skip, take)));
-            var itemPagedList = new StaticPagedList<IItem>(itemList, pageNumber, pageSize, count);
+            var count = await unitOfWork.Items.GetCountAsync(parameters);
+            var itemList = (Mapper.Map<List<IItem>>(await unitOfWork.Items.GetAllAsync(parameters)));
+            var itemPagedList = new StaticPagedList<IItem>(itemList, parameters.PageNumber.Value, parameters.PageSize.Value, count);
 
             return itemPagedList;
         }
-        public async Task<IItem> GetByIdAsync(int? ID)
+        public async Task<IItem> GetByIdAsync(Guid? ID)
         {
             var item = Mapper.Map<IItem>(await unitOfWork.Items.GetByIdAsync(ID));
             return item;
         }
-        public async Task<IAssignViewModel> CreateAssignViewModelAsync(int? ID)
-        {
-            var item = Mapper.Map<IAssignViewModel>(await unitOfWork.Items.GetByIdAsync(ID));
-            item.EmployeeList = Mapper.Map<List<IEmployee>>(await unitOfWork.Employees.GetAllAsync(null, null, null));
-            return item;
-        }
-
+        
         #endregion
-
+        
         #region Basic CRUD
         public async Task CreateAsync(IItem item)
         {
             var itemEntity = Mapper.Map<ItemEntity>(item);
-            int test = await unitOfWork.Items.AddAsync(itemEntity);
+            int test = await unitOfWork.Items.CreateAsync(itemEntity);
             await unitOfWork.SaveAsync();
         }
 
@@ -113,33 +99,34 @@ namespace Service.Inventory
             await unitOfWork.SaveAsync();
         }
 
-        public async Task DeleteAsync(int ID)
+        public async Task DeleteAsync(Guid ID)
         {
             var itemEntity = Mapper.Map<ItemEntity>(await unitOfWork.Items.GetByIdAsync(ID));
-            int test = await unitOfWork.Items.DeleteAsync(itemEntity);
+            int test = await unitOfWork.Items.DeleteAsync(itemEntity.ID);
             await unitOfWork.SaveAsync();
         }
         #endregion
 
         #region Assign and Return
-        public async Task AssignItemAsync(IAssignViewModel item)
+        public async Task AssignItemAsync(Guid itemID, Guid? employeeID)
         {
-            var itemEntity = await unitOfWork.Items.GetByIdAsync(item.ID);
-            itemEntity.EmployeeID = item.EmployeeID;
+            var itemEntity = await unitOfWork.Items.GetByIdAsync(itemID);
+            itemEntity.EmployeeID = employeeID;
             int test = await unitOfWork.Items.UpdateAsync(itemEntity);
             await unitOfWork.SaveAsync();
         }
-        public async Task ReturnOneItemAsync(int? ID)
+        public async Task ReturnOneItemAsync(Guid? ID)
         {
             var itemEntity = Mapper.Map<ItemEntity>(await unitOfWork.Items.GetByIdAsync(ID));
             itemEntity.EmployeeID = null;
             int test = await unitOfWork.Items.UpdateAsync(itemEntity);
             await unitOfWork.SaveAsync();
         }
-        public async Task ReturnAllItemsAsync(int? ID)
+        public async Task ReturnAllItemsAsync(Guid? ID)
         {
-            Expression<Func<ItemEntity, bool>> filter = i => i.EmployeeID == ID;
-            IEnumerable<ItemEntity> itemList = await unitOfWork.Items.GetAllAsync(filter, null, null);
+            IParameters<ItemEntity> itemParameters = new Parameters<ItemEntity>();
+            itemParameters.Filter = i => i.EmployeeID == ID;
+            IEnumerable<ItemEntity> itemList = await unitOfWork.Items.GetAllAsync(itemParameters);
             foreach(var itemEntity in itemList)
             {
                 itemEntity.EmployeeID = null;

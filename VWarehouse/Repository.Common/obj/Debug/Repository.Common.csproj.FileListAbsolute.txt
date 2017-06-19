@@ -20,3 +20,7 @@ C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Repository.Commo
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Repository.Common\bin\Debug\PagedList.Mvc.dll
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Repository.Common\bin\Debug\PagedList.xml
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Repository.Common\bin\Debug\PagedList.Mvc.xml
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Repository.Common\bin\Debug\DAL.dll
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Repository.Common\bin\Debug\EntityFramework.dll
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Repository.Common\bin\Debug\DAL.pdb
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Repository.Common\bin\Debug\EntityFramework.xml

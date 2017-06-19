@@ -1,30 +1,52 @@
 ﻿using DAL;
-using Model.DbEntities.Inventory;
+using DAL.DbEntities.Inventory;
+using Repository.Common;
 using Repository.Common.Inventory;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Repository.Inventory
 {
-    public class VehicleRepository : GenericRepository<VehicleEntity>, IVehicleRepository
+    public class VehicleRepository : IVehicleRepository
     {
+        protected IGenericRepository<VehicleEntity> Repository { get; private set; }
         public VehicleRepository(VWarehouseContext context)
-            : base(context)
         {
+            this.Repository = new GenericRepository<VehicleEntity>(context);
         }
 
-        public async Task<IEnumerable<VehicleEntity>> GetAllPagedListAsync(
-            Expression<Func<VehicleEntity, bool>> filter = null,
-            Func<IQueryable<VehicleEntity>, IOrderedQueryable<VehicleEntity>> orderBy = null,
-            string includeProperties = null,
-            int? skip = null,
-            int? take = null)
+        #region Get
+        public async Task<IEnumerable<VehicleEntity>> GetAllAsync(IParameters<VehicleEntity> parameters)
         {
-            return await GetQueryable(filter, orderBy, includeProperties, skip, take).ToListAsync();
+            return await Repository.GetAllAsync(parameters);
         }
+        public async Task<VehicleEntity> GetByIdAsync(Guid? ID)
+        {
+            return await Repository.GetByIdAsync(ID);
+        }
+
+        public Task<int> GetCountAsync(IParameters<VehicleEntity> parameters)
+        {
+            return Repository.GetCountAsync(parameters);
+        }
+        #endregion
+
+        #region Basic CRUD
+        public async Task<int> CreateAsync(VehicleEntity itemEntity)
+        {
+            return await Repository.AddAsync(itemEntity);
+        }
+
+        public async Task<int> UpdateAsync(VehicleEntity itemEntity)
+        {
+            return await Repository.UpdateAsync(itemEntity);
+        }
+
+        public async Task<int> DeleteAsync(Guid ID)
+        {
+            return await Repository.DeleteAsync(ID);
+        }
+        #endregion
     }
 }

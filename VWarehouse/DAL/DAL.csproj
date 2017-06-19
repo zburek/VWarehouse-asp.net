@@ -49,6 +49,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DbEntities\BaseEntity.cs" />
+    <Compile Include="DbEntities\EmployeeEntity.cs" />
+    <Compile Include="DbEntities\IBaseEntity.cs" />
+    <Compile Include="DbEntities\Inventory\ItemEntity.cs" />
+    <Compile Include="DbEntities\Inventory\MeasuringDeviceEntity.cs" />
+    <Compile Include="DbEntities\Inventory\VehicleEntity.cs" />
+    <Compile Include="IParameters.cs" />
+    <Compile Include="Parameters.cs" />
     <Compile Include="VWarehouseContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -60,14 +68,6 @@
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{3c90cd28-ac38-45b7-95dc-87fdd004a654}</Project>
       <Name>Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Model.Common\Model.Common.csproj">
-      <Project>{ff73c15e-487f-4fcf-b20a-370aa227b2cc}</Project>
-      <Name>Model.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Model\Model.csproj">
-      <Project>{67432b53-10d0-44a1-8df2-5bd88d3de0fb}</Project>
-      <Name>Model</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

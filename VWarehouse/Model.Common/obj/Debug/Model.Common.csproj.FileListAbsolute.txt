@@ -10,3 +10,7 @@ C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Model.Common\bin
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Model.Common\obj\Debug\Model.Common.csprojResolveAssemblyReference.cache
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Model.Common\obj\Debug\Model.Common.dll
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Model.Common\obj\Debug\Model.Common.pdb
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Model.Common\bin\Debug\DAL.dll
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Model.Common\bin\Debug\EntityFramework.dll
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Model.Common\bin\Debug\DAL.pdb
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Model.Common\bin\Debug\EntityFramework.xml

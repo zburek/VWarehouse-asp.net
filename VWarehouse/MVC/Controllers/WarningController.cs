@@ -1,22 +1,50 @@
-﻿using System.Threading.Tasks;
+﻿using AutoMapper;
+using Model.Common.Inventory;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Data.Entity;
 using System.Web.Mvc;
-using Model.Common.ViewModels;
-using Service.Common;
+using MVC.Models.ViewModels;
+using Service.Common.Inventory;
+using DAL.DbEntities.Inventory;
+using DAL;
 
 namespace MVC.Controllers
 {
     public class WarningController : Controller
     {
-        protected IWarningService service;
-        public WarningController(IWarningService service)
+        protected IMeasuringDeviceService MeasuringDeviceService;
+        protected IVehicleService VehicleService;
+        public IWarningViewModel Warning;
+        protected IParameters<MeasuringDeviceEntity> measuringDeviceParameters;
+        protected IParameters<VehicleEntity> vehicleParameters;
+
+        public WarningController(
+            IMeasuringDeviceService measuringDeviceService, IVehicleService vehicleService, WarningViewModel warning, 
+            IParameters<MeasuringDeviceEntity> measuringDeviceParameters, IParameters<VehicleEntity> vehicleParameters)
         {
-            this.service = service;
+            this.MeasuringDeviceService = measuringDeviceService;
+            this.VehicleService = vehicleService;
+            this.Warning = warning;
+            this.measuringDeviceParameters = measuringDeviceParameters;
+            this.vehicleParameters = vehicleParameters;
         }
         public async Task<ActionResult> Index()
         {
-            IWarningViewModel warning = await service.CreateWarningViewModel();
+            int daysDifference = 21;
+            int mileageDifference = 500;
 
-            return View(warning);
+            measuringDeviceParameters.Filter = MD => DbFunctions.DiffDays(DateTime.Today, MD.CalibrationExpirationDate) < daysDifference;
+            Warning.MeasuringDeviceList = Mapper.Map<List<IMeasuringDevice>>(await MeasuringDeviceService.GetAllAsync(measuringDeviceParameters));
+
+            vehicleParameters.Filter = VLP => DbFunctions.DiffDays(DateTime.Today, VLP.LicenseExpirationDate) < daysDifference;
+            Warning.VehicleLicensePlateList = Mapper.Map<List<IVehicle>>(await VehicleService.GetAllAsync(vehicleParameters));
+
+            vehicleParameters.Filter = VM => (VM.NextService - VM.Mileage) < mileageDifference;
+            Warning.VehicleMileageList = Mapper.Map<List<IVehicle>>(await VehicleService.GetAllAsync(vehicleParameters));
+
+            return View(Warning);
         }
 
     }

@@ -1,10 +1,10 @@
-﻿using Model.Common.DbEntities;
+﻿using DAL;
+using DAL.DbEntities;
 using Repository.Common;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Repository
@@ -16,66 +16,58 @@ namespace Repository
         {
             this.context = context;
         }
-        protected virtual IQueryable<TEntity> GetQueryable
-            (Expression<Func<TEntity, bool>> filter = null,
-            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-            string includeProperties = null,
-            int? skip = null,
-            int? take = null)
+        protected virtual IQueryable<TEntity> GetQueryable(IParameters<TEntity> parameters)
         {
 
-            includeProperties = includeProperties ?? string.Empty;
+            parameters.IncludeProperties = parameters.IncludeProperties ?? string.Empty;
             
             IQueryable<TEntity> query = context.Set<TEntity>();
 
-            if (filter != null)
+            if (parameters.Filter != null)
             {
-                query = query.Where(filter);
+                query = query.Where(parameters.Filter);
             }
 
-            foreach (var includeProperty in includeProperties.Split
+            foreach (var includeProperty in parameters.IncludeProperties.Split
                 (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
             {
                 query = query.Include(includeProperty);
             }
-            if (orderBy != null)
+            if (parameters.OrderBy != null)
             {
-                query = orderBy(query);
+                query = parameters.OrderBy(query);
             }
-            if (skip.HasValue)
+            if (parameters.Skip.HasValue)
             {
-                query = query.Skip(skip.Value);
+                query = query.Skip(parameters.Skip.Value);
             }
-            if (take.HasValue)
+            if (parameters.Take.HasValue)
             {
-                query = query.Take(take.Value);
+                query = query.Take(parameters.Take.Value);
             }
             return query;
         }
 
         #region Get
-        public virtual async Task<TEntity> GetByIdAsync(int? ID)
+        public virtual async Task<TEntity> GetByIdAsync(Guid? ID)
         {
             return await context.Set<TEntity>().FindAsync(ID);
         }
-        public virtual async Task<IEnumerable<TEntity>> GetAllAsync(
-            Expression<Func<TEntity, bool>> filter = null,
-            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-            string includeProperties = null)
+        public virtual async Task<IEnumerable<TEntity>> GetAllAsync(IParameters<TEntity> parameters)
         {
-            return await GetQueryable(filter, null, includeProperties).ToListAsync();
+            return await GetQueryable(parameters).ToListAsync();
         }
 
-        public virtual async Task<TEntity> GetOneAsync(
-            Expression<Func<TEntity, bool>> filter = null,
-            string includeProperties = null)
+        public virtual async Task<TEntity> GetOneAsync(IParameters<TEntity> parameters)
         {
-            return await GetQueryable(filter, null, includeProperties).SingleOrDefaultAsync();
+            return await GetQueryable(parameters).SingleOrDefaultAsync();
         }
 
-        public virtual Task<int> GetCountAsync(Expression<Func<TEntity, bool>> filter = null)
+        public virtual Task<int> GetCountAsync(IParameters<TEntity> parameters)
         {
-            return GetQueryable(filter).CountAsync();
+            IParameters<TEntity> CountParameters = new Parameters<TEntity>();
+            CountParameters.Filter = parameters.Filter;
+            return GetQueryable(CountParameters).CountAsync();
         }
 
         #endregion
@@ -119,7 +111,7 @@ namespace Repository
             }
         }
 
-        public virtual Task<int> DeleteAsync(object ID)
+        public virtual Task<int> DeleteAsync(Guid ID)
         {
             var entity = context.Set<TEntity>().Find(ID);
             if (entity == null)

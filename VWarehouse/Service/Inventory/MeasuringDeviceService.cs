@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
-using Model.Common;
+using DAL;
+using DAL.DbEntities.Inventory;
 using Model.Common.Inventory;
-using Model.Common.ViewModels;
-using Model.DbEntities.Inventory;
 using PagedList;
 using Repository;
 using Repository.Common;
@@ -10,7 +9,6 @@ using Service.Common.Inventory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Service.Inventory
@@ -24,87 +22,73 @@ namespace Service.Inventory
         }
 
         #region Get
-        public async Task<List<IMeasuringDevice>> GetAllAsync(
-            Expression<Func<MeasuringDeviceEntity, bool>> filter = null,
-            Func<IQueryable<MeasuringDeviceEntity>, IOrderedQueryable<MeasuringDeviceEntity>> orderBy = null,
-            string includeProperties = null)
+        public async Task<List<IMeasuringDevice>> GetAllAsync(IParameters<MeasuringDeviceEntity> parameters)
         {
             return new List<IMeasuringDevice>
                 (Mapper.Map<List<IMeasuringDevice>>
-                (await unitOfWork.MeasuringDevices.GetAllAsync(filter, orderBy, includeProperties)));
+                (await unitOfWork.MeasuringDevices.GetAllAsync(parameters)));
         }
 
-        public async Task<StaticPagedList<IMeasuringDevice>> GetAllPagedListAsync(
-            string searchString, string sortOrder, int pageNumber, int pageSize,
-            Expression<Func<MeasuringDeviceEntity, bool>> filter = null)
+        public async Task<StaticPagedList<IMeasuringDevice>> GetAllPagedListAsync(IParameters<MeasuringDeviceEntity> parameters)
         {
-            Func<IQueryable<MeasuringDeviceEntity>, IOrderedQueryable<MeasuringDeviceEntity>> orderBy = null;
-            if (!String.IsNullOrEmpty(searchString) && filter == null)
+            if (!String.IsNullOrEmpty(parameters.SearchString) && parameters.Filter == null)
             {
-                filter = MD => MD.Name.Contains(searchString);
+                parameters.Filter = MD => MD.Name.Contains(parameters.SearchString);
             }
-            else if (!String.IsNullOrEmpty(searchString) && filter != null)
+            else if (!String.IsNullOrEmpty(parameters.SearchString) && parameters.Filter != null)
             {
-                filter = MD => MD.Name.Contains(searchString) && MD.EmployeeID == null;
+                parameters.Filter = MD => MD.Name.Contains(parameters.SearchString) && MD.EmployeeID == null;
             }
-            else if (filter != null)
+            else if (parameters.Filter != null)
             {
-                filter = MD => MD.EmployeeID == null;
+                parameters.Filter = MD => MD.EmployeeID == null;
             }
-            switch (sortOrder)
+            switch (parameters.SortOrder)
             {
                 case "Name":
-                    orderBy = source => source.OrderBy(MD => MD.Name);
+                    parameters.OrderBy = source => source.OrderBy(MD => MD.Name);
                     break;
                 case "name_desc":
-                    orderBy = source => source.OrderByDescending(MD => MD.Name);
+                    parameters.OrderBy = source => source.OrderByDescending(MD => MD.Name);
                     break;
                 case "CalibrationExpirationDate":
-                    orderBy = source => source.OrderBy(MD => MD.CalibrationExpirationDate);
+                    parameters.OrderBy = source => source.OrderBy(MD => MD.CalibrationExpirationDate);
                     break;
                 case "calibrationExpirationDate_desc":
-                    orderBy = source => source.OrderByDescending(MD => MD.CalibrationExpirationDate);
+                    parameters.OrderBy = source => source.OrderByDescending(MD => MD.CalibrationExpirationDate);
                     break;
                 case "Employee":
-                    orderBy = source => source.OrderBy(MD => MD.Employee.Name);
+                    parameters.OrderBy = source => source.OrderBy(MD => MD.Employee.Name);
                     break;
                 case "employee_desc":
-                    orderBy = source => source.OrderByDescending(MD => MD.Employee.Name);
+                    parameters.OrderBy = source => source.OrderByDescending(MD => MD.Employee.Name);
                     break;
                 default:
-                    orderBy = source => source.OrderBy(MD => MD.ID);
+                    parameters.OrderBy = source => source.OrderBy(MD => MD.ID);
                     break;
             }
-            var skip = (pageNumber - 1) * pageSize;
-            var take = pageSize;
+            parameters.Skip = (parameters.PageNumber - 1) * parameters.PageSize;
+            parameters.Take = parameters.PageSize;
 
-            var count = await unitOfWork.MeasuringDevices.GetCountAsync(filter);
-            var measuringDeviceList = (Mapper.Map<List<IMeasuringDevice>>(await unitOfWork.MeasuringDevices.GetAllPagedListAsync(filter, orderBy, null, skip, take)));
-            var measuringDevicePagedList = new StaticPagedList<IMeasuringDevice>(measuringDeviceList, pageNumber, pageSize, count);
+            var count = await unitOfWork.MeasuringDevices.GetCountAsync(parameters);
+            var measuringDeviceList = (Mapper.Map<List<IMeasuringDevice>>(await unitOfWork.MeasuringDevices.GetAllAsync(parameters)));
+            var measuringDevicePagedList = new StaticPagedList<IMeasuringDevice>(measuringDeviceList, parameters.PageNumber.Value, parameters.PageSize.Value, count);
 
             return measuringDevicePagedList;
         }
-        public async Task<IMeasuringDevice> GetByIdAsync(int? ID)
+        public async Task<IMeasuringDevice> GetByIdAsync(Guid? ID)
         {
             var measuringDevice = Mapper.Map<IMeasuringDevice>
                 (await unitOfWork.MeasuringDevices.GetByIdAsync(ID));
             return measuringDevice;
         }
-
-        public async Task<IAssignViewModel> CreateAssignViewModelAsync(int? ID)
-        {
-            var measuringDevice = Mapper.Map<IAssignViewModel>(await unitOfWork.MeasuringDevices.GetByIdAsync(ID));
-            measuringDevice.EmployeeList = Mapper.Map<List<IEmployee>>(await unitOfWork.Employees.GetAllAsync(null, null, null));
-            return measuringDevice;
-        }
-
         #endregion
 
         #region CRUD
         public async Task CreateAsync(IMeasuringDevice measuringDevice)
         {
             var measuringDeviceEntity = Mapper.Map<MeasuringDeviceEntity>(measuringDevice);
-            int test = await unitOfWork.MeasuringDevices.AddAsync(measuringDeviceEntity);
+            int test = await unitOfWork.MeasuringDevices.CreateAsync(measuringDeviceEntity);
             await unitOfWork.SaveAsync();
         }
 
@@ -115,25 +99,25 @@ namespace Service.Inventory
             await unitOfWork.SaveAsync();
         }
         
-        public async Task DeleteAsync(int ID)
+        public async Task DeleteAsync(Guid ID)
         {
             var measuringDeviceEntity = Mapper.Map<MeasuringDeviceEntity>(await unitOfWork.MeasuringDevices.GetByIdAsync(ID));
-            int test = await unitOfWork.MeasuringDevices.DeleteAsync(measuringDeviceEntity);
+            int test = await unitOfWork.MeasuringDevices.DeleteAsync(measuringDeviceEntity.ID);
             await unitOfWork.SaveAsync();
         }
 
         #endregion
 
         #region Assign and Return
-        public async Task AssignMeasuringDeviceAsync(IAssignViewModel measuringDevice)
+        public async Task AssignMeasuringDeviceAsync(Guid itemID, Guid? employeeID)
         {
-            var measuringDeviceEntity = await unitOfWork.MeasuringDevices.GetByIdAsync(measuringDevice.ID);
-            measuringDeviceEntity.EmployeeID = measuringDevice.EmployeeID;
+            var measuringDeviceEntity = await unitOfWork.MeasuringDevices.GetByIdAsync(itemID);
+            measuringDeviceEntity.EmployeeID = employeeID;
             int test = await unitOfWork.MeasuringDevices.UpdateAsync(measuringDeviceEntity);
             await unitOfWork.SaveAsync();
         }
 
-        public async Task ReturnOneMeasuringDeviceAsync(int? ID)
+        public async Task ReturnOneMeasuringDeviceAsync(Guid? ID)
         {
             var measuringDeviceEntity = Mapper.Map<MeasuringDeviceEntity>(await unitOfWork.MeasuringDevices.GetByIdAsync(ID));
             measuringDeviceEntity.EmployeeID = null;
@@ -141,10 +125,11 @@ namespace Service.Inventory
             await unitOfWork.SaveAsync();
         }
 
-        public async Task ReturnAllMeasuringDevicesAsync(int? ID)
+        public async Task ReturnAllMeasuringDevicesAsync(Guid? ID)
         {
-            Expression<Func<MeasuringDeviceEntity, bool>> filter = i => i.EmployeeID == ID;
-            IEnumerable<MeasuringDeviceEntity> measuringDeviceList = await unitOfWork.MeasuringDevices.GetAllAsync(filter, null, null);
+            IParameters<MeasuringDeviceEntity> measuringDeviceParameters = new Parameters<MeasuringDeviceEntity>();
+            measuringDeviceParameters.Filter = i => i.EmployeeID == ID;
+            IEnumerable<MeasuringDeviceEntity> measuringDeviceList = await unitOfWork.MeasuringDevices.GetAllAsync(measuringDeviceParameters);
             foreach (var measuringDeviceEntity in measuringDeviceList)
             {
                 measuringDeviceEntity.EmployeeID = null;
