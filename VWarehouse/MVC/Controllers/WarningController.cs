@@ -5,10 +5,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Data.Entity;
 using System.Web.Mvc;
-using MVC.Models.ViewModels;
 using Service.Common.Inventory;
 using DAL.DbEntities.Inventory;
-using DAL;
+using Common;
+using MVC.Models.WarningViewModels;
 
 namespace MVC.Controllers
 {

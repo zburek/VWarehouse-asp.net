@@ -1,4 +1,4 @@
-﻿using DAL;
+﻿using Common;
 using DAL.DbEntities.Inventory;
 using System;
 using System.Collections.Generic;

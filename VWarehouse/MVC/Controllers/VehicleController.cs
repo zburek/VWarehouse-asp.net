@@ -6,14 +6,16 @@ using System.Web.Mvc;
 using Service.Common.Inventory;
 using Model.Common.Inventory;
 using Model.Inventory;
-using MVC.Models.ViewModels;
+using MVC.Models.AssignViewModels;
 using Service.Common;
 using AutoMapper;
 using Model.Common;
 using System.Collections.Generic;
-using DAL;
 using DAL.DbEntities;
 using DAL.DbEntities.Inventory;
+using Common;
+using MVC.Models.VehicleViewModels;
+using PagedList;
 
 namespace MVC.Controllers
 {
@@ -57,7 +59,9 @@ namespace MVC.Controllers
             parameters.SortOrder = sortOrder;
 
             var vehiclePagedList = await Service.GetAllPagedListAsync(parameters);
-            return View(vehiclePagedList);
+            var viewModel = Mapper.Map<IEnumerable<VehicleIndexViewModel>>(vehiclePagedList);
+            var pagedViewModel = new StaticPagedList<VehicleIndexViewModel>(viewModel, vehiclePagedList.GetMetaData());
+            return View(pagedViewModel);
         }
 
         [HttpGet]
@@ -86,7 +90,9 @@ namespace MVC.Controllers
             parameters.SortOrder = sortOrder;
 
             var vehiclePagedList = await Service.GetAllPagedListAsync(parameters);
-            return View(vehiclePagedList);
+            var viewModel = Mapper.Map<IEnumerable<VehicleOnStockViewModel>>(vehiclePagedList);
+            var pagedViewModel = new StaticPagedList<VehicleOnStockViewModel>(viewModel, vehiclePagedList.GetMetaData());
+            return View(pagedViewModel);
         }
 
         [HttpGet]
@@ -96,12 +102,12 @@ namespace MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            IVehicle vehicle = await Service.GetByIdAsync(ID);
-            if (vehicle == null)
+            var vehicleViewModel = Mapper.Map<VehicleDetailsViewModel>(await Service.GetByIdAsync(ID));
+            if (vehicleViewModel == null)
             {
                 return HttpNotFound();
             }
-            return View(vehicle);
+            return View(vehicleViewModel);
         }
         #endregion
 
@@ -153,13 +159,13 @@ namespace MVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Name,Type,LicensePlate,LicenseExpirationDate,Mileage,NextService,EmployeeID")] Vehicle createdVehicle)
+        public async Task<ActionResult> Create([Bind(Include = "Name,Type,LicensePlate,LicenseExpirationDate,Mileage,NextService,EmployeeID")] VehicleCreateViewModel createdVehicle)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    IVehicle vehicle = createdVehicle; // Not sure this is allowed, use automapper for new?
+                    IVehicle vehicle = (Mapper.Map<Vehicle>(createdVehicle));
                     await Service.CreateAsync(vehicle);
                     return RedirectToAction("Index");
                 }
@@ -178,23 +184,23 @@ namespace MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            IVehicle vehicle = await Service.GetByIdAsync(ID);
-            if (vehicle == null)
+            var vehicleViewModel = Mapper.Map<VehicleEditViewModel>(await Service.GetByIdAsync(ID));
+            if (vehicleViewModel == null)
             {
                 return HttpNotFound();
             }
-            return View(vehicle);
+            return View(vehicleViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ID,Name,Type,LicensePlate,LicenseExpirationDate,Mileage,NextService,EmployeeID")] Vehicle editedVehicle)
+        public async Task<ActionResult> Edit([Bind(Include = "ID,Name,Type,LicensePlate,LicenseExpirationDate,Mileage,NextService,EmployeeID")] VehicleEditViewModel editedVehicle)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    IVehicle vehicle = editedVehicle; // Not sure this is allowed, use automapper for new?
+                    IVehicle vehicle = (Mapper.Map<Vehicle>(editedVehicle));
                     await Service.UpdateAsync(vehicle);
                     return RedirectToAction("Index");
                 }
@@ -217,12 +223,12 @@ namespace MVC.Controllers
             {
                 ViewBag.ErrorMessage = "Delete faild. Try again and if the problem persists see your system administrator.";
             }
-            IVehicle vehicle = await Service.GetByIdAsync(ID);
-            if (vehicle == null)
+            var vehicleViewModel = Mapper.Map<VehicleDeleteViewModel>(await Service.GetByIdAsync(ID));
+            if (vehicleViewModel == null)
             {
                 return HttpNotFound();
             }
-            return View(vehicle);
+            return View(vehicleViewModel);
         }
 
         [HttpPost, ActionName("Delete")]

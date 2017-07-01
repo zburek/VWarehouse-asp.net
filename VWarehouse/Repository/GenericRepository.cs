@@ -1,5 +1,5 @@
-﻿using DAL;
-using DAL.DbEntities;
+﻿using Common;
+using DAL;
 using Repository.Common;
 using System;
 using System.Collections.Generic;

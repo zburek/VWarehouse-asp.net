@@ -1,4 +1,4 @@
-﻿using DAL;
+﻿using Common;
 using DAL.DbEntities.Inventory;
 using Repository.Common;
 using Repository.Common.Inventory;
@@ -35,20 +35,20 @@ namespace Repository.Inventory
         #region Basic CRUD
         public async Task CreateAsync(ItemEntity itemEntity)
         {
-            int addTest = await Repository.AddAsync(itemEntity);
-            int saveTest = await Repository.SaveAsync();
+            await Repository.AddAsync(itemEntity);
+            await Repository.SaveAsync();
         }
 
         public async Task UpdateAsync(ItemEntity itemEntity)
         {
-            int updateTest = await Repository.UpdateAsync(itemEntity);
-            int saveTest = await Repository.SaveAsync();
+            await Repository.UpdateAsync(itemEntity);
+            await Repository.SaveAsync();
         }
 
         public async Task DeleteAsync(Guid ID)
         {
-            int updateTest = await Repository.DeleteAsync(ID);
-            int saveTest = await Repository.SaveAsync();
+            await Repository.DeleteAsync(ID);
+            await Repository.SaveAsync();
         }
         #endregion
     }

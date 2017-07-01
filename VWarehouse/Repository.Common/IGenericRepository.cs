@@ -1,5 +1,4 @@
-﻿using DAL;
-using DAL.DbEntities;
+﻿using Common;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

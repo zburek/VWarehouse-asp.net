@@ -196,11 +196,35 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\EmployeeViewModels\EmployeeCreateViewModel.cs" />
+    <Compile Include="Models\EmployeeViewModels\EmployeeDeleteViewModel.cs" />
+    <Compile Include="Models\EmployeeViewModels\EmployeeDetailsViewModel.cs" />
+    <Compile Include="Models\EmployeeViewModels\EmployeeEditViewModel.cs" />
+    <Compile Include="Models\EmployeeViewModels\EmployeeIndexViewModel.cs" />
+    <Compile Include="Models\EmployeeViewModels\EmployeeInventoryViewModel.cs" />
+    <Compile Include="Models\ItemViewModels\ItemCreateViewModel.cs" />
+    <Compile Include="Models\ItemViewModels\ItemDeleteViewModel.cs" />
+    <Compile Include="Models\ItemViewModels\ItemDetailsViewModel.cs" />
+    <Compile Include="Models\ItemViewModels\ItemEditViewModel.cs" />
+    <Compile Include="Models\ItemViewModels\ItemIndexViewModel.cs" />
+    <Compile Include="Models\ItemViewModels\ItemOnStockViewModel.cs" />
     <Compile Include="Models\MapperConfig.cs" />
-    <Compile Include="Models\ViewModels\AssignViewModel.cs" />
-    <Compile Include="Models\ViewModels\IAssignViewModel.cs" />
-    <Compile Include="Models\ViewModels\IWarningViewModel.cs" />
-    <Compile Include="Models\ViewModels\WarningViewModel.cs" />
+    <Compile Include="Models\AssignViewModels\AssignViewModel.cs" />
+    <Compile Include="Models\AssignViewModels\IAssignViewModel.cs" />
+    <Compile Include="Models\MeasuringDeviceViewModels\MeasuringDeviceCreateViewModel.cs" />
+    <Compile Include="Models\MeasuringDeviceViewModels\MeasuringDeviceDeleteViewModel.cs" />
+    <Compile Include="Models\MeasuringDeviceViewModels\MeasuringDeviceDetailsViewModel.cs" />
+    <Compile Include="Models\MeasuringDeviceViewModels\MeasuringDeviceEditViewModel.cs" />
+    <Compile Include="Models\MeasuringDeviceViewModels\MeasuringDeviceIndexViewModel.cs" />
+    <Compile Include="Models\MeasuringDeviceViewModels\MeasuringDeviceOnStockViewModel.cs" />
+    <Compile Include="Models\VehicleViewModels\VehicleCreateViewModel.cs" />
+    <Compile Include="Models\VehicleViewModels\VehicleDeleteViewModel.cs" />
+    <Compile Include="Models\VehicleViewModels\VehicleDetailsViewModel.cs" />
+    <Compile Include="Models\VehicleViewModels\VehicleEditViewModel.cs" />
+    <Compile Include="Models\VehicleViewModels\VehicleIndexViewModel.cs" />
+    <Compile Include="Models\VehicleViewModels\VehicleOnStockViewModel.cs" />
+    <Compile Include="Models\WarningViewModels\IWarningViewModel.cs" />
+    <Compile Include="Models\WarningViewModels\WarningViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

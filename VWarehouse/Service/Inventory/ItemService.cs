@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using DAL;
+using Common;
 using DAL.DbEntities.Inventory;
 using Model.Common.Inventory;
 using PagedList;

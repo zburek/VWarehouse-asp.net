@@ -6,14 +6,16 @@ using System.Web.Mvc;
 using Service.Common.Inventory;
 using Model.Common.Inventory;
 using Model.Inventory;
-using MVC.Models.ViewModels;
+using MVC.Models.AssignViewModels;
 using Service.Common;
 using AutoMapper;
 using Model.Common;
 using System.Collections.Generic;
-using DAL;
 using DAL.DbEntities;
 using DAL.DbEntities.Inventory;
+using Common;
+using MVC.Models.MeasuringDeviceViewModels;
+using PagedList;
 
 namespace MVC.Controllers
 {
@@ -55,7 +57,9 @@ namespace MVC.Controllers
             parameters.SortOrder = sortOrder;
 
             var measuringDevicePagedList = await Service.GetAllPagedListAsync(parameters);
-            return View(measuringDevicePagedList);
+            var viewModel = Mapper.Map<IEnumerable<MeasuringDeviceIndexViewModel>>(measuringDevicePagedList);
+            var pagedViewModel = new StaticPagedList<MeasuringDeviceIndexViewModel>(viewModel, measuringDevicePagedList.GetMetaData());
+            return View(pagedViewModel);
         }
 
         [HttpGet]
@@ -80,7 +84,9 @@ namespace MVC.Controllers
             parameters.SortOrder = sortOrder;
 
             var measuringDevicePagedList = await Service.GetAllPagedListAsync(parameters);
-            return View(measuringDevicePagedList);
+            var viewModel = Mapper.Map<IEnumerable<MeasuringDeviceOnStockViewModel>>(measuringDevicePagedList);
+            var pagedViewModel = new StaticPagedList<MeasuringDeviceOnStockViewModel>(viewModel, measuringDevicePagedList.GetMetaData());
+            return View(pagedViewModel);
         }
 
         [HttpGet]
@@ -90,12 +96,12 @@ namespace MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            IMeasuringDevice measuringDevice = await Service.GetByIdAsync(ID);
-            if (measuringDevice == null)
+            var measuringDeviceViewModel = Mapper.Map<MeasuringDeviceDetailsViewModel>(await Service.GetByIdAsync(ID));
+            if (measuringDeviceViewModel == null)
             {
                 return HttpNotFound();
             }
-            return View(measuringDevice);
+            return View(measuringDeviceViewModel);
         }
         #endregion
 
@@ -148,13 +154,13 @@ namespace MVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Name,SerialNumber,CalibrationExpirationDate,EmployeeID")] MeasuringDevice createdMeasuringDevice)
+        public async Task<ActionResult> Create([Bind(Include = "Name,SerialNumber,CalibrationExpirationDate,EmployeeID")] MeasuringDeviceCreateViewModel createdMeasuringDevice)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    IMeasuringDevice measuringDevice = createdMeasuringDevice; // Not sure this is allowed, use automapper for new?
+                    IMeasuringDevice measuringDevice = (Mapper.Map<MeasuringDevice>(createdMeasuringDevice));
                     await Service.CreateAsync(measuringDevice);
                     return RedirectToAction("Index");
                 }
@@ -173,23 +179,23 @@ namespace MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            IMeasuringDevice measuringDevice = await Service.GetByIdAsync(ID);
-            if (measuringDevice == null)
+            var measuringDeviceViewModel = Mapper.Map<MeasuringDeviceEditViewModel>(await Service.GetByIdAsync(ID));
+            if (measuringDeviceViewModel == null)
             {
                 return HttpNotFound();
             }
-            return View(measuringDevice);
+            return View(measuringDeviceViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ID,Name,SerialNumber,CalibrationExpirationDate,EmployeeID")] MeasuringDevice editedMeasuringDevice)
+        public async Task<ActionResult> Edit([Bind(Include = "ID,Name,SerialNumber,CalibrationExpirationDate,EmployeeID")] MeasuringDeviceEditViewModel editedMeasuringDevice)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    IMeasuringDevice measuringDevice = editedMeasuringDevice; // Not sure this is allowed, use automapper for new?
+                    IMeasuringDevice measuringDevice = (Mapper.Map<MeasuringDevice>(editedMeasuringDevice));
                     await Service.UpdateAsync(measuringDevice);
                     return RedirectToAction("Index");
                 }
@@ -211,12 +217,12 @@ namespace MVC.Controllers
             {
                 ViewBag.ErrorMessage = "Delete faild. Try again and if the problem persists see your system administrator.";
             }
-            IMeasuringDevice measuringDevice = await Service.GetByIdAsync(ID);
-            if (measuringDevice == null)
+            var measuringDeviceViewModel = Mapper.Map<MeasuringDeviceDeleteViewModel>(await Service.GetByIdAsync(ID));
+            if (measuringDeviceViewModel == null)
             {
                 return HttpNotFound();
             }
-            return View(measuringDevice);
+            return View(measuringDeviceViewModel);
         }
 
         [HttpPost, ActionName("Delete")]

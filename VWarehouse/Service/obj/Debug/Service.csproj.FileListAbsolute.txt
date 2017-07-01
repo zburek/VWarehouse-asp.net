@@ -73,3 +73,5 @@ D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.
 D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service\obj\Debug\Service.csprojResolveAssemblyReference.cache
 D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service\obj\Debug\Service.dll
 D:\Programiranje\Project\L3 Mono Project\10 Repository Guid Modeli Parametri 19.6.2017\VWarehouse\Service\obj\Debug\Service.pdb
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service\bin\Debug\Common.dll
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service\bin\Debug\Common.pdb

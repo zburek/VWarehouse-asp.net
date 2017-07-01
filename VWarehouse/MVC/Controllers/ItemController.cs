@@ -6,14 +6,16 @@ using System.Web.Mvc;
 using Service.Common.Inventory;
 using Model.Common.Inventory;
 using Model.Inventory;
-using MVC.Models.ViewModels;
+using MVC.Models.AssignViewModels;
 using AutoMapper;
 using Model.Common;
 using Service.Common;
 using System.Collections.Generic;
-using DAL;
 using DAL.DbEntities;
 using DAL.DbEntities.Inventory;
+using Common;
+using MVC.Models.ItemViewModels;
+using PagedList;
 
 namespace MVC.Controllers
 {
@@ -55,7 +57,9 @@ namespace MVC.Controllers
             parameters.SortOrder = sortOrder;
 
             var itemPagedList = await Service.GetAllPagedListAsync(parameters);
-            return View(itemPagedList);
+            var viewModel = Mapper.Map<IEnumerable<ItemIndexViewModel>>(itemPagedList);
+            var pagedViewModel = new StaticPagedList<ItemIndexViewModel>(viewModel, itemPagedList.GetMetaData());
+            return View(pagedViewModel);
         }
 
         [HttpGet]
@@ -80,7 +84,9 @@ namespace MVC.Controllers
             parameters.SortOrder = sortOrder;
 
             var itemPagedList = await Service.GetAllPagedListAsync(parameters);
-            return View(itemPagedList);
+            var viewModel = Mapper.Map<IEnumerable<ItemOnStockViewModel>>(itemPagedList);
+            var pagedViewModel = new StaticPagedList<ItemOnStockViewModel>(viewModel, itemPagedList.GetMetaData());
+            return View(pagedViewModel);
         }
 
         [HttpGet]
@@ -90,12 +96,12 @@ namespace MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            IItem item = await Service.GetByIdAsync(ID);
-            if (item == null)
+            var itemViewModel = Mapper.Map<ItemDetailsViewModel>(await Service.GetByIdAsync(ID));
+            if (itemViewModel == null)
             {
                 return HttpNotFound();
             }
-            return View(item);
+            return View(itemViewModel);
         }
         #endregion
 
@@ -108,7 +114,7 @@ namespace MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            // Other option without using viewmodel is by using ViewBag to store EmployeeList for DropDownList
+
             IAssignViewModel item = Mapper.Map<IAssignViewModel>(await Service.GetByIdAsync(ID));
             item.EmployeeList = Mapper.Map<List<IEmployee>>(await EmployeeService.GetAllAsync(employeeParameters));
             if (item == null)
@@ -153,13 +159,13 @@ namespace MVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Name,Description,SerialNumber,EmployeeID")] Item createdItem)
+        public async Task<ActionResult> Create([Bind(Include = "Name,Description,SerialNumber,EmployeeID")] ItemCreateViewModel createdItem)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    IItem item = createdItem; // Not sure this is allowed, use automapper for new?
+                    IItem item = (Mapper.Map<Item>(createdItem));
                     await Service.CreateAsync(item);
                     return RedirectToAction("Index");
                 }
@@ -178,23 +184,23 @@ namespace MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            IItem item = await Service.GetByIdAsync(ID);
-            if (item == null)
+            var itemViewModel = Mapper.Map<ItemEditViewModel>(await Service.GetByIdAsync(ID));
+            if (itemViewModel == null)
             {
                 return HttpNotFound();
             }
-            return View(item);
+            return View(itemViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ID,Name,Description,SerialNumber,EmployeeID")] Item editedItem)
+        public async Task<ActionResult> Edit([Bind(Include = "ID,Name,Description,SerialNumber,EmployeeID")] ItemEditViewModel editedItem)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    IItem item = editedItem; // Not sure this is allowed, use automapper for new?
+                    IItem item = (Mapper.Map<Item>(editedItem));
                     await Service.UpdateAsync(item);
                     return RedirectToAction("Index");
                 }
@@ -216,12 +222,12 @@ namespace MVC.Controllers
             {
                 ViewBag.ErrorMessage = "Delete faild. Try again and if the problem persists see your system administrator.";
             }
-            IItem item = await Service.GetByIdAsync(ID);
-            if (item == null)
+            var itemViewModel = Mapper.Map<ItemDeleteViewModel>(await Service.GetByIdAsync(ID));
+            if (itemViewModel == null)
             {
                 return HttpNotFound();
             }
-            return View(item);
+            return View(itemViewModel);
         }
 
         [HttpPost, ActionName("Delete")]

@@ -49,14 +49,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DbEntities\BaseEntity.cs" />
     <Compile Include="DbEntities\EmployeeEntity.cs" />
-    <Compile Include="DbEntities\IBaseEntity.cs" />
     <Compile Include="DbEntities\Inventory\ItemEntity.cs" />
     <Compile Include="DbEntities\Inventory\MeasuringDeviceEntity.cs" />
     <Compile Include="DbEntities\Inventory\VehicleEntity.cs" />
-    <Compile Include="IParameters.cs" />
-    <Compile Include="Parameters.cs" />
     <Compile Include="VWarehouseContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

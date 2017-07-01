@@ -7,8 +7,12 @@ using System.Threading.Tasks;
 using Model.Common;
 using Service.Common;
 using Service.Common.Inventory;
-using DAL;
 using DAL.DbEntities;
+using Common;
+using MVC.Models.EmployeeViewModels;
+using AutoMapper;
+using PagedList;
+using System.Collections.Generic;
 
 namespace MVC.Controllers
 {
@@ -48,10 +52,12 @@ namespace MVC.Controllers
             parameters.SearchString = searchString;
             parameters.SortOrder = sortOrder;
 
-            var employeePagedList = await Service.GetAllPagedListAsync(parameters); 
-            return View(employeePagedList);
+            var employeePagedList = await Service.GetAllPagedListAsync(parameters);
+            var viewModel = Mapper.Map<IEnumerable<EmployeeIndexViewModel>>(employeePagedList);
+            var pagedViewModel = new StaticPagedList<EmployeeIndexViewModel>(viewModel, employeePagedList.GetMetaData());
+            return View(pagedViewModel);
         }
-        
+
         [HttpGet]
         public async Task<ActionResult> Details(Guid? ID)
         {
@@ -59,12 +65,12 @@ namespace MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            IEmployee employee = await Service.GetByIdAsync(ID);
-            if (employee == null)
+            var employeeViewModel = Mapper.Map<EmployeeDetailsViewModel>(await Service.GetByIdAsync(ID));
+            if (employeeViewModel == null)
             {
                 return HttpNotFound();
             }
-            return View(employee);
+            return View(employeeViewModel);
         }
 
         [HttpGet]
@@ -76,12 +82,12 @@ namespace MVC.Controllers
             }
             parameters.Filter = e => e.ID == ID;
             parameters.IncludeProperties = "Items, MeasuringDevices, Vehicles";
-            IEmployee employee = await Service.GetOneAsync(parameters);
-            if (employee == null)
+            var employeeViewModel = Mapper.Map<EmployeeInventoryViewModel>(await Service.GetOneAsync(parameters));
+            if (employeeViewModel == null)
             {
                 return HttpNotFound();
             }
-            return View(employee);
+            return View(employeeViewModel);
         }
         #endregion
 
@@ -176,13 +182,13 @@ namespace MVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Name,PhoneNumber")] Employee createdEmployee)
+        public async Task<ActionResult> Create([Bind(Include = "Name,PhoneNumber")] EmployeeCreateViewModel createdEmployee)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    IEmployee employee = createdEmployee; // Not sure this is allowed, use automapper for new employee?
+                    IEmployee employee = (Mapper.Map<Employee>(createdEmployee));
                     await Service.CreateAsync(employee);
                     return RedirectToAction("Index");
                 }
@@ -201,23 +207,23 @@ namespace MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            IEmployee employee = await Service.GetByIdAsync(ID);
-            if (employee == null)
+            var employeeViewModel = Mapper.Map<EmployeeEditViewModel>(await Service.GetByIdAsync(ID));
+            if (employeeViewModel == null)
             {
                 return HttpNotFound();
             }
-            return View(employee);
+            return View(employeeViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ID,Name,PhoneNumber")] Employee editedEmployee)
+        public async Task<ActionResult> Edit([Bind(Include = "ID,Name,PhoneNumber")] EmployeeEditViewModel editedEmployee)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    IEmployee employee = editedEmployee; // Not sure this is allowed, use automapper for new employee?
+                    IEmployee employee = (Mapper.Map<Employee>(editedEmployee));
                     await Service.UpdateAsync(employee);
                     return RedirectToAction("Index");
                 }
@@ -240,12 +246,12 @@ namespace MVC.Controllers
             {
                 ViewBag.ErrorMessage = "Delete faild. Try again and if the problem persists see your system administrator.";
             }
-            IEmployee employee = await Service.GetByIdAsync(ID);
-            if (employee == null)
+            var employeeViewModel = Mapper.Map<EmployeeDeleteViewModel>(await Service.GetByIdAsync(ID));
+            if (employeeViewModel == null)
             {
                 return HttpNotFound();
             }
-            return View(employee);
+            return View(employeeViewModel);
         }
 
         [HttpPost, ActionName("Delete")]

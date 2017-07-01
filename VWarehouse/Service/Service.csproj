@@ -68,6 +68,10 @@
     <Compile Include="EmployeeService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{3C90CD28-AC38-45B7-95DC-87FDD004A654}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DAL\DAL.csproj">
       <Project>{1308180f-ca4d-4f46-bc57-5ec995900f0a}</Project>
       <Name>DAL</Name>

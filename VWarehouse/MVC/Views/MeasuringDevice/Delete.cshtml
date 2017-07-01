@@ -1,4 +1,4 @@
-﻿@model Model.Common.Inventory.IMeasuringDevice
+﻿@model MVC.Models.MeasuringDeviceViewModels.MeasuringDeviceDeleteViewModel
 
 @{
     ViewBag.Title = "Delete";
@@ -33,6 +33,13 @@
 
         <dd>
             @Html.DisplayFor(model => model.CalibrationExpirationDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Employee.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Employee.Name)
         </dd>
 
     </dl>

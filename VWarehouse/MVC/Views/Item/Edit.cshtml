@@ -1,4 +1,4 @@
-﻿@model Model.Common.Inventory.IItem
+﻿@model MVC.Models.ItemViewModels.ItemEditViewModel
 
 @{
     ViewBag.Title = "Edit";
@@ -16,7 +16,6 @@
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.ID)
-        @Html.HiddenFor(model => model.EmployeeID)
 
         <div class="form-group">
             @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })

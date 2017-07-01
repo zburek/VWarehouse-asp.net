@@ -1,4 +1,4 @@
-﻿@model PagedList.IPagedList<Model.Common.Inventory.IMeasuringDevice>
+﻿@model PagedList.IPagedList<MVC.Models.MeasuringDeviceViewModels.MeasuringDeviceOnStockViewModel>
 @using PagedList.Mvc;
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
@@ -13,7 +13,7 @@
     <span class="glyphicon glyphicon-plus"></span> New Measuring Device
 </a>
 
-@using (Html.BeginForm("Index", "MeasuringDevice", FormMethod.Get))
+@using (Html.BeginForm("OnStock", "MeasuringDevice", FormMethod.Get))
 {
     <p>
         Search by Measuring Device Name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)

@@ -1,6 +1,4 @@
-﻿
-
-using MVC.Controllers;
+﻿using MVC.Controllers;
 using NUnit.Framework;
 using Service.Common.Inventory;
 using Model.Common.Inventory;

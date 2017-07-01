@@ -1,4 +1,4 @@
-﻿@model Model.Common.Inventory.IItem
+﻿@model MVC.Models.ItemViewModels.ItemDeleteViewModel
 
 @{
     ViewBag.Title = "Delete";
@@ -37,11 +37,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.EmployeeID)
+            @Html.DisplayNameFor(model => model.Employee.Name)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.EmployeeID)
+            @Html.DisplayFor(model => model.Employee.Name)
         </dd>  
 
     </dl>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DAL.DbEntities.Inventory

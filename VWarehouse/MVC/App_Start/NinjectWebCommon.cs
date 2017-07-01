@@ -21,6 +21,7 @@ namespace MVC.App_Start
     using Repository.Common;
     using Repository.Common.Inventory;
     using Repository.Inventory;
+    using Common;
 
     public static class NinjectWebCommon 
     {

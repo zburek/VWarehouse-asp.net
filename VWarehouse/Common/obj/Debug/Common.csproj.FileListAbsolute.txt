@@ -2,3 +2,9 @@ C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Common\bin\Debug
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Common\bin\Debug\Common.pdb
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Common\obj\Debug\Common.dll
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Common\obj\Debug\Common.pdb
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Common\bin\Debug\Common.dll.config
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Common\bin\Debug\EntityFramework.dll
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Common\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Common\bin\Debug\EntityFramework.xml
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Common\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Common\obj\Debug\Common.csprojResolveAssemblyReference.cache

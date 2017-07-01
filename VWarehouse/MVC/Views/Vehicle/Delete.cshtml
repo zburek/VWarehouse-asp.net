@@ -1,4 +1,4 @@
-﻿@model Model.Common.Inventory.IVehicle
+﻿@model MVC.Models.VehicleViewModels.VehicleDeleteViewModel
 
 @{
     ViewBag.Title = "Delete";
@@ -58,6 +58,13 @@
         <dd>
             @Html.DisplayFor(model => model.NextService)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Employee.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Employee.Name)
+        </dd> 
 
 
     </dl>

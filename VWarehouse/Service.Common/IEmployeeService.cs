@@ -1,11 +1,9 @@
-﻿using DAL;
+﻿using Common;
 using DAL.DbEntities;
 using Model.Common;
 using PagedList;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Service.Common

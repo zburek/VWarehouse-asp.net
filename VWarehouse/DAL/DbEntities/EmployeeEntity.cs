@@ -1,4 +1,5 @@
-﻿using DAL.DbEntities.Inventory;
+﻿using Common;
+using DAL.DbEntities.Inventory;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
