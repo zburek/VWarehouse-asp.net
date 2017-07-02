@@ -3,7 +3,6 @@ using Common;
 using DAL.DbEntities.Inventory;
 using Model.Common.Inventory;
 using PagedList;
-using Repository;
 using Repository.Common;
 using Service.Common.Inventory;
 using System;
@@ -16,7 +15,7 @@ namespace Service.Inventory
     public class ItemService : IItemService
     {
         private IUnitOfWork unitOfWork;
-        public ItemService(UnitOfWork unitOfWork)
+        public ItemService(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
         }
@@ -35,7 +34,7 @@ namespace Service.Inventory
             {
                 parameters.Filter = i => i.Name.Contains(parameters.SearchString);
             }
-            else if(!String.IsNullOrEmpty(parameters.SearchString) && parameters.Filter != null)
+            else if (!String.IsNullOrEmpty(parameters.SearchString) && parameters.Filter != null)
             {
                 parameters.Filter = i => i.Name.Contains(parameters.SearchString) && i.EmployeeID == null;
             }
@@ -81,26 +80,29 @@ namespace Service.Inventory
             var item = Mapper.Map<IItem>(await unitOfWork.Items.GetByIdAsync(ID));
             return item;
         }
-        
+
         #endregion
-        
+
         #region Basic CRUD
         public async Task CreateAsync(IItem item)
         {
             var itemEntity = Mapper.Map<ItemEntity>(item);
             await unitOfWork.Items.CreateAsync(itemEntity);
+            await unitOfWork.SaveAsync();
         }
 
         public async Task UpdateAsync(IItem item)
         {
             var itemEntity = Mapper.Map<ItemEntity>(item);
             await unitOfWork.Items.UpdateAsync(itemEntity);
+            await unitOfWork.SaveAsync();
         }
 
         public async Task DeleteAsync(Guid ID)
         {
             var itemEntity = Mapper.Map<ItemEntity>(await unitOfWork.Items.GetByIdAsync(ID));
             await unitOfWork.Items.DeleteAsync(itemEntity.ID);
+            await unitOfWork.SaveAsync();
         }
         #endregion
 
@@ -110,25 +112,29 @@ namespace Service.Inventory
             var itemEntity = await unitOfWork.Items.GetByIdAsync(itemID);
             itemEntity.EmployeeID = employeeID;
             await unitOfWork.Items.UpdateAsync(itemEntity);
+            await unitOfWork.SaveAsync();
         }
         public async Task ReturnOneItemAsync(Guid? ID)
         {
             var itemEntity = Mapper.Map<ItemEntity>(await unitOfWork.Items.GetByIdAsync(ID));
             itemEntity.EmployeeID = null;
             await unitOfWork.Items.UpdateAsync(itemEntity);
+            await unitOfWork.SaveAsync();
         }
         public async Task ReturnAllItemsAsync(Guid? ID)
         {
             IParameters<ItemEntity> itemParameters = new Parameters<ItemEntity>();
             itemParameters.Filter = i => i.EmployeeID == ID;
             IEnumerable<ItemEntity> itemList = await unitOfWork.Items.GetAllAsync(itemParameters);
-            foreach(var itemEntity in itemList)
+            foreach (var itemEntity in itemList)
             {
                 itemEntity.EmployeeID = null;
                 await unitOfWork.Items.UpdateAsync(itemEntity);
             }
-        }
-        #endregion
+            await unitOfWork.SaveAsync();
 
+            #endregion
+
+        }
     }
 }
