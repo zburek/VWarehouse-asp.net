@@ -74,7 +74,8 @@ namespace MVC.App_Start
         private static void RegisterServices(IKernel kernel)
         {
             kernel.Bind<VWarehouseContext>().ToSelf().InRequestScope();
-            kernel.Bind<UnitOfWork>().ToSelf().InRequestScope();
+            //kernel.Bind<UnitOfWork>().ToSelf().InRequestScope();
+            kernel.Bind<IUnitOfWork> ().To<UnitOfWork>().InRequestScope();
 
             kernel.Bind<IEmployeeService>().To<EmployeeService>().InRequestScope();
 

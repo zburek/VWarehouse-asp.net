@@ -3,7 +3,6 @@ using Common;
 using DAL.DbEntities.Inventory;
 using Model.Common.Inventory;
 using PagedList;
-using Repository;
 using Repository.Common;
 using Service.Common.Inventory;
 using System;
@@ -16,7 +15,7 @@ namespace Service.Inventory
     public class MeasuringDeviceService : IMeasuringDeviceService
     {
         private IUnitOfWork unitOfWork;
-        public MeasuringDeviceService(UnitOfWork unitOfWork)
+        public MeasuringDeviceService(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
         }
@@ -89,18 +88,21 @@ namespace Service.Inventory
         {
             var measuringDeviceEntity = Mapper.Map<MeasuringDeviceEntity>(measuringDevice);
             await unitOfWork.MeasuringDevices.CreateAsync(measuringDeviceEntity);
+            await unitOfWork.SaveAsync();
         }
 
         public async Task UpdateAsync(IMeasuringDevice measuringDevice)
         {
             var measuringDeviceEntity = Mapper.Map<MeasuringDeviceEntity>(measuringDevice);
             await unitOfWork.MeasuringDevices.UpdateAsync(measuringDeviceEntity);
+            await unitOfWork.SaveAsync();
         }
         
         public async Task DeleteAsync(Guid ID)
         {
             var measuringDeviceEntity = Mapper.Map<MeasuringDeviceEntity>(await unitOfWork.MeasuringDevices.GetByIdAsync(ID));
             await unitOfWork.MeasuringDevices.DeleteAsync(measuringDeviceEntity.ID);
+            await unitOfWork.SaveAsync();
         }
 
         #endregion
@@ -111,6 +113,7 @@ namespace Service.Inventory
             var measuringDeviceEntity = await unitOfWork.MeasuringDevices.GetByIdAsync(itemID);
             measuringDeviceEntity.EmployeeID = employeeID;
             await unitOfWork.MeasuringDevices.UpdateAsync(measuringDeviceEntity);
+            await unitOfWork.SaveAsync();
         }
 
         public async Task ReturnOneMeasuringDeviceAsync(Guid? ID)
@@ -118,6 +121,7 @@ namespace Service.Inventory
             var measuringDeviceEntity = Mapper.Map<MeasuringDeviceEntity>(await unitOfWork.MeasuringDevices.GetByIdAsync(ID));
             measuringDeviceEntity.EmployeeID = null;
             await unitOfWork.MeasuringDevices.UpdateAsync(measuringDeviceEntity);
+            await unitOfWork.SaveAsync();
         }
 
         public async Task ReturnAllMeasuringDevicesAsync(Guid? ID)
@@ -130,6 +134,7 @@ namespace Service.Inventory
                 measuringDeviceEntity.EmployeeID = null;
                 await unitOfWork.MeasuringDevices.UpdateAsync(measuringDeviceEntity);
             }
+            await unitOfWork.SaveAsync();
         }
         #endregion
     }

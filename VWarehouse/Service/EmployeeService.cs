@@ -4,13 +4,11 @@ using DAL.DbEntities;
 using DAL.DbEntities.Inventory;
 using Model.Common;
 using PagedList;
-using Repository;
 using Repository.Common;
 using Service.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Service
@@ -18,7 +16,7 @@ namespace Service
     public class EmployeeService : IEmployeeService
     {
         private IUnitOfWork unitOfWork;
-        public EmployeeService(UnitOfWork unitOfWork)
+        public EmployeeService(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
         }
@@ -77,15 +75,17 @@ namespace Service
         public async Task CreateAsync(IEmployee employee)
         {
             var employeeEntity = Mapper.Map<EmployeeEntity>(employee);
-            await unitOfWork.Employees.AddAsync(employeeEntity);
+            await unitOfWork.Employees.CreateAsync(employeeEntity);
+            await unitOfWork.SaveAsync();
         }
 
         public async Task UpdateAsync(IEmployee employee)
         {
             var employeeEntity = Mapper.Map<EmployeeEntity>(employee);
             await unitOfWork.Employees.UpdateAsync(employeeEntity);
+            await unitOfWork.SaveAsync();
         }
-        
+
         public async Task DeleteAsync(Guid ID)
         {
             IParameters<ItemEntity> itemParameters = new Parameters<ItemEntity>();
@@ -95,22 +95,19 @@ namespace Service
             IParameters<VehicleEntity> vehicleParameters = new Parameters<VehicleEntity>();
             vehicleParameters.Filter = i => i.EmployeeID == ID;
 
-            List<ItemEntity> employeeItems = (Mapper.Map<List<ItemEntity>>
-                (await unitOfWork.Items.GetAllAsync(itemParameters)));
-            foreach(ItemEntity item in employeeItems)
+            IEnumerable<ItemEntity> employeeItems = await unitOfWork.Items.GetAllAsync(itemParameters);
+            foreach (ItemEntity item in employeeItems)
             {
                 await unitOfWork.Items.DeleteAsync(item.ID);
             }
 
-            List<MeasuringDeviceEntity> employeeMeasuringDevices = (Mapper.Map<List<MeasuringDeviceEntity>>
-                (await unitOfWork.MeasuringDevices.GetAllAsync(measuringDeviceParameters)));
+            IEnumerable<MeasuringDeviceEntity> employeeMeasuringDevices = await unitOfWork.MeasuringDevices.GetAllAsync(measuringDeviceParameters);
             foreach (MeasuringDeviceEntity measuringDevice in employeeMeasuringDevices)
             {
                 await unitOfWork.MeasuringDevices.DeleteAsync(measuringDevice.ID);
             }
 
-            List<VehicleEntity> employeeVehicles = (Mapper.Map<List<VehicleEntity>>
-                (await unitOfWork.Vehicles.GetAllAsync(vehicleParameters)));
+            IEnumerable<VehicleEntity> employeeVehicles = await unitOfWork.Vehicles.GetAllAsync(vehicleParameters);
             foreach (VehicleEntity vehicle in employeeVehicles)
             {
                 await unitOfWork.Vehicles.DeleteAsync(vehicle.ID);
@@ -118,6 +115,7 @@ namespace Service
 
             var employeeEnity = Mapper.Map<EmployeeEntity>(await unitOfWork.Employees.GetByIdAsync(ID));
             await unitOfWork.Employees.DeleteAsync(employeeEnity.ID);
+            await unitOfWork.SaveAsync();
         }
         #endregion
     }

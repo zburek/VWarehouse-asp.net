@@ -16,3 +16,4 @@ namespace Repository.Common.Inventory
         Task DeleteAsync(Guid ID);
     }
 }
+

@@ -1,0 +1,6 @@
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Repository.Test\bin\Release\Repository.Test.dll
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Repository.Test\bin\Release\Repository.Test.pdb
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Repository.Test\bin\Release\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Repository.Test\obj\Release\Repository.Tests.csprojResolveAssemblyReference.cache
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Repository.Test\obj\Release\Repository.Test.dll
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Repository.Test\obj\Release\Repository.Test.pdb

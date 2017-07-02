@@ -1,0 +1,12 @@
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\DAL\bin\Release\DAL.dll.config
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\DAL\bin\Release\DAL.dll
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\DAL\bin\Release\DAL.pdb
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\DAL\bin\Release\Common.dll
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\DAL\bin\Release\EntityFramework.dll
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\DAL\bin\Release\EntityFramework.SqlServer.dll
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\DAL\bin\Release\Common.pdb
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\DAL\bin\Release\EntityFramework.xml
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\DAL\bin\Release\EntityFramework.SqlServer.xml
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\DAL\obj\Release\DAL.csprojResolveAssemblyReference.cache
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\DAL\obj\Release\DAL.dll
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\DAL\obj\Release\DAL.pdb

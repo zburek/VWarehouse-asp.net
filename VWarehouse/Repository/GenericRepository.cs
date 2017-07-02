@@ -73,7 +73,7 @@ namespace Repository
         #endregion
 
         #region CRUD
-        public virtual Task<int> AddAsync(TEntity entity)
+        public virtual Task<int> CreateAsync(TEntity entity)
         {
             try
             {
@@ -141,27 +141,6 @@ namespace Repository
             {
                 throw e;
             }
-        }
-        #endregion
-
-        #region Save/Dispose
-
-        public virtual async Task<int> SaveAsync()
-        {
-            int result = 0;
-            try
-            {
-                result = await context.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-            return result;
-        }
-        public void Dispose()
-        {
-            context.Dispose();
         }
         #endregion
     }

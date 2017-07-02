@@ -35,20 +35,17 @@ namespace Repository.Inventory
         #region Basic CRUD
         public async Task CreateAsync(ItemEntity itemEntity)
         {
-            await Repository.AddAsync(itemEntity);
-            await Repository.SaveAsync();
+            await Repository.CreateAsync(itemEntity);
         }
 
         public async Task UpdateAsync(ItemEntity itemEntity)
         {
             await Repository.UpdateAsync(itemEntity);
-            await Repository.SaveAsync();
         }
 
         public async Task DeleteAsync(Guid ID)
         {
             await Repository.DeleteAsync(ID);
-            await Repository.SaveAsync();
         }
         #endregion
     }

@@ -36,7 +36,7 @@ namespace MVC.Controllers
         #region Get
 
         [HttpGet]
-        public async Task<ActionResult> Index(string currentFilter, int? page, string searchString = null, string sortOrder = null)
+        public async Task<ViewResult> Index(string currentFilter, int? page, string searchString = null, string sortOrder = null)
         {
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NameSortParm = sortOrder == "Name" ? "name_desc" : "Name";

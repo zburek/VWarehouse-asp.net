@@ -11,9 +11,8 @@ namespace Repository.Common
         Task<TEntity> GetByIdAsync(Guid? ID);
         Task<TEntity> GetOneAsync(IParameters<TEntity> parameters);
         Task<int> GetCountAsync(IParameters<TEntity> parameters);
-        Task<int> AddAsync(TEntity entity);
+        Task<int> CreateAsync(TEntity entity);
         Task<int> UpdateAsync(TEntity entity);
         Task<int> DeleteAsync(Guid ID);
-        Task<int> SaveAsync();
     }
 }

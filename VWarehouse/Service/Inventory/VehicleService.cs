@@ -3,7 +3,6 @@ using Common;
 using DAL.DbEntities.Inventory;
 using Model.Common.Inventory;
 using PagedList;
-using Repository;
 using Repository.Common;
 using Service.Common.Inventory;
 using System;
@@ -17,7 +16,7 @@ namespace Service.Inventory
     {
         private IUnitOfWork unitOfWork;
 
-        public VehicleService(UnitOfWork unitOfWork)
+        public VehicleService(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
         }
@@ -110,18 +109,21 @@ namespace Service.Inventory
         {
             var vehicleEntity = Mapper.Map<VehicleEntity>(vehicle);
             await unitOfWork.Vehicles.CreateAsync(vehicleEntity);
+            await unitOfWork.SaveAsync();
         }
 
         public async Task UpdateAsync(IVehicle vehicle)
         {
             var vehicleEntity = Mapper.Map<VehicleEntity>(vehicle);
             await unitOfWork.Vehicles.UpdateAsync(vehicleEntity);
+            await unitOfWork.SaveAsync();
         }
 
         public async Task DeleteAsync(Guid ID)
         {
             var vehicleEntity = Mapper.Map<VehicleEntity>(await unitOfWork.Vehicles.GetByIdAsync(ID));
             await unitOfWork.Vehicles.DeleteAsync(vehicleEntity.ID);
+            await unitOfWork.SaveAsync();
         }
 
         #endregion
@@ -132,12 +134,14 @@ namespace Service.Inventory
             var vehicleEntity = await unitOfWork.Vehicles.GetByIdAsync(itemID);
             vehicleEntity.EmployeeID = employeeID;
             await unitOfWork.Vehicles.UpdateAsync(vehicleEntity);
+            await unitOfWork.SaveAsync();
         }
         public async Task ReturnOneVehicleAsync(Guid? ID)
         {
             var vehicleEntity = Mapper.Map<VehicleEntity>(await unitOfWork.Vehicles.GetByIdAsync(ID));
             vehicleEntity.EmployeeID = null;
             await unitOfWork.Vehicles.UpdateAsync(vehicleEntity);
+            await unitOfWork.SaveAsync();
         }
 
         public async Task ReturnAllVehiclesAsync(Guid? ID)
@@ -150,6 +154,7 @@ namespace Service.Inventory
                 vehicleEntity.EmployeeID = null;
                 await unitOfWork.Vehicles.UpdateAsync(vehicleEntity);
             }
+            await unitOfWork.SaveAsync();
         }
         #endregion
     }

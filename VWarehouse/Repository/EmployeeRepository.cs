@@ -38,22 +38,19 @@ namespace Repository
         #endregion
 
         #region CRUD
-        public async Task AddAsync(EmployeeEntity entity)
+        public async Task CreateAsync(EmployeeEntity entity)
         {
-            await Repository.AddAsync(entity);
-            await Repository.SaveAsync();
+            await Repository.CreateAsync(entity);
         }
 
         public async Task UpdateAsync(EmployeeEntity entity)
         {
             await Repository.UpdateAsync(entity);
-             await Repository.SaveAsync();
         }
 
         public async Task DeleteAsync(Guid ID)
         {
             await Repository.DeleteAsync(ID);
-            await Repository.SaveAsync();
         }
         #endregion
     }
