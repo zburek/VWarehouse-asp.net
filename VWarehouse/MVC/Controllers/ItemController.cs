@@ -21,14 +21,14 @@ namespace MVC.Controllers
     {
         protected IItemService Service;
         protected IEmployeeService EmployeeService;
-        protected IItemParameters itemParameters;
-        protected IEmployeeParameters employeeParameters;
+        protected IItemParameters ItemParameters;
+        protected IEmployeeParameters EmployeeParameters;
         public ItemController(IItemService service, IEmployeeService employeeService, IItemParameters itemParameters, IEmployeeParameters employeeParameters)
         {
             this.Service = service;
             this.EmployeeService = employeeService;
-            this.itemParameters = itemParameters;
-            this.employeeParameters = employeeParameters;
+            this.ItemParameters = itemParameters;
+            this.EmployeeParameters = employeeParameters;
         }
 
         #region Get
@@ -49,13 +49,13 @@ namespace MVC.Controllers
                 searchString = currentFilter;
             }
             ViewBag.CurrentFilter = searchString;
-            itemParameters.PageSize = 5;
-            itemParameters.PageNumber = (page ?? 1);
-            itemParameters.SearchString = searchString;
-            itemParameters.SortOrder = sortOrder;
-            itemParameters.Paged = true;
+            ItemParameters.PageSize = 5;
+            ItemParameters.PageNumber = (page ?? 1);
+            ItemParameters.SearchString = searchString;
+            ItemParameters.SortOrder = sortOrder;
+            ItemParameters.Paged = true;
 
-            var itemPagedList = await Service.GetAllPagedListAsync(itemParameters);
+            var itemPagedList = await Service.GetAllPagedListAsync(ItemParameters);
             var viewModel = Mapper.Map<IEnumerable<ItemIndexViewModel>>(itemPagedList);
             var pagedViewModel = new StaticPagedList<ItemIndexViewModel>(viewModel, itemPagedList.GetMetaData());
             return View(pagedViewModel);
@@ -76,14 +76,14 @@ namespace MVC.Controllers
                 searchString = currentFilter;
             }
             ViewBag.CurrentFilter = searchString;
-            itemParameters.PageSize = 5;
-            itemParameters.PageNumber = (page ?? 1);
-            itemParameters.SearchString = searchString;
-            itemParameters.SortOrder = sortOrder;
-            itemParameters.Paged = true;
-            itemParameters.OnStock = true;
+            ItemParameters.PageSize = 5;
+            ItemParameters.PageNumber = (page ?? 1);
+            ItemParameters.SearchString = searchString;
+            ItemParameters.SortOrder = sortOrder;
+            ItemParameters.Paged = true;
+            ItemParameters.OnStock = true;
 
-            var itemPagedList = await Service.GetAllPagedListAsync(itemParameters);
+            var itemPagedList = await Service.GetAllPagedListAsync(ItemParameters);
             var viewModel = Mapper.Map<IEnumerable<ItemOnStockViewModel>>(itemPagedList);
             var pagedViewModel = new StaticPagedList<ItemOnStockViewModel>(viewModel, itemPagedList.GetMetaData());
             return View(pagedViewModel);
@@ -116,7 +116,7 @@ namespace MVC.Controllers
             }
 
             IAssignViewModel item = Mapper.Map<IAssignViewModel>(await Service.GetByIdAsync(ID));
-            item.EmployeeList = Mapper.Map<List<IEmployee>>(await EmployeeService.GetAllAsync(employeeParameters));
+            item.EmployeeList = Mapper.Map<List<IEmployee>>(await EmployeeService.GetAllAsync(EmployeeParameters));
             if (item == null)
             {
                 return HttpNotFound();

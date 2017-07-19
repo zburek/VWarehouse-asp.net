@@ -21,14 +21,14 @@ namespace MVC.Controllers
     {
         protected IMeasuringDeviceService Service;
         protected IEmployeeService EmployeeService;
-        protected IMeasuringDeviceParameters measuringDeviceParameters;
-        protected IEmployeeParameters employeeParameters;
+        protected IMeasuringDeviceParameters MeasuringDeviceParameters;
+        protected IEmployeeParameters EmployeeParameters;
         public MeasuringDeviceController(IMeasuringDeviceService service, IEmployeeService employeeService, IMeasuringDeviceParameters measuringDeviceParameters, IEmployeeParameters employeeParameters)
         {
             this.Service = service;
             this.EmployeeService = employeeService;
-            this.measuringDeviceParameters = measuringDeviceParameters;
-            this.employeeParameters = employeeParameters;
+            this.MeasuringDeviceParameters = measuringDeviceParameters;
+            this.EmployeeParameters = employeeParameters;
         }
 
         #region Get
@@ -49,13 +49,13 @@ namespace MVC.Controllers
                 searchString = currentFilter;
             }
             ViewBag.CurrentFilter = searchString;
-            measuringDeviceParameters.PageSize = 5;
-            measuringDeviceParameters.PageNumber = (page ?? 1);
-            measuringDeviceParameters.SearchString = searchString;
-            measuringDeviceParameters.SortOrder = sortOrder;
-            measuringDeviceParameters.Paged = true;
+            MeasuringDeviceParameters.PageSize = 5;
+            MeasuringDeviceParameters.PageNumber = (page ?? 1);
+            MeasuringDeviceParameters.SearchString = searchString;
+            MeasuringDeviceParameters.SortOrder = sortOrder;
+            MeasuringDeviceParameters.Paged = true;
 
-            var measuringDevicePagedList = await Service.GetAllPagedListAsync(measuringDeviceParameters);
+            var measuringDevicePagedList = await Service.GetAllPagedListAsync(MeasuringDeviceParameters);
             var viewModel = Mapper.Map<IEnumerable<MeasuringDeviceIndexViewModel>>(measuringDevicePagedList);
             var pagedViewModel = new StaticPagedList<MeasuringDeviceIndexViewModel>(viewModel, measuringDevicePagedList.GetMetaData());
             return View(pagedViewModel);
@@ -76,14 +76,14 @@ namespace MVC.Controllers
                 searchString = currentFilter;
             }
             ViewBag.CurrentFilter = searchString;
-            measuringDeviceParameters.PageSize = 5;
-            measuringDeviceParameters.PageNumber = (page ?? 1);
-            measuringDeviceParameters.SearchString = searchString;
-            measuringDeviceParameters.SortOrder = sortOrder;
-            measuringDeviceParameters.Paged = true;
-            measuringDeviceParameters.OnStock = true;
+            MeasuringDeviceParameters.PageSize = 5;
+            MeasuringDeviceParameters.PageNumber = (page ?? 1);
+            MeasuringDeviceParameters.SearchString = searchString;
+            MeasuringDeviceParameters.SortOrder = sortOrder;
+            MeasuringDeviceParameters.Paged = true;
+            MeasuringDeviceParameters.OnStock = true;
 
-            var measuringDevicePagedList = await Service.GetAllPagedListAsync(measuringDeviceParameters);
+            var measuringDevicePagedList = await Service.GetAllPagedListAsync(MeasuringDeviceParameters);
             var viewModel = Mapper.Map<IEnumerable<MeasuringDeviceOnStockViewModel>>(measuringDevicePagedList);
             var pagedViewModel = new StaticPagedList<MeasuringDeviceOnStockViewModel>(viewModel, measuringDevicePagedList.GetMetaData());
             return View(pagedViewModel);
@@ -115,7 +115,7 @@ namespace MVC.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             IAssignViewModel measuringDevice = Mapper.Map<IAssignViewModel>(await Service.GetByIdAsync(ID));
-            measuringDevice.EmployeeList = Mapper.Map<List<IEmployee>>(await EmployeeService.GetAllAsync(employeeParameters));
+            measuringDevice.EmployeeList = Mapper.Map<List<IEmployee>>(await EmployeeService.GetAllAsync(EmployeeParameters));
             if (measuringDevice == null)
             {
                 return HttpNotFound();

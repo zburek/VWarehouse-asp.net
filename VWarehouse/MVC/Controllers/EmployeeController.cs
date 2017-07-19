@@ -17,11 +17,11 @@ namespace MVC.Controllers
     public class EmployeeController : Controller
     {
         protected IEmployeeService Service;
-        protected IEmployeeParameters employeeParameters;
+        protected IEmployeeParameters EmployeeParameters;
         public EmployeeController(IEmployeeService service, IEmployeeParameters employeeParameters)
         { 
             this.Service = service;
-            this.employeeParameters = employeeParameters;
+            this.EmployeeParameters = employeeParameters;
         }
 
         #region Get
@@ -39,13 +39,13 @@ namespace MVC.Controllers
                 searchString = currentFilter;
             }
             ViewBag.CurrentFilter = searchString;
-            employeeParameters.PageSize = 5;
-            employeeParameters.PageNumber = (page ?? 1);
-            employeeParameters.SearchString = searchString;
-            employeeParameters.SortOrder = sortOrder;
-            employeeParameters.Paged = true;
+            EmployeeParameters.PageSize = 5;
+            EmployeeParameters.PageNumber = (page ?? 1);
+            EmployeeParameters.SearchString = searchString;
+            EmployeeParameters.SortOrder = sortOrder;
+            EmployeeParameters.Paged = true;
 
-            var employeePagedList = await Service.GetAllPagedListAsync(employeeParameters);
+            var employeePagedList = await Service.GetAllPagedListAsync(EmployeeParameters);
             var viewModel = Mapper.Map<IEnumerable<EmployeeIndexViewModel>>(employeePagedList);
             var pagedViewModel = new StaticPagedList<EmployeeIndexViewModel>(viewModel, employeePagedList.GetMetaData());
             return View(pagedViewModel);
@@ -73,9 +73,9 @@ namespace MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            employeeParameters.ID = ID;
-            employeeParameters.IncludeProperties = "Items, MeasuringDevices, Vehicles";
-            var employeeViewModel = Mapper.Map<EmployeeInventoryViewModel>(await Service.GetOneAsync(employeeParameters));
+            EmployeeParameters.ID = ID;
+            EmployeeParameters.IncludeProperties = "Items, MeasuringDevices, Vehicles";
+            var employeeViewModel = Mapper.Map<EmployeeInventoryViewModel>(await Service.GetOneAsync(EmployeeParameters));
             if (employeeViewModel == null)
             {
                 return HttpNotFound();

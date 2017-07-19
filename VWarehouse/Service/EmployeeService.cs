@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Common.Parameters;
+﻿using Common.Parameters;
 using Model.Common;
 using PagedList;
 using Repository.Common;

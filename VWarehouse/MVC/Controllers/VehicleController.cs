@@ -21,14 +21,14 @@ namespace MVC.Controllers
     {
         protected IVehicleService Service;
         protected IEmployeeService EmployeeService;
-        protected IVehicleParameters vehicleParameters;
-        protected IEmployeeParameters employeeParameters;
+        protected IVehicleParameters VehicleParameters;
+        protected IEmployeeParameters EmployeeParameters;
         public VehicleController(IVehicleService service, IEmployeeService employeeService, IVehicleParameters vehicleParameters, IEmployeeParameters employeeParameters)
         {
             this.Service = service;
             this.EmployeeService = employeeService;
-            this.vehicleParameters = vehicleParameters;
-            this.employeeParameters = employeeParameters;
+            this.VehicleParameters = vehicleParameters;
+            this.EmployeeParameters = employeeParameters;
         }
 
         #region Get
@@ -51,13 +51,13 @@ namespace MVC.Controllers
                 searchString = currentFilter;
             }
             ViewBag.CurrentFilter = searchString;
-            vehicleParameters.PageSize = 5;
-            vehicleParameters.PageNumber = (page ?? 1);
-            vehicleParameters.SearchString = searchString;
-            vehicleParameters.SortOrder = sortOrder;
-            vehicleParameters.Paged = true;
+            VehicleParameters.PageSize = 5;
+            VehicleParameters.PageNumber = (page ?? 1);
+            VehicleParameters.SearchString = searchString;
+            VehicleParameters.SortOrder = sortOrder;
+            VehicleParameters.Paged = true;
 
-            var vehiclePagedList = await Service.GetAllPagedListAsync(vehicleParameters);
+            var vehiclePagedList = await Service.GetAllPagedListAsync(VehicleParameters);
             var viewModel = Mapper.Map<IEnumerable<VehicleIndexViewModel>>(vehiclePagedList);
             var pagedViewModel = new StaticPagedList<VehicleIndexViewModel>(viewModel, vehiclePagedList.GetMetaData());
             return View(pagedViewModel);
@@ -66,7 +66,6 @@ namespace MVC.Controllers
         [HttpGet]
         public async Task<ActionResult> OnStock(string currentFilter, int? page, string searchString = null, string sortOrder = null)
         {
-            vehicleParameters.OnStock = true;
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NameSortParm = sortOrder == "Name" ? "name_desc" : "Name";
             ViewBag.TypeSortParm = sortOrder == "Type" ? "type_desc" : "Type";
@@ -83,13 +82,14 @@ namespace MVC.Controllers
                 searchString = currentFilter;
             }
             ViewBag.CurrentFilter = searchString;
-            vehicleParameters.PageSize = 5;
-            vehicleParameters.PageNumber = (page ?? 1);
-            vehicleParameters.SearchString = searchString;
-            vehicleParameters.SortOrder = sortOrder;
-            vehicleParameters.Paged = true;
+            VehicleParameters.PageSize = 5;
+            VehicleParameters.PageNumber = (page ?? 1);
+            VehicleParameters.SearchString = searchString;
+            VehicleParameters.SortOrder = sortOrder;
+            VehicleParameters.Paged = true;
+            VehicleParameters.OnStock = true;
 
-            var vehiclePagedList = await Service.GetAllPagedListAsync(vehicleParameters);
+            var vehiclePagedList = await Service.GetAllPagedListAsync(VehicleParameters);
             var viewModel = Mapper.Map<IEnumerable<VehicleOnStockViewModel>>(vehiclePagedList);
             var pagedViewModel = new StaticPagedList<VehicleOnStockViewModel>(viewModel, vehiclePagedList.GetMetaData());
             return View(pagedViewModel);
@@ -120,7 +120,7 @@ namespace MVC.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             IAssignViewModel vehicle = Mapper.Map<IAssignViewModel>(await Service.GetByIdAsync(ID));
-            vehicle.EmployeeList = Mapper.Map<List<IEmployee>>(await EmployeeService.GetAllAsync(employeeParameters));
+            vehicle.EmployeeList = Mapper.Map<List<IEmployee>>(await EmployeeService.GetAllAsync(EmployeeParameters));
             if (vehicle == null)
             {
                 return HttpNotFound();

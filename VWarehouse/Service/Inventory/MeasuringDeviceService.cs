@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Common.Parameters;
+﻿using Common.Parameters;
 using Model.Common.Inventory;
 using PagedList;
 using Repository.Common.Inventory;
@@ -27,7 +26,7 @@ namespace Service.Inventory
         public async Task<StaticPagedList<IMeasuringDevice>> GetAllPagedListAsync(IMeasuringDeviceParameters measuringDeviceParameters)
         {
             var count = await MeasuringDeviceRepository.GetCountAsync(measuringDeviceParameters);
-            var measuringDeviceList = (Mapper.Map<List<IMeasuringDevice>>(await MeasuringDeviceRepository.GetAllAsync(measuringDeviceParameters)));
+            var measuringDeviceList = await MeasuringDeviceRepository.GetAllAsync(measuringDeviceParameters);
             var measuringDevicePagedList = new StaticPagedList<IMeasuringDevice>(measuringDeviceList, measuringDeviceParameters.PageNumber.Value, measuringDeviceParameters.PageSize.Value, count);
 
             return measuringDevicePagedList;
