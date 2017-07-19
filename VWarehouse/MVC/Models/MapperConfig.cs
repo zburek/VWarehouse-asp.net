@@ -11,6 +11,9 @@ using MVC.Models.AssignViewModels;
 using MVC.Models.WarningViewModels;
 using MVC.Models.MeasuringDeviceViewModels;
 using MVC.Models.VehicleViewModels;
+using Common.Parameters;
+using Common.Parameters.RepositoryParameters;
+using Common;
 
 namespace MVC.Models
 {
@@ -25,17 +28,17 @@ namespace MVC.Models
                 cfg.CreateMap<Employee, IEmployee>().ReverseMap();
 
                 cfg.CreateMap<ItemEntity, Item>().ReverseMap();
-                cfg.CreateMap<ItemEntity, IBaseInfo>().ReverseMap();
+                cfg.CreateMap<ItemEntity, IBaseEntity>().ReverseMap();
                 cfg.CreateMap<ItemEntity, IItem>().ReverseMap();
                 cfg.CreateMap<Item, IItem>().ReverseMap();
 
                 cfg.CreateMap<MeasuringDeviceEntity, MeasuringDevice>().ReverseMap();
-                cfg.CreateMap<MeasuringDeviceEntity, IBaseInfo>().ReverseMap();
+                cfg.CreateMap<MeasuringDeviceEntity, IBaseEntity>().ReverseMap();
                 cfg.CreateMap<MeasuringDeviceEntity, IMeasuringDevice>().ReverseMap();
                 cfg.CreateMap<MeasuringDevice, IMeasuringDevice>().ReverseMap();
 
                 cfg.CreateMap<VehicleEntity, Vehicle>().ReverseMap();
-                cfg.CreateMap<VehicleEntity, IBaseInfo>().ReverseMap();
+                cfg.CreateMap<VehicleEntity, IBaseEntity>().ReverseMap();
                 cfg.CreateMap<VehicleEntity, IVehicle>().ReverseMap();
                 cfg.CreateMap<Vehicle, IVehicle>().ReverseMap();
 
@@ -82,8 +85,15 @@ namespace MVC.Models
                 cfg.CreateMap<IWarningViewModel, IVehicle>().ReverseMap();
                 #endregion
 
+                #region Mapping Parameters
+
+                cfg.CreateMap<IEmployeeParameters, IGenericRepositoryParameters<EmployeeEntity>>();
+                cfg.CreateMap<IItemParameters, IGenericRepositoryParameters<ItemEntity>>();
+                cfg.CreateMap<IMeasuringDeviceParameters, IGenericRepositoryParameters<MeasuringDeviceEntity>>();
+                cfg.CreateMap<IVehicleParameters, IGenericRepositoryParameters<VehicleEntity>>();
+
+                #endregion
             });
         }
-
     }
 }

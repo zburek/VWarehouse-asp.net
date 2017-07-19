@@ -1,4 +1,5 @@
 ﻿using Common;
+using Common.Parameters.RepositoryParameters;
 using DAL;
 using Repository.Common;
 using System;
@@ -8,20 +9,27 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace Repository
-{
-    public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class, IBaseEntity
+{   
+    public class GenericRepository : IGenericRepository
     {
-        protected readonly DbContext context;
-        public GenericRepository(VWarehouseContext context)
+        protected readonly IVWarehouseContext Context;
+        internal IUnitOfWorkFactory UnitOfWorkFactory;
+        public GenericRepository(IVWarehouseContext context, IUnitOfWorkFactory unitOfWorkFactory)
         {
-            this.context = context;
+            this.Context = context;
+            this.UnitOfWorkFactory = unitOfWorkFactory;
         }
-        protected virtual IQueryable<TEntity> GetQueryable(IParameters<TEntity> parameters)
+
+        public IUnitOfWork CreateUnitOfWork()
+        {
+            return UnitOfWorkFactory.CreateUnitOfWork(Context);
+        }
+        private IQueryable<TEntity> GetQueryable<TEntity>(IGenericRepositoryParameters<TEntity> parameters) where TEntity : class, IBaseEntity
         {
 
             parameters.IncludeProperties = parameters.IncludeProperties ?? string.Empty;
 
-            IQueryable<TEntity> query = context.Set<TEntity>();
+            IQueryable<TEntity> query = Context.Set<TEntity>();
 
             if (parameters.Filter != null)
             {
@@ -49,61 +57,61 @@ namespace Repository
         }
 
         #region Get
-        public virtual async Task<TEntity> GetByIdAsync(Guid? ID)
+        public virtual async Task<TEntity> GetByIdAsync<TEntity>(Guid? ID) where TEntity : class, IBaseEntity
         {
-            return await context.Set<TEntity>().FindAsync(ID);
+            return await Context.Set<TEntity>().FindAsync(ID);
         }
-        public virtual async Task<IEnumerable<TEntity>> GetAllAsync(IParameters<TEntity> parameters)
+        public virtual async Task<IEnumerable<TEntity>> GetAllAsync<TEntity>(IGenericRepositoryParameters<TEntity> parameters) where TEntity : class, IBaseEntity
         {
-            return await GetQueryable(parameters).ToListAsync();
+            return await GetQueryable<TEntity>(parameters).ToListAsync();
         }
 
-        public virtual async Task<TEntity> GetOneAsync(IParameters<TEntity> parameters)
+        public virtual async Task<TEntity> GetOneAsync<TEntity>(IGenericRepositoryParameters<TEntity> parameters) where TEntity : class, IBaseEntity
         {
             return await GetQueryable(parameters).SingleOrDefaultAsync();
         }
 
-        public virtual Task<int> GetCountAsync(IParameters<TEntity> parameters)
+        public virtual Task<int> GetCountAsync<TEntity>(IGenericRepositoryParameters<TEntity> parameters) where TEntity : class, IBaseEntity
         {
-            IParameters<TEntity> CountParameters = new Parameters<TEntity>();
-            CountParameters.Filter = parameters.Filter;
-            return GetQueryable(CountParameters).CountAsync();
+            return GetQueryable(parameters).CountAsync();
         }
 
         #endregion
 
         #region CRUD
-        public virtual Task<int> CreateAsync(TEntity entity)
+        public virtual async Task<int> CreateAsync<TEntity>(TEntity entity) where TEntity : class, IBaseEntity
         {
             try
             {
-                var dbEntityEntry = context.Entry(entity);
+                var dbEntityEntry = Context.Entry(entity);
                 if (dbEntityEntry.State != EntityState.Detached)
                 {
                     dbEntityEntry.State = EntityState.Added;
                 }
                 else
                 {
-                    context.Set<TEntity>().Add(entity);
+                    Context.Set<TEntity>().Add(entity);
+                    await Context.SaveChangesAsync();
                 }
-                return Task.FromResult(1);
+                return await Task.FromResult(1);
             }
             catch (Exception e)
             {
                 throw e;
             }
         }
-        public virtual Task<int> UpdateAsync(TEntity entity)
+        public virtual async Task<int> UpdateAsync<TEntity>(TEntity entity) where TEntity : class, IBaseEntity
         {
             try
             {
-                var dbEntityEntry = context.Entry(entity);
+                var dbEntityEntry = Context.Entry(entity);
                 if (dbEntityEntry.State == EntityState.Detached)
                 {
-                    context.Set<TEntity>().Attach(entity);
+                    Context.Set<TEntity>().Attach(entity);
                 }
                 dbEntityEntry.State = EntityState.Modified;
-                return Task.FromResult(1);
+                await Context.SaveChangesAsync();
+                return await Task.FromResult(1);
             }
             catch (Exception e)
             {
@@ -111,31 +119,32 @@ namespace Repository
             }
         }
 
-        public virtual Task<int> DeleteAsync(Guid ID)
+        public virtual async Task<int> DeleteAsync<TEntity>(Guid ID) where TEntity : class, IBaseEntity
         {
-            var entity = context.Set<TEntity>().Find(ID);
+            var entity = Context.Set<TEntity>().Find(ID);
             if (entity == null)
             {
-                return Task.FromResult(0);
+                return await Task.FromResult(0);
             }
-            return DeleteAsync(entity);
+            return await DeleteAsync(entity);
         }
 
-        public virtual Task<int> DeleteAsync(TEntity entity)
+        private async Task<int> DeleteAsync<TEntity>(TEntity entity) where TEntity : class, IBaseEntity
         {
             try
             {
-                var dbEntityEntry = context.Entry(entity);
+                var dbEntityEntry = Context.Entry(entity);
                 if (dbEntityEntry.State != EntityState.Deleted)
                 {
                     dbEntityEntry.State = EntityState.Deleted;
                 }
                 else
                 {
-                    context.Set<TEntity>().Attach(entity);
-                    context.Set<TEntity>().Remove(entity);
+                    Context.Set<TEntity>().Attach(entity);
+                    Context.Set<TEntity>().Remove(entity);
                 }
-                return Task.FromResult(1);
+                await Context.SaveChangesAsync();
+                return await Task.FromResult(1);
             }
             catch (Exception e)
             {

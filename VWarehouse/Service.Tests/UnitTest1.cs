@@ -3,15 +3,16 @@ using NUnit.Framework;
 using Model.Common.Inventory;
 using System.Collections.Generic;
 using Moq;
-using Common;
 using DAL.DbEntities.Inventory;
 using DAL.DbEntities;
 using PagedList;
 using System;
 using AutoMapper;
-using Repository.Common;
 using Service.Inventory;
 using Model.Common;
+using Common.Parameters;
+using Repository.Common.Inventory;
+using Model.Inventory;
 
 namespace Service.Tests
 {
@@ -25,24 +26,24 @@ namespace Service.Tests
             public void Item_GetAllPagedList_Returns_PagedList()
             {
                 // Arrange
-                Mock<IUnitOfWork> mockUnitOfWork = new Mock<IUnitOfWork>();
+                Mock<IItemRepository> mockItemRepository = new Mock<IItemRepository>();
 
 
-                IParameters<ItemEntity> parameters = new Parameters<ItemEntity>
+                IItemParameters parameters = new ItemParameters()
                 {
                     PageSize = 5,
                     PageNumber = 1
                 };
 
-                IEnumerable<ItemEntity> itemList = new List<ItemEntity>
+                IEnumerable<Item> itemList = new List<Item>
                 {
-                    new ItemEntity { ID = Guid.NewGuid(), Name = "Hammer", Description = "Green", SerialNumber = "111", EmployeeID = Guid.NewGuid() },
-                    new ItemEntity { ID = Guid.NewGuid(), Name = "Hammer", Description = "Black", SerialNumber = "222", EmployeeID = Guid.NewGuid() },
-                    new ItemEntity { ID = Guid.NewGuid(), Name = "Phone", Description = "Samsung", SerialNumber = "333", EmployeeID = Guid.NewGuid() }
+                    new Item { ID = Guid.NewGuid(), Name = "Hammer", Description = "Green", SerialNumber = "111", EmployeeID = Guid.NewGuid() },
+                    new Item { ID = Guid.NewGuid(), Name = "Hammer", Description = "Black", SerialNumber = "222", EmployeeID = Guid.NewGuid() },
+                    new Item { ID = Guid.NewGuid(), Name = "Phone", Description = "Samsung", SerialNumber = "333", EmployeeID = Guid.NewGuid() }
                 };
 
-                mockUnitOfWork.Setup(m => m.Items.GetAllAsync(parameters)).ReturnsAsync(itemList);
-                ItemService service = new ItemService(mockUnitOfWork.Object);
+                mockItemRepository.Setup(m => m.GetAllAsync(parameters)).ReturnsAsync(itemList);
+                ItemService service = new ItemService(mockItemRepository.Object);
                 Mapper.Initialize(cfg =>
                 {
                     cfg.CreateMap<EmployeeEntity, IEmployee>().ReverseMap();

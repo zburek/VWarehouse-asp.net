@@ -208,9 +208,9 @@
     <Compile Include="Models\ItemViewModels\ItemEditViewModel.cs" />
     <Compile Include="Models\ItemViewModels\ItemIndexViewModel.cs" />
     <Compile Include="Models\ItemViewModels\ItemOnStockViewModel.cs" />
-    <Compile Include="Models\MapperConfig.cs" />
     <Compile Include="Models\AssignViewModels\AssignViewModel.cs" />
     <Compile Include="Models\AssignViewModels\IAssignViewModel.cs" />
+    <Compile Include="Models\MapperConfig.cs" />
     <Compile Include="Models\MeasuringDeviceViewModels\MeasuringDeviceCreateViewModel.cs" />
     <Compile Include="Models\MeasuringDeviceViewModels\MeasuringDeviceDeleteViewModel.cs" />
     <Compile Include="Models\MeasuringDeviceViewModels\MeasuringDeviceDetailsViewModel.cs" />

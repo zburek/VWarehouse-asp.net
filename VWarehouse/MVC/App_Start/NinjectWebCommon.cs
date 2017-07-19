@@ -21,7 +21,8 @@ namespace MVC.App_Start
     using Repository.Common;
     using Repository.Common.Inventory;
     using Repository.Inventory;
-    using Common;
+    using Common.Parameters;
+    using Common.Parameters.RepositoryParameters;
 
     public static class NinjectWebCommon 
     {
@@ -73,30 +74,37 @@ namespace MVC.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
+            kernel.Bind<IVWarehouseContext>().To<VWarehouseContext>().InRequestScope(); 
             kernel.Bind<VWarehouseContext>().ToSelf().InRequestScope();
             //kernel.Bind<UnitOfWork>().ToSelf().InRequestScope();
             kernel.Bind<IUnitOfWork> ().To<UnitOfWork>().InRequestScope();
+            kernel.Bind<IUnitOfWorkFactory>().To<UnitOfWorkFactory>().InRequestScope();
 
             kernel.Bind<IEmployeeService>().To<EmployeeService>().InRequestScope();
-
             kernel.Bind<IItemService>().To<ItemService>().InRequestScope();
             kernel.Bind<IMeasuringDeviceService>().To<MeasuringDeviceService>().InRequestScope();
             kernel.Bind<IVehicleService>().To<VehicleService>().InRequestScope();
+            kernel.Bind<IWarningService>().To<WarningService>().InRequestScope();
 
-            kernel.Bind<IParameters<EmployeeEntity>>().To<Parameters<EmployeeEntity>>().InRequestScope();
-            kernel.Bind<IParameters<ItemEntity>>().To<Parameters<ItemEntity>>().InRequestScope();
-            kernel.Bind<IParameters<MeasuringDeviceEntity>>().To<Parameters<MeasuringDeviceEntity>>().InRequestScope();
-            kernel.Bind<IParameters<VehicleEntity>>().To<Parameters<VehicleEntity>>().InRequestScope();
+
+            #region Parameters
+            kernel.Bind<IEmployeeParameters>().To<EmployeeParameters>().InRequestScope();
+            kernel.Bind<IItemParameters>().To<ItemParameters>().InRequestScope();
+            kernel.Bind<IMeasuringDeviceParameters>().To<MeasuringDeviceParameters>().InRequestScope();
+            kernel.Bind<IVehicleParameters>().To<VehicleParameters>().InRequestScope();
+
+            kernel.Bind<IGenericRepositoryParameters<EmployeeEntity>>().To<GenericRepositoryParameters<EmployeeEntity>>().InRequestScope();
+            kernel.Bind<IGenericRepositoryParameters<ItemEntity>>().To<GenericRepositoryParameters<ItemEntity>>().InRequestScope();
+            kernel.Bind<IGenericRepositoryParameters<MeasuringDeviceEntity>>().To<GenericRepositoryParameters<MeasuringDeviceEntity>>().InRequestScope();
+            kernel.Bind<IGenericRepositoryParameters<VehicleEntity>>().To<GenericRepositoryParameters<VehicleEntity>>().InRequestScope();
+            #endregion
 
             kernel.Bind<IEmployeeRepository>().To<EmployeeRepository>().InRequestScope();
             kernel.Bind<IItemRepository>().To<ItemRepository>().InRequestScope();
             kernel.Bind<IMeasuringDeviceRepository>().To<MeasuringDeviceRepository>().InRequestScope();
             kernel.Bind<IVehicleRepository>().To<VehicleRepository>().InRequestScope();
 
-            kernel.Bind<IGenericRepository<EmployeeEntity>>().To<GenericRepository<EmployeeEntity>>().InRequestScope();
-            kernel.Bind<IGenericRepository<ItemEntity>>().To<GenericRepository<ItemEntity>>().InRequestScope();
-            kernel.Bind<IGenericRepository<MeasuringDeviceEntity>>().To<GenericRepository<MeasuringDeviceEntity>>().InRequestScope();
-            kernel.Bind<IGenericRepository<VehicleEntity>>().To<GenericRepository<VehicleEntity>>().InRequestScope();
+            kernel.Bind<IGenericRepository>().To<GenericRepository>().InRequestScope();
         }        
     }
 }

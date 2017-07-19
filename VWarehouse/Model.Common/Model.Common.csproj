@@ -41,7 +41,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IBaseInfo.cs" />
     <Compile Include="IEmployee.cs" />
     <Compile Include="Inventory\IItem.cs" />
     <Compile Include="Inventory\IMeasuringDevice.cs" />

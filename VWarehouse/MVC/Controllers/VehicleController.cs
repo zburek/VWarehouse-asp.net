@@ -11,11 +11,9 @@ using Service.Common;
 using AutoMapper;
 using Model.Common;
 using System.Collections.Generic;
-using DAL.DbEntities;
-using DAL.DbEntities.Inventory;
-using Common;
 using MVC.Models.VehicleViewModels;
 using PagedList;
+using Common.Parameters;
 
 namespace MVC.Controllers
 {
@@ -23,13 +21,13 @@ namespace MVC.Controllers
     {
         protected IVehicleService Service;
         protected IEmployeeService EmployeeService;
-        protected IParameters<VehicleEntity> parameters;
-        protected IParameters<EmployeeEntity> employeeParameters;
-        public VehicleController(IVehicleService service, IEmployeeService employeeService, IParameters<VehicleEntity> parameters, IParameters<EmployeeEntity> employeeParameters)
+        protected IVehicleParameters vehicleParameters;
+        protected IEmployeeParameters employeeParameters;
+        public VehicleController(IVehicleService service, IEmployeeService employeeService, IVehicleParameters vehicleParameters, IEmployeeParameters employeeParameters)
         {
             this.Service = service;
             this.EmployeeService = employeeService;
-            this.parameters = parameters;
+            this.vehicleParameters = vehicleParameters;
             this.employeeParameters = employeeParameters;
         }
 
@@ -53,12 +51,13 @@ namespace MVC.Controllers
                 searchString = currentFilter;
             }
             ViewBag.CurrentFilter = searchString;
-            parameters.PageSize = 5;
-            parameters.PageNumber = (page ?? 1);
-            parameters.SearchString = searchString;
-            parameters.SortOrder = sortOrder;
+            vehicleParameters.PageSize = 5;
+            vehicleParameters.PageNumber = (page ?? 1);
+            vehicleParameters.SearchString = searchString;
+            vehicleParameters.SortOrder = sortOrder;
+            vehicleParameters.Paged = true;
 
-            var vehiclePagedList = await Service.GetAllPagedListAsync(parameters);
+            var vehiclePagedList = await Service.GetAllPagedListAsync(vehicleParameters);
             var viewModel = Mapper.Map<IEnumerable<VehicleIndexViewModel>>(vehiclePagedList);
             var pagedViewModel = new StaticPagedList<VehicleIndexViewModel>(viewModel, vehiclePagedList.GetMetaData());
             return View(pagedViewModel);
@@ -67,7 +66,7 @@ namespace MVC.Controllers
         [HttpGet]
         public async Task<ActionResult> OnStock(string currentFilter, int? page, string searchString = null, string sortOrder = null)
         {
-            parameters.Filter = v => v.EmployeeID == null;
+            vehicleParameters.OnStock = true;
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NameSortParm = sortOrder == "Name" ? "name_desc" : "Name";
             ViewBag.TypeSortParm = sortOrder == "Type" ? "type_desc" : "Type";
@@ -84,12 +83,13 @@ namespace MVC.Controllers
                 searchString = currentFilter;
             }
             ViewBag.CurrentFilter = searchString;
-            parameters.PageSize = 5;
-            parameters.PageNumber = (page ?? 1);
-            parameters.SearchString = searchString;
-            parameters.SortOrder = sortOrder;
+            vehicleParameters.PageSize = 5;
+            vehicleParameters.PageNumber = (page ?? 1);
+            vehicleParameters.SearchString = searchString;
+            vehicleParameters.SortOrder = sortOrder;
+            vehicleParameters.Paged = true;
 
-            var vehiclePagedList = await Service.GetAllPagedListAsync(parameters);
+            var vehiclePagedList = await Service.GetAllPagedListAsync(vehicleParameters);
             var viewModel = Mapper.Map<IEnumerable<VehicleOnStockViewModel>>(vehiclePagedList);
             var pagedViewModel = new StaticPagedList<VehicleOnStockViewModel>(viewModel, vehiclePagedList.GetMetaData());
             return View(pagedViewModel);

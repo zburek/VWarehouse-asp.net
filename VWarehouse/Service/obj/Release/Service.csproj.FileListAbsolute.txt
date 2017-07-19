@@ -3,7 +3,6 @@ C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service\bin\Rele
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service\bin\Release\Service.pdb
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service\bin\Release\AutoMapper.dll
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service\bin\Release\Common.dll
-C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service\bin\Release\DAL.dll
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service\bin\Release\EntityFramework.dll
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service\bin\Release\EntityFramework.SqlServer.dll
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service\bin\Release\Model.Common.dll
@@ -11,14 +10,11 @@ C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service\bin\Rele
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service\bin\Release\PagedList.dll
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service\bin\Release\PagedList.Mvc.dll
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service\bin\Release\Repository.Common.dll
-C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service\bin\Release\Repository.dll
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service\bin\Release\Service.Common.dll
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service\bin\Release\Common.pdb
-C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service\bin\Release\DAL.pdb
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service\bin\Release\Model.Common.pdb
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service\bin\Release\Model.pdb
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service\bin\Release\Repository.Common.pdb
-C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service\bin\Release\Repository.pdb
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service\bin\Release\Service.Common.pdb
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service\bin\Release\AutoMapper.xml
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Service\bin\Release\EntityFramework.xml

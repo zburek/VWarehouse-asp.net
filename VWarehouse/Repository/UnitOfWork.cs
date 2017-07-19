@@ -1,40 +1,120 @@
-﻿using DAL;
-using DAL.DbEntities;
+﻿using Common;
+using DAL;
 using DAL.DbEntities.Inventory;
 using Repository.Common;
-using Repository.Common.Inventory;
-using Repository.Inventory;
 using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Repository
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly VWarehouseContext Context;
-        public IGenericRepository<EmployeeEntity> genericRepositoryEmployee { get; private set; }
-        public IGenericRepository<ItemEntity> genericRepositoryItem { get; private set; }
-        public IGenericRepository<MeasuringDeviceEntity> genericRepositoryMeasuringDevice { get; private set; }
-        public IGenericRepository<VehicleEntity> genericRepositoryVehicle { get; private set; }
-        public IEmployeeRepository Employees { get; private set; }
-        public IItemRepository Items { get; private set; }
-        public IMeasuringDeviceRepository MeasuringDevices { get; private set; }
-        public IVehicleRepository Vehicles { get; private set; }
-
-        public UnitOfWork(VWarehouseContext context)
+        protected IVWarehouseContext Context { get; private set; }
+        public UnitOfWork(IVWarehouseContext context)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("Context is null");
+            }
             this.Context = context;
-            genericRepositoryEmployee = new GenericRepository<EmployeeEntity>(Context);
-            genericRepositoryItem = new GenericRepository<ItemEntity>(Context);
-            genericRepositoryMeasuringDevice = new GenericRepository<MeasuringDeviceEntity>(Context);
-            genericRepositoryVehicle = new GenericRepository<VehicleEntity>(Context);
-            Employees = new EmployeeRepository(genericRepositoryEmployee);
-            Items = new ItemRepository(genericRepositoryItem);
-            MeasuringDevices = new MeasuringDeviceRepository(genericRepositoryMeasuringDevice);
-            Vehicles = new VehicleRepository(genericRepositoryVehicle);
         }
 
-        public virtual async Task SaveAsync()
+        #region Return
+        public async Task ReturnAllItemsAsync(Guid? ID)
+        {
+            IQueryable<ItemEntity> query = Context.Set<ItemEntity>().Where(i => i.EmployeeID == ID);
+            IEnumerable<ItemEntity> itemList = await query.ToListAsync();
+            foreach (var itemEntity in itemList)
+            {
+                itemEntity.EmployeeID = null;
+                await UpdateAsync<ItemEntity>(itemEntity);
+            }
+        }
+
+        public async Task ReturnAllMeasuringDevicesAsync(Guid? ID)
+        {
+            IQueryable<MeasuringDeviceEntity> query = Context.Set<MeasuringDeviceEntity>().Where(i => i.EmployeeID == ID);
+            IEnumerable<MeasuringDeviceEntity> measuringDeviceList = await query.ToListAsync();
+            foreach (var measuringDeviceEntity in measuringDeviceList)
+            {
+                measuringDeviceEntity.EmployeeID = null;
+                await UpdateAsync<MeasuringDeviceEntity>(measuringDeviceEntity);
+            }
+        }
+
+        public async Task ReturnAllVehiclesAsync(Guid? ID)
+        {
+            IQueryable<VehicleEntity> query = Context.Set<VehicleEntity>().Where(i => i.EmployeeID == ID);
+            IEnumerable<VehicleEntity> vehicleList = await query.ToListAsync();
+            foreach (var vehicleEntity in vehicleList)
+            {
+                vehicleEntity.EmployeeID = null;
+                await UpdateAsync<VehicleEntity>(vehicleEntity);
+            }
+        }
+        public async Task ReturnAllInventory(Guid? ID)
+        {
+            await ReturnAllItemsAsync(ID);
+            await ReturnAllMeasuringDevicesAsync(ID);
+            await ReturnAllVehiclesAsync(ID);
+        }
+        #endregion
+
+        #region CRUD
+        public virtual async Task<int> UpdateAsync<TEntity>(TEntity entity) where TEntity : class, IBaseEntity
+        {
+            try
+            {
+                var dbEntityEntry = Context.Entry(entity);
+                if (dbEntityEntry.State == EntityState.Detached)
+                {
+                    Context.Set<TEntity>().Attach(entity);
+                }
+                dbEntityEntry.State = EntityState.Modified;
+                return await Task.FromResult(1);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public virtual async Task<int> DeleteAsync<TEntity>(Guid ID) where TEntity : class, IBaseEntity
+        {
+            await ReturnAllInventory(ID);
+            var entity = Context.Set<TEntity>().Find(ID);
+            if (entity == null)
+            {
+                return await Task.FromResult(0);
+            }
+
+            try
+            {
+                var dbEntityEntry = Context.Entry(entity);
+                if (dbEntityEntry.State != EntityState.Deleted)
+                {
+                    dbEntityEntry.State = EntityState.Deleted;
+                }
+                else
+                {
+                    Context.Set<TEntity>().Attach(entity);
+                    Context.Set<TEntity>().Remove(entity);
+                }
+                return await Task.FromResult(1);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        #endregion
+
+        #region Save and Dispose
+        public async Task SaveAsync()
         {
             try
             {
@@ -49,5 +129,6 @@ namespace Repository
         {
             Context.Dispose();
         }
+        #endregion
     }
 }

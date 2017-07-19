@@ -52,16 +52,13 @@
     <Compile Include="Inventory\IItemService.cs" />
     <Compile Include="Inventory\IMeasuringDeviceService.cs" />
     <Compile Include="Inventory\IVehicleService.cs" />
+    <Compile Include="IWarningService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{3c90cd28-ac38-45b7-95dc-87fdd004a654}</Project>
       <Name>Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DAL\DAL.csproj">
-      <Project>{1308180f-ca4d-4f46-bc57-5ec995900f0a}</Project>
-      <Name>DAL</Name>
     </ProjectReference>
     <ProjectReference Include="..\Model.Common\Model.Common.csproj">
       <Project>{ff73c15e-487f-4fcf-b20a-370aa227b2cc}</Project>
@@ -70,14 +67,6 @@
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{67432b53-10d0-44a1-8df2-5bd88d3de0fb}</Project>
       <Name>Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Repository.Common\Repository.Common.csproj">
-      <Project>{47c371a6-2646-4f07-ad8c-8e7122f0f4f7}</Project>
-      <Name>Repository.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Repository\Repository.csproj">
-      <Project>{8721ac78-9fd3-4e16-87ac-2461ad342b2d}</Project>
-      <Name>Repository</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

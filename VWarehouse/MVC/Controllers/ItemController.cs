@@ -11,11 +11,9 @@ using AutoMapper;
 using Model.Common;
 using Service.Common;
 using System.Collections.Generic;
-using DAL.DbEntities;
-using DAL.DbEntities.Inventory;
-using Common;
 using MVC.Models.ItemViewModels;
 using PagedList;
+using Common.Parameters;
 
 namespace MVC.Controllers
 {
@@ -23,13 +21,13 @@ namespace MVC.Controllers
     {
         protected IItemService Service;
         protected IEmployeeService EmployeeService;
-        protected IParameters<ItemEntity> parameters;
-        protected IParameters<EmployeeEntity> employeeParameters;
-        public ItemController(IItemService service, IEmployeeService employeeService, IParameters<ItemEntity> parameters, IParameters<EmployeeEntity> employeeParameters)
+        protected IItemParameters itemParameters;
+        protected IEmployeeParameters employeeParameters;
+        public ItemController(IItemService service, IEmployeeService employeeService, IItemParameters itemParameters, IEmployeeParameters employeeParameters)
         {
             this.Service = service;
             this.EmployeeService = employeeService;
-            this.parameters = parameters;
+            this.itemParameters = itemParameters;
             this.employeeParameters = employeeParameters;
         }
 
@@ -51,12 +49,13 @@ namespace MVC.Controllers
                 searchString = currentFilter;
             }
             ViewBag.CurrentFilter = searchString;
-            parameters.PageSize = 5;
-            parameters.PageNumber = (page ?? 1);
-            parameters.SearchString = searchString;
-            parameters.SortOrder = sortOrder;
+            itemParameters.PageSize = 5;
+            itemParameters.PageNumber = (page ?? 1);
+            itemParameters.SearchString = searchString;
+            itemParameters.SortOrder = sortOrder;
+            itemParameters.Paged = true;
 
-            var itemPagedList = await Service.GetAllPagedListAsync(parameters);
+            var itemPagedList = await Service.GetAllPagedListAsync(itemParameters);
             var viewModel = Mapper.Map<IEnumerable<ItemIndexViewModel>>(itemPagedList);
             var pagedViewModel = new StaticPagedList<ItemIndexViewModel>(viewModel, itemPagedList.GetMetaData());
             return View(pagedViewModel);
@@ -65,7 +64,6 @@ namespace MVC.Controllers
         [HttpGet]
         public async Task<ActionResult> OnStock(string currentFilter, int? page, string searchString = null, string sortOrder = null)
         {
-            parameters.Filter = i => i.EmployeeID == null;
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NameSortParm = sortOrder == "Name" ? "name_desc" : "Name";
             ViewBag.DescriptionSortParm = sortOrder == "Description" ? "description_desc" : "Description";
@@ -78,12 +76,14 @@ namespace MVC.Controllers
                 searchString = currentFilter;
             }
             ViewBag.CurrentFilter = searchString;
-            parameters.PageSize = 5;
-            parameters.PageNumber = (page ?? 1);
-            parameters.SearchString = searchString;
-            parameters.SortOrder = sortOrder;
+            itemParameters.PageSize = 5;
+            itemParameters.PageNumber = (page ?? 1);
+            itemParameters.SearchString = searchString;
+            itemParameters.SortOrder = sortOrder;
+            itemParameters.Paged = true;
+            itemParameters.OnStock = true;
 
-            var itemPagedList = await Service.GetAllPagedListAsync(parameters);
+            var itemPagedList = await Service.GetAllPagedListAsync(itemParameters);
             var viewModel = Mapper.Map<IEnumerable<ItemOnStockViewModel>>(itemPagedList);
             var pagedViewModel = new StaticPagedList<ItemOnStockViewModel>(viewModel, itemPagedList.GetMetaData());
             return View(pagedViewModel);

@@ -1,121 +1,100 @@
 ﻿using AutoMapper;
-using Common;
-using DAL.DbEntities;
-using DAL.DbEntities.Inventory;
+using Common.Parameters;
 using Model.Common;
 using PagedList;
 using Repository.Common;
 using Service.Common;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Service
 {
     public class EmployeeService : IEmployeeService
     {
-        private IUnitOfWork unitOfWork;
-        public EmployeeService(IUnitOfWork unitOfWork)
+        private IEmployeeRepository EmployeeRepository;
+        public EmployeeService(IEmployeeRepository employeeRepository)
         {
-            this.unitOfWork = unitOfWork;
+            this.EmployeeRepository = employeeRepository;
         }
 
         #region Get
-        public async Task<List<IEmployee>> GetAllAsync(IParameters<EmployeeEntity> parameters = null)
+        public async Task<List<IEmployee>> GetAllAsync(IEmployeeParameters employeeParameters = null)
         {
-            return new List<IEmployee>
-                (Mapper.Map<List<IEmployee>>
-                (await unitOfWork.Employees.GetAllAsync(parameters)));
+            return new List<IEmployee>(await EmployeeRepository.GetAllAsync(employeeParameters));
         }
 
-        public async Task<StaticPagedList<IEmployee>> GetAllPagedListAsync(IParameters<EmployeeEntity> parameters)
+        public async Task<StaticPagedList<IEmployee>> GetAllPagedListAsync(IEmployeeParameters employeeParameters)
         {
-            if (!String.IsNullOrEmpty(parameters.SearchString))
-            {
-                parameters.Filter = e => e.Name.Contains(parameters.SearchString);
-            }
-            switch (parameters.SortOrder)
-            {
-                case "Name":
-                    parameters.OrderBy = source => source.OrderBy(e => e.Name);
-                    break;
-                case "name_desc":
-                    parameters.OrderBy = source => source.OrderByDescending(e => e.Name);
-                    break;
-                default:
-                    parameters.OrderBy = source => source.OrderBy(e => e.ID);
-                    break;
-            }
-            parameters.Skip = (parameters.PageNumber - 1) * parameters.PageSize;
-            parameters.Take = parameters.PageSize;
-
-            var count = await unitOfWork.Employees.GetCountAsync(parameters);
-            var employeeList = (Mapper.Map<List<IEmployee>>(await unitOfWork.Employees.GetAllAsync(parameters)));
-            var employeePagedList = new StaticPagedList<IEmployee>(employeeList, parameters.PageNumber.Value, parameters.PageSize.Value, count);
+            var count = await EmployeeRepository.GetCountAsync(employeeParameters);
+            var employeeList = await EmployeeRepository.GetAllAsync(employeeParameters);
+            var employeePagedList = new StaticPagedList<IEmployee>(employeeList, employeeParameters.PageNumber.Value, employeeParameters.PageSize.Value, count);
 
             return employeePagedList;
         }
 
         public async Task<IEmployee> GetByIdAsync(Guid? ID)
         {
-            var employee = Mapper.Map<IEmployee>
-                (await unitOfWork.Employees.GetByIdAsync(ID));
-            return employee;
+            return await EmployeeRepository.GetByIdAsync(ID);
         }
-        public async Task<IEmployee> GetOneAsync(IParameters<EmployeeEntity> parameters)
+        public async Task<IEmployee> GetOneAsync(IEmployeeParameters employeeParameters)
         {
-            var employee = Mapper.Map<IEmployee>
-                (await unitOfWork.Employees.GetOneAsync(parameters));
-            return employee;
+            return await EmployeeRepository.GetOneAsync(employeeParameters);
         }
         #endregion
 
         #region Basic CRUD
         public async Task CreateAsync(IEmployee employee)
         {
-            var employeeEntity = Mapper.Map<EmployeeEntity>(employee);
-            await unitOfWork.Employees.CreateAsync(employeeEntity);
-            await unitOfWork.SaveAsync();
+            await EmployeeRepository.CreateAsync(employee);
         }
 
         public async Task UpdateAsync(IEmployee employee)
         {
-            var employeeEntity = Mapper.Map<EmployeeEntity>(employee);
-            await unitOfWork.Employees.UpdateAsync(employeeEntity);
-            await unitOfWork.SaveAsync();
+            await EmployeeRepository.UpdateAsync(employee);
         }
 
         public async Task DeleteAsync(Guid ID)
         {
-            IParameters<ItemEntity> itemParameters = new Parameters<ItemEntity>();
-            itemParameters.Filter = i => i.EmployeeID == ID;
-            IParameters<MeasuringDeviceEntity> measuringDeviceParameters = new Parameters<MeasuringDeviceEntity>();
-            measuringDeviceParameters.Filter = i => i.EmployeeID == ID;
-            IParameters<VehicleEntity> vehicleParameters = new Parameters<VehicleEntity>();
-            vehicleParameters.Filter = i => i.EmployeeID == ID;
+            await EmployeeRepository.DeleteAsync(ID);
+        }
 
-            IEnumerable<ItemEntity> employeeItems = await unitOfWork.Items.GetAllAsync(itemParameters);
-            foreach (ItemEntity item in employeeItems)
-            {
-                await unitOfWork.Items.DeleteAsync(item.ID);
-            }
+        #endregion
 
-            IEnumerable<MeasuringDeviceEntity> employeeMeasuringDevices = await unitOfWork.MeasuringDevices.GetAllAsync(measuringDeviceParameters);
-            foreach (MeasuringDeviceEntity measuringDevice in employeeMeasuringDevices)
-            {
-                await unitOfWork.MeasuringDevices.DeleteAsync(measuringDevice.ID);
-            }
+        #region Return Methods      
+        public async Task ReturnOneItemAsync(Guid? ID)
+        {
+            await EmployeeRepository.ReturnOneItemAsync(ID);
+        }
 
-            IEnumerable<VehicleEntity> employeeVehicles = await unitOfWork.Vehicles.GetAllAsync(vehicleParameters);
-            foreach (VehicleEntity vehicle in employeeVehicles)
-            {
-                await unitOfWork.Vehicles.DeleteAsync(vehicle.ID);
-            }
+        public async Task ReturnAllItemsAsync(Guid? ID)
+        {
+            await EmployeeRepository.ReturnAllItemsAsync(ID);
+        }
 
-            var employeeEnity = Mapper.Map<EmployeeEntity>(await unitOfWork.Employees.GetByIdAsync(ID));
-            await unitOfWork.Employees.DeleteAsync(employeeEnity.ID);
-            await unitOfWork.SaveAsync();
+        public async Task ReturnOneMeasuringDeviceAsync(Guid? ID)
+        {
+            await EmployeeRepository.ReturnOneMeasuringDeviceAsync(ID);
+        }
+
+        public async Task ReturnAllMeasuringDevicesAsync(Guid? ID)
+        {
+            await EmployeeRepository.ReturnAllMeasuringDevicesAsync(ID);
+        }
+
+        public async Task ReturnOneVehicleAsync(Guid? ID)
+        {
+            await EmployeeRepository.ReturnOneVehicleAsync(ID);
+        }
+
+        public async Task ReturnAllVehiclesAsync(Guid? ID)
+        {
+            await EmployeeRepository.ReturnAllVehiclesAsync(ID);
+        }
+
+        public async Task ReturnAllInventory(Guid? ID)
+        {
+            await EmployeeRepository.ReturnAllInventory(ID);
         }
         #endregion
     }

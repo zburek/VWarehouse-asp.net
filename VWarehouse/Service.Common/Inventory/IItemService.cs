@@ -1,5 +1,4 @@
-﻿using Common;
-using DAL.DbEntities.Inventory;
+﻿using Common.Parameters;
 using Model.Common.Inventory;
 using PagedList;
 using System;
@@ -10,15 +9,13 @@ namespace Service.Common.Inventory
 {
     public interface IItemService
     {
-        Task<List<IItem>> GetAllAsync(IParameters<ItemEntity> parameters);
+        Task<List<IItem>> GetAllAsync(IItemParameters parameters);
         Task<IItem> GetByIdAsync(Guid? ID);
-        Task<StaticPagedList<IItem>> GetAllPagedListAsync(IParameters<ItemEntity> parameters);
+        Task<StaticPagedList<IItem>> GetAllPagedListAsync(IItemParameters parameters);
         Task CreateAsync(IItem item);
         Task UpdateAsync(IItem item);
         Task DeleteAsync(Guid ID);
         Task AssignItemAsync(Guid itemID, Guid? employeeID);
-        Task ReturnOneItemAsync(Guid? ID);
-        Task ReturnAllItemsAsync(Guid? ID);
-
+        
     }
 }

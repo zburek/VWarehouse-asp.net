@@ -11,11 +11,9 @@ using Service.Common;
 using AutoMapper;
 using Model.Common;
 using System.Collections.Generic;
-using DAL.DbEntities;
-using DAL.DbEntities.Inventory;
-using Common;
 using MVC.Models.MeasuringDeviceViewModels;
 using PagedList;
+using Common.Parameters;
 
 namespace MVC.Controllers
 {
@@ -23,13 +21,13 @@ namespace MVC.Controllers
     {
         protected IMeasuringDeviceService Service;
         protected IEmployeeService EmployeeService;
-        protected IParameters<MeasuringDeviceEntity> parameters;
-        protected IParameters<EmployeeEntity> employeeParameters;
-        public MeasuringDeviceController(IMeasuringDeviceService service, IEmployeeService employeeService, IParameters<MeasuringDeviceEntity> parameters, IParameters<EmployeeEntity> employeeParameters)
+        protected IMeasuringDeviceParameters measuringDeviceParameters;
+        protected IEmployeeParameters employeeParameters;
+        public MeasuringDeviceController(IMeasuringDeviceService service, IEmployeeService employeeService, IMeasuringDeviceParameters measuringDeviceParameters, IEmployeeParameters employeeParameters)
         {
             this.Service = service;
             this.EmployeeService = employeeService;
-            this.parameters = parameters;
+            this.measuringDeviceParameters = measuringDeviceParameters;
             this.employeeParameters = employeeParameters;
         }
 
@@ -51,12 +49,13 @@ namespace MVC.Controllers
                 searchString = currentFilter;
             }
             ViewBag.CurrentFilter = searchString;
-            parameters.PageSize = 5;
-            parameters.PageNumber = (page ?? 1);
-            parameters.SearchString = searchString;
-            parameters.SortOrder = sortOrder;
+            measuringDeviceParameters.PageSize = 5;
+            measuringDeviceParameters.PageNumber = (page ?? 1);
+            measuringDeviceParameters.SearchString = searchString;
+            measuringDeviceParameters.SortOrder = sortOrder;
+            measuringDeviceParameters.Paged = true;
 
-            var measuringDevicePagedList = await Service.GetAllPagedListAsync(parameters);
+            var measuringDevicePagedList = await Service.GetAllPagedListAsync(measuringDeviceParameters);
             var viewModel = Mapper.Map<IEnumerable<MeasuringDeviceIndexViewModel>>(measuringDevicePagedList);
             var pagedViewModel = new StaticPagedList<MeasuringDeviceIndexViewModel>(viewModel, measuringDevicePagedList.GetMetaData());
             return View(pagedViewModel);
@@ -65,7 +64,6 @@ namespace MVC.Controllers
         [HttpGet]
         public async Task<ActionResult> OnStock(string currentFilter, int? page, string searchString = null, string sortOrder = null)
         {
-            parameters.Filter = i => i.EmployeeID == null;
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NameSortParm = sortOrder == "Name" ? "name_desc" : "Name";
             ViewBag.CalibrationExpirationDateSortParm = sortOrder == "CalibrationExpirationDate" ? "calibrationExpirationDate_desc" : "CalibrationExpirationDate";
@@ -78,12 +76,14 @@ namespace MVC.Controllers
                 searchString = currentFilter;
             }
             ViewBag.CurrentFilter = searchString;
-            parameters.PageSize = 5;
-            parameters.PageNumber = (page ?? 1);
-            parameters.SearchString = searchString;
-            parameters.SortOrder = sortOrder;
+            measuringDeviceParameters.PageSize = 5;
+            measuringDeviceParameters.PageNumber = (page ?? 1);
+            measuringDeviceParameters.SearchString = searchString;
+            measuringDeviceParameters.SortOrder = sortOrder;
+            measuringDeviceParameters.Paged = true;
+            measuringDeviceParameters.OnStock = true;
 
-            var measuringDevicePagedList = await Service.GetAllPagedListAsync(parameters);
+            var measuringDevicePagedList = await Service.GetAllPagedListAsync(measuringDeviceParameters);
             var viewModel = Mapper.Map<IEnumerable<MeasuringDeviceOnStockViewModel>>(measuringDevicePagedList);
             var pagedViewModel = new StaticPagedList<MeasuringDeviceOnStockViewModel>(viewModel, measuringDevicePagedList.GetMetaData());
             return View(pagedViewModel);

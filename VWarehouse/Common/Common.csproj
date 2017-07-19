@@ -50,9 +50,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseEntity.cs" />
-    <Compile Include="IBaseEntity.cs" />
-    <Compile Include="IParameters.cs" />
-    <Compile Include="Parameters.cs" />
+    <Compile Include="Parameters\EmployeeParameters.cs" />
+    <Compile Include="Parameters\ItemParameters.cs" />
+    <Compile Include="Parameters\MeasuringDeviceParameters.cs" />
+    <Compile Include="Parameters\Parameters.cs" />
+    <Compile Include="Parameters\RepositoryParameters\GenericRepositoryParameters.cs" />
+    <Compile Include="Parameters\VehicleParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

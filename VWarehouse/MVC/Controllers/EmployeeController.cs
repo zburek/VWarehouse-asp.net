@@ -6,30 +6,22 @@ using Model;
 using System.Threading.Tasks;
 using Model.Common;
 using Service.Common;
-using Service.Common.Inventory;
-using DAL.DbEntities;
-using Common;
 using MVC.Models.EmployeeViewModels;
 using AutoMapper;
 using PagedList;
 using System.Collections.Generic;
+using Common.Parameters;
 
 namespace MVC.Controllers
 {
     public class EmployeeController : Controller
     {
         protected IEmployeeService Service;
-        protected IItemService ItemService;
-        protected IMeasuringDeviceService MeasuringDeviceService;
-        protected IVehicleService VehicleService;
-        protected IParameters<EmployeeEntity> parameters;
-        public EmployeeController(IEmployeeService service, IItemService itemService, IMeasuringDeviceService measuringDeviceService, IVehicleService vehicleService, IParameters<EmployeeEntity> parameters)
+        protected IEmployeeParameters employeeParameters;
+        public EmployeeController(IEmployeeService service, IEmployeeParameters employeeParameters)
         { 
             this.Service = service;
-            this.ItemService = itemService;
-            this.MeasuringDeviceService = measuringDeviceService;
-            this.VehicleService = vehicleService;
-            this.parameters = parameters;
+            this.employeeParameters = employeeParameters;
         }
 
         #region Get
@@ -47,12 +39,13 @@ namespace MVC.Controllers
                 searchString = currentFilter;
             }
             ViewBag.CurrentFilter = searchString;
-            parameters.PageSize = 5;
-            parameters.PageNumber = (page ?? 1);
-            parameters.SearchString = searchString;
-            parameters.SortOrder = sortOrder;
+            employeeParameters.PageSize = 5;
+            employeeParameters.PageNumber = (page ?? 1);
+            employeeParameters.SearchString = searchString;
+            employeeParameters.SortOrder = sortOrder;
+            employeeParameters.Paged = true;
 
-            var employeePagedList = await Service.GetAllPagedListAsync(parameters);
+            var employeePagedList = await Service.GetAllPagedListAsync(employeeParameters);
             var viewModel = Mapper.Map<IEnumerable<EmployeeIndexViewModel>>(employeePagedList);
             var pagedViewModel = new StaticPagedList<EmployeeIndexViewModel>(viewModel, employeePagedList.GetMetaData());
             return View(pagedViewModel);
@@ -80,9 +73,9 @@ namespace MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            parameters.Filter = e => e.ID == ID;
-            parameters.IncludeProperties = "Items, MeasuringDevices, Vehicles";
-            var employeeViewModel = Mapper.Map<EmployeeInventoryViewModel>(await Service.GetOneAsync(parameters));
+            employeeParameters.ID = ID;
+            employeeParameters.IncludeProperties = "Items, MeasuringDevices, Vehicles";
+            var employeeViewModel = Mapper.Map<EmployeeInventoryViewModel>(await Service.GetOneAsync(employeeParameters));
             if (employeeViewModel == null)
             {
                 return HttpNotFound();
@@ -99,7 +92,7 @@ namespace MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            await ItemService.ReturnOneItemAsync(itemID);
+            await Service.ReturnOneItemAsync(itemID);
             return RedirectToAction("Inventory", new { ID = empID });
         }
 
@@ -110,7 +103,7 @@ namespace MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            await ItemService.ReturnAllItemsAsync(empID);
+            await Service.ReturnAllItemsAsync(empID);
             return RedirectToAction("Inventory", new { ID = empID });
         }
 
@@ -121,7 +114,7 @@ namespace MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            await MeasuringDeviceService.ReturnOneMeasuringDeviceAsync(MDeviceID);
+            await Service.ReturnOneMeasuringDeviceAsync(MDeviceID);
             return RedirectToAction("Inventory", new { ID = empID });
         }
 
@@ -132,7 +125,7 @@ namespace MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            await MeasuringDeviceService.ReturnAllMeasuringDevicesAsync(empID);
+            await Service.ReturnAllMeasuringDevicesAsync(empID);
             return RedirectToAction("Inventory", new { ID = empID });
         }
 
@@ -143,7 +136,7 @@ namespace MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            await VehicleService.ReturnOneVehicleAsync(vhID);
+            await Service.ReturnOneVehicleAsync(vhID);
             return RedirectToAction("Inventory", new { ID = empID });
         }
 
@@ -154,7 +147,7 @@ namespace MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            await VehicleService.ReturnAllVehiclesAsync(empID);
+            await Service.ReturnAllVehiclesAsync(empID);
             return RedirectToAction("Inventory", new { ID = empID });
         }
 
@@ -165,9 +158,7 @@ namespace MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            await ItemService.ReturnAllItemsAsync(empID);
-            await MeasuringDeviceService.ReturnAllMeasuringDevicesAsync(empID);
-            await VehicleService.ReturnAllVehiclesAsync(empID);
+            await Service.ReturnAllInventory(empID);
             return RedirectToAction("Inventory", new { ID = empID });
         }
         #endregion
@@ -260,9 +251,6 @@ namespace MVC.Controllers
         {
             try
             {
-                await ItemService.ReturnAllItemsAsync(ID);
-                await MeasuringDeviceService.ReturnAllMeasuringDevicesAsync(ID);
-                await VehicleService.ReturnAllVehiclesAsync(ID);
                 await Service.DeleteAsync(ID);
             }
             catch (DataException)

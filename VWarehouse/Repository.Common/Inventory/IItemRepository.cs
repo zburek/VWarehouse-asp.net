@@ -1,5 +1,5 @@
-﻿using Common;
-using DAL.DbEntities.Inventory;
+﻿using Common.Parameters;
+using Model.Common.Inventory;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -8,11 +8,12 @@ namespace Repository.Common.Inventory
 {
     public interface IItemRepository
     {
-        Task<IEnumerable<ItemEntity>> GetAllAsync(IParameters<ItemEntity> parameters);
-        Task<ItemEntity> GetByIdAsync(Guid? ID);
-        Task<int> GetCountAsync(IParameters<ItemEntity> parameters);
-        Task CreateAsync(ItemEntity itemEntity);
-        Task UpdateAsync(ItemEntity itemEntity);
+        Task<IEnumerable<IItem>> GetAllAsync(IItemParameters parameters);
+        Task<IItem> GetByIdAsync(Guid? ID);
+        Task<int> GetCountAsync(IItemParameters parameters);
+        Task CreateAsync(IItem item);
+        Task UpdateAsync(IItem item);
         Task DeleteAsync(Guid ID);
+        Task AssignOneItemAsync(Guid itemID, Guid? employeeID);
     }
 }

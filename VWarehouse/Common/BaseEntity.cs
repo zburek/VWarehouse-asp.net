@@ -4,6 +4,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Common
 {
+    public interface IBaseEntity
+    {
+        Guid ID { get; set; }
+        string Name { get; set; }
+    }
     public class BaseEntity : IBaseEntity
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

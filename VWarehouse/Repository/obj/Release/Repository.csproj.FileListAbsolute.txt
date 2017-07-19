@@ -22,3 +22,5 @@ C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Repository\bin\R
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Repository\obj\Release\Repository.csprojResolveAssemblyReference.cache
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Repository\obj\Release\Repository.dll
 C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Repository\obj\Release\Repository.pdb
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Repository\bin\Release\AutoMapper.dll
+C:\Users\zvone\Documents\Visual Studio 2015\Projects\VWarehouse\Repository\bin\Release\AutoMapper.xml
