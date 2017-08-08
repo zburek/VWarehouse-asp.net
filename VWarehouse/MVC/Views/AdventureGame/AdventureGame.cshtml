@@ -1,0 +1,196 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title - Adventure</title>
+    <script src="~/Scripts/angular.js"></script>
+    <script src="~/Scripts/AdventureScript.js"></script>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
+    <meta charset="utf-8" />
+</head>
+<body ng-app="AdventureModule">
+    <style>
+        .margin20 {
+            margin: 20px;
+        }
+
+        .margin40 {
+            margin: 40px;
+        }
+
+        #startAdventure, #screen2, #screen3, #screen4 {
+            display: none;
+        }
+
+        #group, #alone {
+            display: none;
+        }
+
+        #sendingGroup, #attack, #attack2, #runOnFoot, #runWithHorse, #runOnFoot2, #runWithHorse2 {
+            display: none;
+        }
+
+        #attackGroupMelee, #attackAloneMelee, #attackGroupRange, #attackAloneRange, #attackGroupMagic, #attackAloneMagic, #attackAloneMelee2, #attackAloneRange2, #attackAloneMagic2 {
+            display: none;
+        }
+    </style>
+    <div ng-controller="AdventureController">
+        <div>
+            <div class="well margin40 container-fluid">
+                <div class="text-center">
+                    <h1 class="margin20">Scary adventure</h1>
+                    <center>
+                        <img class="img-responsive thumbnail" src="/Images/Adventure group.png" alt="Adventure group">
+                    </center>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-1">
+                </div>
+                <!--#region screen1  -->
+                <div id="screen1" class="col-xs-5">
+                    <p>Initialize your brave adventurer</p>
+                    <table>
+                        <!--#region Adventurer info  -->
+                        <tr>
+                            <td>Name </td>
+                            <td><input type="text" ng-model="adventurer.name" /></td>
+                        </tr>
+                        <tr>
+                            <td>Type </td>
+                            <td>
+                                <form>
+                                    <input type="radio" ng-model="adventurer.type" ng-change="showWeapon(); selectImage(); start()" value="Soldier" checked> Soldier<br>
+                                    <input type="radio" ng-model="adventurer.type" ng-change="showWeapon(); selectImage(); start()" value="Ranger" checked> Ranger<br>
+                                    <input type="radio" ng-model="adventurer.type" ng-change="showWeapon(); selectImage(); start()" value="Barbarian" checked> Barbarian<br>
+                                    <input type="radio" ng-model="adventurer.type" ng-change="showWeapon(); selectImage(); start()" value="Wizard" checked> Wizard<br>
+                                    <input type="radio" ng-model="adventurer.type" ng-change="showWeapon(); selectImage(); start()" value="Cleric" checked> Cleric<br>
+                                </form>
+                            </td>
+                        </tr>
+                        <!--#endregion -->
+                        <tr><td><p> </p> </td></tr>
+                        <!--#region Weapon selection  -->
+                        <tr>
+                            <td>Weapon </td>
+                            <td>
+                                <form id="Soldier">
+                                    <input type="radio" ng-model="adventurer.weapon" ng-change="start()" value="Longsword" checked> Longsword<br>
+                                    <input type="radio" ng-model="adventurer.weapon" ng-change="start()" value="Shortsword" checked> Shortsword<br>
+                                    <input type="radio" ng-model="adventurer.weapon" ng-change="start()" value="Spear" checked> Spear<br>
+                                    <input type="radio" ng-model="adventurer.weapon" ng-change="start()" value="Mace" checked> Mace<br>
+                                </form>
+                                <form id="Ranger">
+                                    <input type="radio" ng-model="adventurer.weapon" ng-change="start()" value="Longbow" checked> Longbow<br>
+                                    <input type="radio" ng-model="adventurer.weapon" ng-change="start()" value="Shortbow" checked> Shortbow<br>
+                                    <input type="radio" ng-model="adventurer.weapon" ng-change="start()" value="Crossbow" checked> Crossbow<br>
+                                    <input type="radio" ng-model="adventurer.weapon" ng-change="start()" value="Shortsword" checked> Shortsword<br>
+                                </form>
+                                <form id="Barbarian">
+                                    <input type="radio" ng-model="adventurer.weapon" ng-change="start()" value="Longsword" checked> Longsword<br>
+                                    <input type="radio" ng-model="adventurer.weapon" ng-change="start()" value="Battleaxe" checked> Battleaxe<br>
+                                    <input type="radio" ng-model="adventurer.weapon" ng-change="start()" value="Warhammer" checked> Warhammer<br>
+                                    <input type="radio" ng-model="adventurer.weapon" ng-change="start()" value="Morningstar" checked> Morningstar<br>
+                                </form>
+                                <form id="Wizard">
+                                    <input type="radio" ng-model="adventurer.weapon" ng-change="start()" value="Fire Magic" checked> Fire Magic<br>
+                                    <input type="radio" ng-model="adventurer.weapon" ng-change="start()" value="Ice Magic" checked> Ice Magic<br>
+                                    <input type="radio" ng-model="adventurer.weapon" ng-change="start()" value="Electric magic" checked> Electric magic<br>
+                                </form>
+                                <form id="Cleric">
+                                    <input type="radio" ng-model="adventurer.weapon" ng-change="start()" value="Holy Magic" checked> Holy Magic<br>
+                                    <input type="radio" ng-model="adventurer.weapon" ng-change="start()" value="Cursed Magic" checked> Cursed Magic<br>
+                                    <input type="radio" ng-model="adventurer.weapon" ng-change="start()" value="Healing Magic" checked> Healing Magic<br>
+                                </form>
+                            </td>
+                        </tr>
+                        <!--#endregion -->
+                        <tr><td><p> </p> </td></tr>
+                        <!--#region Shop  -->
+                        <tr>
+                            <td>Shop </td>
+                            <td>Price </td>
+                            <td>Buy/Sell </td>
+                        <tr ng-repeat="item in items">
+                            <td>{{ item.name }}</td>
+                            <td>{{ item.price }}</td>
+                            <td>
+                                <input type="button" value="Buy" ng-click="buy(item)" />
+                                <input type="button" value="Sell" ng-click="sell(item)" />
+                            </td>
+                        </tr>
+                        <!--#endregion -->
+                        <tr><td><p> </p> </td></tr>
+                    </table>
+                    <div id="startAdventure" class="text-center" style="margin: 30px">
+                        <button ng-click="screen2()">Start your adventure</button>
+                    </div>
+                </div>
+                <!--#endregion -->
+                <!--#region screen2  -->
+                <div id="screen2" class="col-xs-7">
+                    <p>So {{ adventurer.name }} you think you have what it takes to survive in the unforgiving wilderness. There are many {{adventurer.type}}'s that left their bones in the wild so remain vigilant at all times</p>
+                    <div id="group">
+                        <p>As you venture into the unknow, durgin one of your second breakfast breaks, one of your mercenaries you hired screems The hords of hell are upon us, defend yourself</p>
+                        <button ng-click="sendGroup()" style="width:100px">Send your mercenaries</button>
+                        <button ng-click="attack()" style="width:100px">Take lead and charge first against evil hordes</button>
+                        <button ng-click="run()" style="width:100px">Run like the wind</button>
+                    </div>
+                    <div id="alone">
+                        <p>As you venture into the unknow, durgin one of your second breakfast breaks, you hear loud rumble. The hords of hell are upon you, defend yourself!</p>
+                        <button ng-click="attack()">Charge against evil hordes</button>
+                        <button ng-click="run()">Run like the wind</button>
+                    </div>
+                </div>
+                <!--#endregion -->
+                <!--#region screen3  -->
+                <div id="screen3" class="col-xs-7">
+                    <div id="sendingGroup">
+                        <p>You dont want to quit your breakfast do you so you order your mercenaries to charge first. They all die beautifully. What are you going to do?</p>
+                        <button ng-click="attack2()" style="width:100px">I revenge my fallen brothers, Charge!</button>
+                        <button ng-click="run2()" style="width:100px">Run like the wind</button>
+                    </div>
+
+                    <div id="attack">
+                        <p>Think you have what it takes to take down hords of hell?</p>
+                        <p id="attackGroupMelee">You fearlessly charge wielding your {{adventurer.weapon}} like the heroes of old only to meet your doom as you are taken down by huge monster. Last thing you see are your mercenaries fleeing for their lives</p>
+                        <p id="attackAloneMelee">You fearlessly charge wielding your {{adventurer.weapon}} like the heroes of old only to meet your doom as you are taken down by huge monster.</p>
+                        <p id="attackGroupRange">You take your {{adventurer.weapon}} and fire arrow at hords of hell. An imposible shot to miss. Yet you miss and get taken down by huge monster. Last thing you see are your mercenaries fleeing for their lives</p>
+                        <p id="attackAloneRange">You take your {{adventurer.weapon}} and fire arrow at hords of hell. An imposible shot to miss. Yet you miss and get taken down by huge monster.</p>
+                        <p id="attackGroupMagic">You know there is no weapon that can take this hords of hell so you prepare your {{adventurer.weapon}} to aid your mercenaries. But as you prepare to cast speel you are taken down by huge monster. Last thing you see are your mercenaries fleeing for their lives</p>
+                        <p id="attackAloneMagic">You know there is no weapon that can take this hords of hell so you prepare your {{adventurer.weapon}} to defend against this attack. But as you prepare to cast speel you are taken down by huge monster.</p>
+                        <p>Dont know what is worse, to be remembered as naive fool who thought he lived in fairy tale and could be brave hero or be forgotten forever in the emptiness of time and space. Maybe next time...</p>
+                    </div>
+
+                    <p id="runOnFoot">This is no story with happy end and these are real monster. You run for your life. But death catches your first in the form of arrow in the back.</p>
+                    <p id="runWithHorse">This is no story with happy end and these are real monster. You mount your horse are run to fight another day. Or hide from these hords of hell for this is no way for a gentleman to have his second breakfast.</p>
+                </div>
+                <!--#endregion -->
+                <!--#region screen4  -->
+                <div id="screen4" class="col-xs-7">
+                    <div id="attack2">
+                        <p>Think you have what it takes to take down hords of hell?</p>
+                        <p id="attackAloneMelee2">You fearlessly charge wielding your {{adventurer.weapon}} like the heroes of old only to meet your doom as you are taken down by huge monster.</p>
+                        <p id="attackAloneRange2">You take your {{adventurer.weapon}} and fire arrow at hords of hell. An imposible shot to miss. Yet you miss and get taken down by huge monster.</p>
+                        <p id="attackAloneMagic2">You know there is no weapon that can take this hords of hell so you prepare your {{adventurer.weapon}} to defend against this attack. But as you prepare to cast speel you are taken down by huge monster.</p>
+                        <p>If you know the enemy and know yourself you need not fear the results of a hundred battles. I guess you know nothing {{ adventurer.name }}</p>
+                    </div>
+                    <p id="runOnFoot2">As you watched your mercenaries die you relaized that your moment to shine... ain't happening any time soon. You run for your life. Since your mercenaries delayed hords of hells charge you had a chance to escape. A chance you didn't use wisely. You got caught and devoured by one of monster. A terrible way to go.</p>
+                    <p id="runWithHorse2">While your brave mercenaries fought, not only did you manage to finish your second breakfast but you also found the time to obtain their gold and some of their possessions. They sure wont be needing that now wont they. You mount your horse and run to fight another day. Or hide from these hords of hell for this is no way for a gentleman to have his second breakfast.</p>
+                </div>
+                <!--#endregion -->
+                <div class="col-xs-4">
+                    <img ng-src="{{adventurer.image}}" alt="{{adventurer.name + ' Picture'}}" style="height: 150px; width: 100px;" />
+                    <p>Name: {{ adventurer.name}}</p>
+                    <p>Type: {{ adventurer.type}}</p>
+                    <p>Weapon: {{ adventurer.weapon}}</p>
+                    <p>Money: {{ adventurer.money}}</p>
+                    <p ng-repeat="item in adventurer.inventory">Item: {{ item.amount }} {{ item.name }} </p>
+                    <p><input type="checkbox" ng-model="disabelPromptPopups" />Disable prompt pop-ups</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+

@@ -187,6 +187,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AdventureGameController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ItemController.cs" />
@@ -235,11 +236,22 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\Adventure group.png" />
+    <Content Include="Images\barbarian.png" />
+    <Content Include="Images\cleric.png" />
+    <Content Include="Images\ranger.png" />
+    <Content Include="Images\soldier.png" />
+    <Content Include="Images\wizard.png" />
+    <Content Include="Scripts\AdventureScript.js" />
+    <Content Include="Scripts\angular-mocks.js" />
+    <Content Include="Scripts\angular.js" />
+    <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\angular.min.js.map" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -292,6 +304,7 @@
     <Content Include="Views\MeasuringDevice\Assign.cshtml" />
     <Content Include="Views\Vehicle\Assign.cshtml" />
     <Content Include="Views\Warning\Index.cshtml" />
+    <Content Include="Views\AdventureGame\AdventureGame.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
