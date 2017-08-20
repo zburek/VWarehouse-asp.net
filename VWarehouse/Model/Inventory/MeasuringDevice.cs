@@ -2,6 +2,7 @@
 using Model.Common;
 using Model.Common.Inventory;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -18,8 +19,9 @@ namespace Model.Inventory
         public string SerialNumber { get; set; }
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime CalibrationExpirationDate { get; set; }
+        public DateTime? CalibrationExpirationDate { get; set; }
         public Guid? EmployeeID { get; set; }
         public virtual IEmployee Employee { get; set; }
+        public virtual ICollection<IAssignment> Assignments { get; set; }
     }
 }

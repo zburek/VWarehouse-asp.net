@@ -16,5 +16,6 @@ namespace Repository.Common
         Task<int> UpdateAsync<TEntity>(TEntity entity) where TEntity : class, IBaseEntity;
         Task<int> DeleteAsync<TEntity>(Guid ID) where TEntity : class, IBaseEntity;
         IUnitOfWork CreateUnitOfWork();
+        IUnitOfWorkAssignment CreateUnitOfWorkAssignment();
     }
 }

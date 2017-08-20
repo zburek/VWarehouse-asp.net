@@ -12,6 +12,7 @@ namespace DAL.DbEntities
         public ICollection<ItemEntity> Items { get; set; }
         public ICollection<MeasuringDeviceEntity> MeasuringDevices { get; set; }
         public ICollection<VehicleEntity> Vehicles { get; set; }
+        public ICollection<AssignmentEntity> Assignments { get; set; }
     }
 }
 

@@ -6,6 +6,7 @@ namespace Repository
     public interface IUnitOfWorkFactory
     {
         IUnitOfWork CreateUnitOfWork(IVWarehouseContext context);
+        IUnitOfWorkAssignment CreateUnitOfWorkAssignment(IVWarehouseContext context);
     }
 
     public class UnitOfWorkFactory : IUnitOfWorkFactory
@@ -13,6 +14,10 @@ namespace Repository
         public IUnitOfWork CreateUnitOfWork(IVWarehouseContext context)
         {
             return new UnitOfWork(context);
+        }
+        public IUnitOfWorkAssignment CreateUnitOfWorkAssignment(IVWarehouseContext context)
+        {
+            return new UnitOfWorkAssignment(context);
         }
     }
 }

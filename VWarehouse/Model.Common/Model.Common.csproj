@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IAssignment.cs" />
     <Compile Include="IEmployee.cs" />
     <Compile Include="Inventory\IItem.cs" />
     <Compile Include="Inventory\IMeasuringDevice.cs" />

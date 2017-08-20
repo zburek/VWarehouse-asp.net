@@ -1,0 +1,74 @@
+﻿@model PagedList.IPagedList<MVC.Models.AssignmentViewModels.AssignmentIndexViewModel>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<a href="@Url.Action("Create")"
+   class="btn btn-success">
+    <span class="glyphicon glyphicon-plus"></span> New Assignment
+</a>
+@using (Html.BeginForm("Index", "Assignment", FormMethod.Get))
+{
+    <p>
+        Search by Assignment Name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+        <input type="submit" value="Search" />
+    </p>
+}
+<div style="height: 350px">
+    <table class="table">
+        <tr>
+            <th>
+                @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                Materials
+            </th>
+            <th>
+                @Html.ActionLink("StartTime", "Index", new { sortOrder = ViewBag.StartTime, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink("EndTime", "Index", new { sortOrder = ViewBag.EndTime, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                Note
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var assignment in Model)
+        {
+            <tr>
+                <td width="150">
+                    @Html.DisplayFor(model => assignment.Name)
+                </td>
+                <td width="150">
+                    @Html.DisplayFor(model => assignment.Materials)
+                </td>
+                <td width="150">
+                    @Html.DisplayFor(model => assignment.StartTime)
+                </td>
+                <td width="150">
+                    @Html.DisplayFor(model => assignment.EndTime)
+                </td>
+                <td width="150">
+                    @Html.DisplayFor(model => assignment.Note)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = assignment.ID }, new { @class = "btn btn-success" })
+                    @Html.ActionLink("Details", "Details", new { id = assignment.ID }, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Delete", "Delete", new { id = assignment.ID }, new { @class = "btn btn-danger" })
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+

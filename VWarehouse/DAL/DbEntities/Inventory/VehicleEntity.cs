@@ -1,5 +1,6 @@
 ﻿using Common;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DAL.DbEntities.Inventory
@@ -15,5 +16,6 @@ namespace DAL.DbEntities.Inventory
         [ForeignKey("Employee")]
         public Guid? EmployeeID { get; set; }
         public virtual EmployeeEntity Employee { get; set; }
+        public virtual ICollection<AssignmentEntity> Assignments { get; set; }
     }
 }

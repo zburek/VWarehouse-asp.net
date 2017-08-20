@@ -3,7 +3,6 @@ using DAL;
 using DAL.DbEntities.Inventory;
 using Repository.Common;
 using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,8 +25,7 @@ namespace Repository
         public async Task ReturnAllItemsAsync(Guid? ID)
         {
             IQueryable<ItemEntity> query = Context.Set<ItemEntity>().Where(i => i.EmployeeID == ID);
-            IEnumerable<ItemEntity> itemList = await query.ToListAsync();
-            foreach (var itemEntity in itemList)
+            foreach (var itemEntity in query)
             {
                 itemEntity.EmployeeID = null;
                 await UpdateAsync<ItemEntity>(itemEntity);
@@ -37,8 +35,7 @@ namespace Repository
         public async Task ReturnAllMeasuringDevicesAsync(Guid? ID)
         {
             IQueryable<MeasuringDeviceEntity> query = Context.Set<MeasuringDeviceEntity>().Where(i => i.EmployeeID == ID);
-            IEnumerable<MeasuringDeviceEntity> measuringDeviceList = await query.ToListAsync();
-            foreach (var measuringDeviceEntity in measuringDeviceList)
+            foreach (var measuringDeviceEntity in query)
             {
                 measuringDeviceEntity.EmployeeID = null;
                 await UpdateAsync<MeasuringDeviceEntity>(measuringDeviceEntity);
@@ -48,8 +45,7 @@ namespace Repository
         public async Task ReturnAllVehiclesAsync(Guid? ID)
         {
             IQueryable<VehicleEntity> query = Context.Set<VehicleEntity>().Where(i => i.EmployeeID == ID);
-            IEnumerable<VehicleEntity> vehicleList = await query.ToListAsync();
-            foreach (var vehicleEntity in vehicleList)
+            foreach (var vehicleEntity in query)
             {
                 vehicleEntity.EmployeeID = null;
                 await UpdateAsync<VehicleEntity>(vehicleEntity);

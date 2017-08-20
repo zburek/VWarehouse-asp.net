@@ -1,0 +1,203 @@
+﻿@model MVC.Models.AssignmentViewModels.AssignmentDetailsViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Assignment</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Materials)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Materials)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.StartTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StartTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.EndTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EndTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Note)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Note)
+        </dd>
+    </dl>
+
+    <a href="@Url.Action("Edit", new { id = Model.ID })"
+       class="btn btn-success">
+        <span class="glyphicon glyphicon-pencil"></span> Edit
+    </a>
+    <a href="@Url.Action("Index")"
+       class="btn btn-default">
+        <span class="glyphicon glyphicon-list-alt"></span> Back to List
+    </a>
+</div>
+
+<!--#region Employees -->
+
+<h4>Employees</h4>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var emp in Model.Employees)
+    {
+        <tr>
+            <td width="300">
+                @Html.DisplayFor(modelItem => emp.Name)
+            </td>
+            <td>
+                @Html.ActionLink("Return Employee", "ReturnOneEmployee", new { empID = emp.ID, assignmentID = Model.ID }, new { @class = "btn btn-primary" })
+            </td>
+        </tr>
+    }
+</table>
+<table class="table">
+    <tr>
+        <td width="300"></td>
+        <td>
+            @Html.ActionLink("Return All Employees", "ReturnAllEmployees", new { assignmentID = Model.ID }, new { @class = "btn btn-primary" })
+        </td>
+    </tr>
+</table>
+<p>&nbsp;</p>
+<p></p>
+
+<!--#endregion  -->
+
+<!--#region Items -->
+<h4>Items</h4>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.Items)
+    {
+        <tr>
+            <td width="300">
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.ActionLink("Return Item", "ReturnOneItem", new { itemID = item.ID, assignmentID = Model.ID }, new { @class = "btn btn-primary" })
+            </td>
+        </tr>
+    }
+</table>
+<table class="table">
+    <tr>
+        <td width="300"></td>
+        <td>
+            @Html.ActionLink("Return All Items", "ReturnAllItems", new { assignmentID = Model.ID }, new { @class = "btn btn-primary" })
+        </td>
+    </tr>
+</table>
+<p>&nbsp;</p>
+<p></p>
+<!--#endregion  -->
+
+<!--#region Measuring Devices -->
+<h4>Measuring Devices</h4>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var MD in Model.MeasuringDevices)
+    {
+        <tr>
+            <td width="300">
+                @Html.DisplayFor(modelItem => MD.Name)
+            </td>
+            <td>
+                @Html.ActionLink("Return Item", "ReturnOneItem", new { MDID = MD.ID, assignmentID = Model.ID }, new { @class = "btn btn-primary" })
+            </td>
+        </tr>
+    }
+</table>
+<table class="table">
+    <tr>
+        <td width="300"></td>
+        <td>
+            @Html.ActionLink("Return All Measuring Devices", "ReturnAllMeasuringDevices", new { assignmentID = Model.ID }, new { @class = "btn btn-primary" })
+        </td>
+    </tr>
+</table>
+<p>&nbsp;</p>
+<p></p>
+
+<!--#endregion  -->
+
+<!--#region Vehicles -->
+<h4>Items</h4>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var vehicle in Model.Vehicles)
+    {
+        <tr>
+            <td width="300">
+                @Html.DisplayFor(modelItem => vehicle.Name)
+            </td>
+            <td>
+                @Html.ActionLink("Return Item", "ReturnOneItem", new { vehicleID = vehicle.ID, assignmentID = Model.ID }, new { @class = "btn btn-primary" })
+            </td>
+        </tr>
+    }
+</table>
+<table class="table">
+    <tr>
+        <td width="300"></td>
+        <td>
+            @Html.ActionLink("Return All Vehicle", "ReturnAllVehicles", new { assignmentID = Model.ID }, new { @class = "btn btn-primary" })
+        </td>
+    </tr>
+</table>
+<p>&nbsp;</p>
+<p></p>
+
+<!--#endregion  -->

@@ -19,6 +19,7 @@ namespace Model
         public ICollection<IBaseEntity> Items { get; set; }
         public ICollection<IBaseEntity> MeasuringDevices { get; set; }
         public ICollection<IBaseEntity> Vehicles { get; set; }
+        public ICollection<IBaseEntity> Assignments { get; set; }
     }
 }
 

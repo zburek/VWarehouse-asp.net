@@ -1,0 +1,40 @@
+﻿@model MVC.Models.AssignViewModels.AssignmentAssignViewModel
+
+@{
+    ViewBag.Title = "Assign";
+}
+
+<h4>Employee Items</h4>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.EmployeeList)
+    {
+        <tr>
+            <td width="300">
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.ActionLink("Return Item", "ReturnOneItem", new { itemID = item.ID, empID = Model.ID }, new { @class = "btn btn-primary" })
+            </td>
+        </tr>
+    }
+</table>
+<table class="table">
+    <tr>
+        <td width="300"></td>
+        <td>
+            @Html.ActionLink("Return All Items", "ReturnAllItems", new { empID = Model.ID }, new { @class = "btn btn-primary" })
+        </td>
+    </tr>
+</table>
+<p>&nbsp;</p>
+<p></p>
+

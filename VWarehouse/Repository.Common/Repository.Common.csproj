@@ -48,12 +48,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IAssignemntRepository.cs" />
     <Compile Include="IEmployeeRepository.cs" />
     <Compile Include="IGenericRepository.cs" />
     <Compile Include="Inventory\IItemRepository.cs" />
     <Compile Include="Inventory\IMeasuringDeviceRepository.cs" />
     <Compile Include="Inventory\IVehicleRepository.cs" />
     <Compile Include="IUnitOfWork.cs" />
+    <Compile Include="IUnitOfWorkAssignment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

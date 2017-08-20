@@ -18,5 +18,6 @@ namespace Model.Common
         ICollection<IBaseEntity> Items { get; set; }
         ICollection<IBaseEntity> MeasuringDevices { get; set; }
         ICollection<IBaseEntity> Vehicles { get; set; }
+        ICollection<IBaseEntity> Assignments { get; set; }
     }
 }

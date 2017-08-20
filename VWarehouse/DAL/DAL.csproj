@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DbEntities\AssignmentEntity.cs" />
     <Compile Include="DbEntities\EmployeeEntity.cs" />
     <Compile Include="DbEntities\Inventory\ItemEntity.cs" />
     <Compile Include="DbEntities\Inventory\MeasuringDeviceEntity.cs" />

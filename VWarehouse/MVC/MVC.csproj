@@ -188,6 +188,7 @@
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdventureGameController.cs" />
+    <Compile Include="Controllers\AssignmentController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ItemController.cs" />
@@ -197,6 +198,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AssignmentViewModels\AssignmentCreateViewModel.cs" />
+    <Compile Include="Models\AssignmentViewModels\AssignmentDeleteViewModel.cs" />
+    <Compile Include="Models\AssignmentViewModels\AssignmentDetailsViewModel.cs" />
+    <Compile Include="Models\AssignmentViewModels\AssignmentEditViewModel.cs" />
+    <Compile Include="Models\AssignmentViewModels\AssignmentIndexViewModel.cs" />
+    <Compile Include="Models\AssignViewModels\AssignmentAssignViewModel.cs" />
+    <Compile Include="Models\AssignViewModels\IAssignmentAssignViewModel.cs" />
     <Compile Include="Models\EmployeeViewModels\EmployeeCreateViewModel.cs" />
     <Compile Include="Models\EmployeeViewModels\EmployeeDeleteViewModel.cs" />
     <Compile Include="Models\EmployeeViewModels\EmployeeDetailsViewModel.cs" />
@@ -305,6 +313,12 @@
     <Content Include="Views\Vehicle\Assign.cshtml" />
     <Content Include="Views\Warning\Index.cshtml" />
     <Content Include="Views\AdventureGame\AdventureGame.cshtml" />
+    <Content Include="Views\Assignment\Index.cshtml" />
+    <Content Include="Views\Assignment\Details.cshtml" />
+    <Content Include="Views\Assignment\Create.cshtml" />
+    <Content Include="Views\Assignment\Edit.cshtml" />
+    <Content Include="Views\Assignment\Delete.cshtml" />
+    <Content Include="Views\Assignment\Assign.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

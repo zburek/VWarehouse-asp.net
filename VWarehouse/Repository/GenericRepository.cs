@@ -24,6 +24,10 @@ namespace Repository
         {
             return UnitOfWorkFactory.CreateUnitOfWork(Context);
         }
+        public IUnitOfWorkAssignment CreateUnitOfWorkAssignment()
+        {
+            return UnitOfWorkFactory.CreateUnitOfWorkAssignment(Context);
+        }
         private IQueryable<TEntity> GetQueryable<TEntity>(IGenericRepositoryParameters<TEntity> parameters) where TEntity : class, IBaseEntity
         {
 

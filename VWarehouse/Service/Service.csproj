@@ -61,6 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssignmentService.cs" />
     <Compile Include="Inventory\ItemService.cs" />
     <Compile Include="Inventory\MeasuringDeviceService.cs" />
     <Compile Include="Inventory\VehicleService.cs" />

@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IAssignmentService.cs" />
     <Compile Include="IEmployeeService.cs" />
     <Compile Include="Inventory\IItemService.cs" />
     <Compile Include="Inventory\IMeasuringDeviceService.cs" />

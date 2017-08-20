@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -18,5 +19,6 @@ namespace Model.Common.Inventory
         string SerialNumber { get; set; }
         Guid? EmployeeID { get; set; }
         IEmployee Employee { get; set; }
+        ICollection<IAssignment> Assignments { get; set; }
     }
 }

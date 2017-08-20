@@ -14,6 +14,7 @@ using MVC.Models.VehicleViewModels;
 using Common.Parameters;
 using Common.Parameters.RepositoryParameters;
 using Common;
+using MVC.Models.AssignmentViewModels;
 
 namespace MVC.Models
 {
@@ -41,6 +42,10 @@ namespace MVC.Models
                 cfg.CreateMap<VehicleEntity, IBaseEntity>().ReverseMap();
                 cfg.CreateMap<VehicleEntity, IVehicle>().ReverseMap();
                 cfg.CreateMap<Vehicle, IVehicle>().ReverseMap();
+
+                cfg.CreateMap<AssignmentEntity, Assignment>().ReverseMap();
+                cfg.CreateMap<AssignmentEntity, IAssignment>().ReverseMap();
+                cfg.CreateMap<Assignment, IAssignment>().ReverseMap();
 
                 #region Mapping View Models
                 cfg.CreateMap<IEmployee, EmployeeIndexViewModel>();
@@ -75,6 +80,13 @@ namespace MVC.Models
                 cfg.CreateMap<VehicleEditViewModel, Vehicle>();
                 cfg.CreateMap<IVehicle, VehicleDeleteViewModel>();
 
+                cfg.CreateMap<IAssignment, AssignmentIndexViewModel>();
+                cfg.CreateMap<IAssignment, AssignmentDetailsViewModel>();
+                cfg.CreateMap<AssignmentCreateViewModel, Assignment>();
+                cfg.CreateMap<IAssignment, AssignmentEditViewModel>();
+                cfg.CreateMap<AssignmentEditViewModel, Assignment>();
+                cfg.CreateMap<IAssignment, AssignmentDeleteViewModel>();
+
                 cfg.CreateMap<IAssignViewModel, AssignViewModel>().ReverseMap();
                 cfg.CreateMap<IAssignViewModel, IItem>().ReverseMap();
                 cfg.CreateMap<IAssignViewModel, IMeasuringDevice>().ReverseMap();
@@ -91,6 +103,7 @@ namespace MVC.Models
                 cfg.CreateMap<IItemParameters, IGenericRepositoryParameters<ItemEntity>>();
                 cfg.CreateMap<IMeasuringDeviceParameters, IGenericRepositoryParameters<MeasuringDeviceEntity>>();
                 cfg.CreateMap<IVehicleParameters, IGenericRepositoryParameters<VehicleEntity>>();
+                cfg.CreateMap<IAssignmentParameters, IGenericRepositoryParameters<AssignmentEntity>>();
 
                 #endregion
             });

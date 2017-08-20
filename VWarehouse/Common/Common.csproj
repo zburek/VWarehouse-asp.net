@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseEntity.cs" />
+    <Compile Include="Parameters\AssignmentParameters.cs" />
     <Compile Include="Parameters\EmployeeParameters.cs" />
     <Compile Include="Parameters\ItemParameters.cs" />
     <Compile Include="Parameters\MeasuringDeviceParameters.cs" />
