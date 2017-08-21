@@ -4,37 +4,83 @@
     ViewBag.Title = "Assign";
 }
 
-<h4>Employee Items</h4>
+<h4>Assignment</h4>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
 
-        <th></th>
-    </tr>
+    
+    <table class="table">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.ID)
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
 
-    @foreach (var item in Model.EmployeeList)
-    {
-        <tr>
-            <td width="300">
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.ActionLink("Return Item", "ReturnOneItem", new { itemID = item.ID, empID = Model.ID }, new { @class = "btn btn-primary" })
-            </td>
-        </tr>
-    }
-</table>
-<table class="table">
-    <tr>
-        <td width="300"></td>
-        <td>
-            @Html.ActionLink("Return All Items", "ReturnAllItems", new { empID = Model.ID }, new { @class = "btn btn-primary" })
-        </td>
-    </tr>
-</table>
+            <dd>
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Materials)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Materials)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.StartTime)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.StartTime)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.EndTime)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.EndTime)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Note)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Note)
+            </dd>
+        </dl>
+        <h4>Available Employees</h4>
+        @foreach (var item in Model.EmployeeList)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.CheckBoxFor(modelItem => item.isSelected)
+                </td>
+            </tr>
+        }
+    </table>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="btn btn-success">
+                <i class="glyphicon glyphicon-plus"></i> Submit
+            </button>
+            <a href="@Url.Action("Index")"
+               class="btn btn-default">
+                <span class="glyphicon glyphicon-list-alt"></span> Back to List
+            </a>
+        </div>
+    </div>
+
+}
+
+
 <p>&nbsp;</p>
 <p></p>
 

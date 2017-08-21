@@ -86,11 +86,14 @@ namespace MVC.Models
                 cfg.CreateMap<IAssignment, AssignmentEditViewModel>();
                 cfg.CreateMap<AssignmentEditViewModel, Assignment>();
                 cfg.CreateMap<IAssignment, AssignmentDeleteViewModel>();
+                cfg.CreateMap<IAssignment, AssignmentAssignViewModel>();
 
                 cfg.CreateMap<IAssignViewModel, AssignViewModel>().ReverseMap();
                 cfg.CreateMap<IAssignViewModel, IItem>().ReverseMap();
                 cfg.CreateMap<IAssignViewModel, IMeasuringDevice>().ReverseMap();
                 cfg.CreateMap<IAssignViewModel, IVehicle>().ReverseMap();
+                cfg.CreateMap<IBaseEntity, IAssignedEntity>();
+
 
                 cfg.CreateMap<WarningViewModel, IWarningViewModel>().ReverseMap();
                 cfg.CreateMap<IWarningViewModel, IMeasuringDevice>().ReverseMap();

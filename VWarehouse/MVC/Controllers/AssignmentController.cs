@@ -12,6 +12,7 @@ using PagedList;
 using System.Collections.Generic;
 using Common.Parameters;
 using MVC.Models.AssignViewModels;
+using Common;
 
 namespace MVC.Controllers
 {
@@ -186,18 +187,18 @@ namespace MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var assignmentViewModel = await Service.GetByIdAsync(id);
+            AssignmentAssignViewModel assignmentViewModel = Mapper.Map<AssignmentAssignViewModel>(await Service.GetByIdAsync(id));
             this.AssignmentParameters.ID = assignmentViewModel.ID;
             this.AssignmentParameters.StartTime = assignmentViewModel.StartTime;
             this.AssignmentParameters.EndTime = assignmentViewModel.EndTime;
-            IAssignmentAssignViewModel assignment = new AssignmentAssignViewModel();
-            assignment.EmployeeList = await Service.GetAllEmployeesAsync(AssignmentParameters);
-            return View(assignment);
+            assignmentViewModel.EmployeeList = Mapper.Map<IEnumerable<IAssignedEntity>>(await Service.GetAllEmployeesAsync(AssignmentParameters));
+
+            return View(assignmentViewModel);
         }
-        /*
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Assign([Bind(Include = "ID,Name,Materials,StartTime,EndTime,Note,AssignedEmployeeIDList,AssignedItemIDList,AssignedMeasuringDeviceIDList,AssignedVehicleIDList,EmployeeList,ItemList,MeasuringDeviceList,VehicleList")] AssignmentAssignViewModel assignment)
+        public async Task<ActionResult> Assign([Bind(Include = "ID,EmployeeList,ItemList,MeasuringDeviceList,VehicleList")] AssignmentAssignViewModel assignment)
         {
             try
             {
@@ -207,19 +208,24 @@ namespace MVC.Controllers
                 }
                 if (ModelState.IsValid)
                 {
-                    Guid itemID = assignedItem.ID;
-                    Guid? employeeID = assignedItem.EmployeeID;
-                    await Service.AssignAsync(assignment);
-                    return RedirectToAction("OnStock");
-                }
+                    foreach (var emp in assignment.EmployeeList)
+                    {
+                        if (emp.isSelected)
+                        {
+                            AssignmentParameters.EmployeeList.Add(new BaseEntity() { ID = emp.ID });
+                        }
+                    }
+                    await Service.AssignAsync(AssignmentParameters);
+                    return RedirectToAction("Details", new { ID = assignment.ID });
+                } 
             }
             catch (DataException)
             {
                 ModelState.AddModelError("", "Unable to save changes. Try again and if the problem persists see your system administrator.");
             }
-            return RedirectToAction("Assign", new { ID = assignedItem.ID });
+            return RedirectToAction("Assign", new { ID = assignment.ID });
         }
-        */
+        
         #endregion
 
         #region CRUD

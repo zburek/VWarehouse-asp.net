@@ -17,5 +17,6 @@ namespace Repository.Common
         Task ReturnAll(Guid? ID);
         Task<IEnumerable<IBaseEntity>> GetAllEmployeesAsync(IAssignmentParameters assignmentParameters);
         Task SaveAsync();
+        Task AssignAsync(IAssignmentParameters assignmentParameters);
     }
 }

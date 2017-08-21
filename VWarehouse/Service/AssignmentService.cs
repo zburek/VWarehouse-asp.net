@@ -117,6 +117,11 @@ namespace Service
             return await AssignmentRepository.GetEmployeesAsync(assignmentParameters);
         }
 
+        public async Task AssignAsync(IAssignmentParameters assignmentParameters = null)
+        {
+            await AssignmentRepository.AssignAsync(assignmentParameters);
+        }
+
         #endregion
     }
 }

@@ -203,8 +203,8 @@
     <Compile Include="Models\AssignmentViewModels\AssignmentDetailsViewModel.cs" />
     <Compile Include="Models\AssignmentViewModels\AssignmentEditViewModel.cs" />
     <Compile Include="Models\AssignmentViewModels\AssignmentIndexViewModel.cs" />
+    <Compile Include="Models\AssignViewModels\AssignedEntity.cs" />
     <Compile Include="Models\AssignViewModels\AssignmentAssignViewModel.cs" />
-    <Compile Include="Models\AssignViewModels\IAssignmentAssignViewModel.cs" />
     <Compile Include="Models\EmployeeViewModels\EmployeeCreateViewModel.cs" />
     <Compile Include="Models\EmployeeViewModels\EmployeeDeleteViewModel.cs" />
     <Compile Include="Models\EmployeeViewModels\EmployeeDetailsViewModel.cs" />
@@ -218,7 +218,6 @@
     <Compile Include="Models\ItemViewModels\ItemIndexViewModel.cs" />
     <Compile Include="Models\ItemViewModels\ItemOnStockViewModel.cs" />
     <Compile Include="Models\AssignViewModels\AssignViewModel.cs" />
-    <Compile Include="Models\AssignViewModels\IAssignViewModel.cs" />
     <Compile Include="Models\MapperConfig.cs" />
     <Compile Include="Models\MeasuringDeviceViewModels\MeasuringDeviceCreateViewModel.cs" />
     <Compile Include="Models\MeasuringDeviceViewModels\MeasuringDeviceDeleteViewModel.cs" />
@@ -254,6 +253,7 @@
     <Content Include="Scripts\angular-mocks.js" />
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
+    <Content Include="Scripts\AssignmentScript.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">

@@ -203,6 +203,13 @@ namespace Repository
             IUnitOfWorkAssignment unitOfWork = Repository.CreateUnitOfWorkAssignment();
             return await unitOfWork.GetAllEmployeesAsync(assignmentParameters);
         }
+
+        public async Task AssignAsync(IAssignmentParameters assignmentParameters)
+        {
+            IUnitOfWorkAssignment unitOfWork = Repository.CreateUnitOfWorkAssignment();
+            await unitOfWork.AssignAsync(assignmentParameters);
+            await unitOfWork.SaveAsync();
+        }
         /*
         public async Task AssignOneMeasuringDeviceAsync(Guid measuringDeviceID, Guid? employeeID)
         {

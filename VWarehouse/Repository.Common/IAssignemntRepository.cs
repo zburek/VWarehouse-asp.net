@@ -27,5 +27,6 @@ namespace Repository.Common
         Task ReturnAllVehiclesAsync(Guid? assignmentID);
         Task ReturnAll(Guid? assignmentID);
         Task<IEnumerable<IBaseEntity>> GetEmployeesAsync(IAssignmentParameters assignmentParameters);
+        Task AssignAsync(IAssignmentParameters assignmentParameters);
     }
 }

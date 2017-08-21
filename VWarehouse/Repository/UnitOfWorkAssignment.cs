@@ -77,16 +77,26 @@ namespace Repository
         }
         #endregion
 
-        #region GetForAssign
+        #region GetForAssign and Assign
         public async Task<IEnumerable<IBaseEntity>> GetAllEmployeesAsync(IAssignmentParameters assignmentParameters)
         {
             var query = from employee in Context.Set<EmployeeEntity>().Include("Assignments")
-                        where (employee.Assignments.All(e => e.StartTime <= assignmentParameters.EndTime || e.EndTime >= assignmentParameters.StartTime))
+                        where (employee.Assignments.All(e => e.StartTime > assignmentParameters.EndTime || e.EndTime < assignmentParameters.StartTime || e.EndTime == null)) || (employee.Assignments.Count == 0)
                         select employee;
 
             return await query.ToListAsync();
         }
 
+        public async Task AssignAsync(IAssignmentParameters assignmentParameters)
+        {
+            var assignmentEntity = await Context.Set<AssignmentEntity>().Include("Employees").FirstOrDefaultAsync(assignment => assignment.ID == assignmentParameters.ID);
+            foreach (var employee in assignmentParameters.EmployeeList)
+            {
+                var employeeEntity = await Context.Set<EmployeeEntity>().FindAsync(employee.ID);
+                assignmentEntity.Employees.Add(employeeEntity);
+                await UpdateAsync(assignmentEntity);
+            }
+        }
         #endregion
 
         #region CRUD
@@ -154,7 +164,7 @@ namespace Repository
         public void Dispose()
         {
             Context.Dispose();
-        }
+        }       
         #endregion
     }
 }

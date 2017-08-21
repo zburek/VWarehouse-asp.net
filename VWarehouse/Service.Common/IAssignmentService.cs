@@ -27,7 +27,6 @@ namespace Service.Common
         Task ReturnAllVehiclesAsync(Guid? ID);
         Task ReturnAll(Guid? ID);
         Task<IEnumerable<IBaseEntity>> GetAllEmployeesAsync(IAssignmentParameters assignmentParameters = null);
-
-
+        Task AssignAsync(IAssignmentParameters assignmentParameters = null);
     }
 }
